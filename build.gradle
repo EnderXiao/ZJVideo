@@ -1,0 +1,18 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+plugins {
+    id 'com.android.application' version '7.2.2' apply false
+    id 'com.android.library' version '7.2.2' apply false
+}
+ext {
+    buildToolsVersion = "30.0.2"
+    minSdkVersion = 21
+    compileSdkVersion = 30
+    targetSdkVersion = 30
+    ndkVersion = "24.0.8215888"
+    kotlin_version = "1.6.0"
+    liteavSdk="com.tencent.liteav:LiteAVSDK_TRTC:latest.release"
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linear_analysis"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="horizontal"
+    android:padding="5dp"
+    android:background="@color/purple_500">
+
+    <LinearLayout
+        android:id="@+id/linear1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="15dp"
+        android:background="#d3d7d4">
+        <!-- 页面左侧-->
+        <LinearLayout
+            android:id="@+id/linear2"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:background="#FFFFFF"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!--分割线-->
+<!--            <View-->
+<!--                android:visibility="invisible"-->
+<!--                android:id="@+id/view_daan"-->
+<!--                android:layout_marginLeft="5dp"-->
+<!--                android:layout_width="1dp"-->
+<!--                android:layout_height="25dp"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:background="#d3d7d4" />-->
+
+            <!--答题率-->
+            <LinearLayout
+                android:id="@+id/linear_dati"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp">
+                <TextView
+                    android:id="@+id/tx_dati1"
+                    android:text="答题率: "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ed1941"
+                    android:layout_marginLeft="5dp"/>
+                <TextView
+                    android:id="@+id/tx_dati2"
+                    android:text="95%"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ed1941" />
+            </LinearLayout>
+
+            <!--正确率-->
+            <LinearLayout
+                android:visibility="invisible"
+                android:id="@+id/linear_right"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp">
+                <TextView
+                    android:id="@+id/tx_right1"
+                    android:text="正确率: "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ed1941"
+                    android:layout_marginLeft="5dp"/>
+                <TextView
+                    android:id="@+id/tx_right2"
+                    android:text="72%"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ed1941" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:text="汇总数据"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="20dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#007947"
+                    />
+
+                <ListView
+                    android:id="@+id/lvClass"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--中间分割区-->
+        <View
+            android:id="@+id/view"
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:background="#d3d7d4"
+            />
+
+        <!-- 页面右侧-->
+        <LinearLayout
+            android:id="@+id/linear3"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:background="#FFFFFF"
+            android:layout_weight="3"
+            android:orientation="vertical">
+            <!--答题率-->
+            <!--android:gravity="right"-->
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp">
+
+                <LinearLayout
+                    android:visibility="invisible"
+                    android:id="@+id/linear_quick"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+                    <!-- 最快答对-->
+                    <TextView
+                        android:id="@+id/tx_quick"
+                        android:text="最快答对: "
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#828798"
+                        android:layout_marginLeft="5dp"
+                        android:paddingTop="5dp"/>
+                    <ImageView
+                        android:id="@+id/img_top1"
+                        android:src="@mipmap/top1"
+                        android:layout_width="25dp"
+                        android:layout_height="35dp"
+                        android:layout_marginLeft="5dp"/>
+                    <TextView
+                        android:id="@+id/tx_top1"
+                        android:text="钱宇华"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#828798"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="5dp"/>
+
+                    <ImageView
+                        android:id="@+id/img_top2"
+                        android:src="@mipmap/top2"
+                        android:layout_width="25dp"
+                        android:layout_height="35dp"
+                        android:layout_marginLeft="5dp"/>
+                    <TextView
+                        android:id="@+id/tx_top2"
+                        android:text="王春芸"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#828798"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="5dp"/>
+
+                    <!--android:scaleType="center"-->
+                    <ImageView
+                        android:id="@+id/img_top3"
+                        android:src="@mipmap/top3"
+                        android:layout_width="25dp"
+                        android:layout_height="35dp"
+                        android:layout_marginLeft="5dp"/>
+                    <TextView
+                        android:id="@+id/tx_top3"
+                        android:text="薛志"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#828798"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="5dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="invisible"
+                    android:id="@+id/linear_answer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal">
+                    <!--答案-->
+                    <TextView
+                        android:id="@+id/tx_answer1"
+                        android:text="答案: "
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:textColor="#ed1941" />
+                    <TextView
+                        android:id="@+id/tx_answer2"
+                        android:text="B"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#ed1941" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--单题分析   柱状图区域-->
+            <com.github.mikephil.charting.charts.BarChart
+                android:visibility="gone"
+                android:id="@+id/bar_chart"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <!--答题详情 -->
+            <ScrollView
+                android:id="@+id/slStusAnswers"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:id="@+id/linearStusAnswers"
+                    android:layout_height="fill_parent"
+                    android:layout_width="fill_parent"
+                    android:orientation="vertical">
+                </LinearLayout>
+            </ScrollView>
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/txt_area"
+                android:text="柱状图"
+                android:gravity="center"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="#E5E5E5"/>
+
+            <!--分割线-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#007947"
+                />
+            <View
+                android:id="@+id/view1"
+                android:layout_marginLeft="20dp"
+                android:layout_width="90dp"
+                android:layout_height="3dp"
+                android:background="#007947"
+                />
+
+            <View
+                android:visibility="gone"
+                android:id="@+id/view2"
+                android:layout_marginLeft="115dp"
+                android:layout_width="90dp"
+                android:layout_height="3dp"
+                android:background="#007947"
+                />
+
+            <!--右侧底部工具栏-->
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/txdanti"
+                    android:text="单题分析"
+                    android:textColor="#007947"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"/>
+
+                <TextView
+                    android:id="@+id/txdaan"
+                    android:text="答题详情"
+                    android:textColor="#007947"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"/>
+
+                <ImageView
+                    android:id="@+id/imgSet"
+                    android:src="@mipmap/q_szda"
+                    android:scaleType="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"/>
+
+                <ImageView
+                    android:id="@+id/imgPush"
+                    android:src="@mipmap/q_gbda"
+                    android:scaleType="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"/>
+
+                <ImageView
+                    android:id="@+id/imgFlash"
+                    android:src="@mipmap/q_flush"
+                    android:scaleType="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"/>
+
+                <ImageView
+                    android:id="@+id/imgExit"
+                    android:src="@mipmap/q_exit"
+                    android:scaleType="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

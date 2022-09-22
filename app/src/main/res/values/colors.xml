@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="colorPrimary">#56C3EC</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="live_main_bg">#1B1B1B</color>
+    <color name="live_green_bg">#34c759</color>
+    <color name="live_bottom_dialog_blue">#037BFF</color>
+    <color name="live_bottom_dialog_gray">#8F8F8F</color>
+    <color name="live_title_bg">#B7B7B7</color>
+    <color name="live_single_select_button_bg">#34c759</color>
+    <color name="live_single_select_button_bg_off">#999999</color>
+    <color name="common_green_bg">#34c759</color>
+    <color name="common_edit_solid">#EFEFEF</color>
+    <color name="common_edit_stroke">#FFFFFF</color>
+    <color name="common_radio_select">#34c759</color>
+    <color name="common_raido_select_off">#999999</color>
+    <color name="rl_main_bg">#1B1B1B</color>
+    <color name="videocall_green_bg">#00A66B</color>
+    <color name="videocall_title_bg">#B7B7B7</color>
+    <color name="gray_back">#e8e8e8</color>
+
+
+
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="message_input">#313540</color>
+    <color name="line_gray">#dcdcdc</color>
+    <color name="line_gray_light">#f1f1f1</color>
+    <color name="gray_page_bg">#ecedf1</color>
+    <color name="gray_text">#8B959F</color>
+    <color name="gray_text_dark">#292929</color>
+    <color name="gray_text_light">#979797</color>
+    <color name="window_half_transparent">#90000000</color>
+    <color name="blue_white">#0eabe5</color>
+
+    <color name="background">#2A2F38</color>
+    <color name="background_tollBar">#2A2F36</color>
+    <color name="border_color">#303640</color>
+    <color name="background_chatroom">#454D5B</color>
+    <color name="temp_camera">#555D6D</color>
+    <color name="background_button">#050607</color>
+
+
+    <!--    zyl-->
+    <color name="backgroung_chat_input">#505A6C</color>
+    <color name="bg_select_menu">#234739</color>
+
+
+    <!--    wly-->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+
+    <color name="text_orange">#FF6100</color>
+    <color name="text_gray">#485060</color>
+    <color name="text_white">#FFFFFF</color>
+    <color name="text_yellow">#FFC800</color>
+    <color name="text_topbar">#694E42</color>
+    <color name="div_white">#E5E5E5</color>
+
+    <color name="div_gray">#636b79</color>
+    <color name="div_shallowgray">#828798</color>
+
+    <color name="div_shallowgray1">#f6f5ec</color>
+
+</resources>
