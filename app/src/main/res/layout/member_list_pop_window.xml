@@ -2,8 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:layout_constraintWidth_percent="0.5"
-    app:layout_constraintHeight_percent="0.45"
+    xmlns:tools="http://schemas.android.com/tools"
      android:layout_height="match_parent" android:layout_width="match_parent"
     android:orientation="vertical">
 
@@ -11,7 +10,7 @@
         android:id="@+id/member_list_pop_head"
         app:layout_constraintHeight_percent="0.06"
         android:layout_width="match_parent"
-        android:background="@color/gray_text_dark"
+        android:background="@color/popupWindow_title"
         android:padding="5dp"
         android:layout_height="wrap_content" >
 
@@ -30,149 +29,37 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/close" />
-
-
     </RelativeLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:id="@+id/member_list_container"
+    <ScrollView
+        android:id="@+id/horizontal_scroll_view"
+        android:background="@color/popupWindow_container"
         android:layout_width="match_parent"
-        android:background="@color/black"
-        android:layout_height="wrap_content" >
-
-        <!-- 此部分是标题部分 -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-
-            <!-- 右侧标题的父容器可实现水平滚动 -->
-
-            <com.example.trtc_client.MyHorizontalScrollView
-                android:id="@+id/title_horsv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:id="@+id/right_title_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:textColor="@color/gray_text"
-                            android:layout_width="94dp"
-                            android:layout_height="40dp"
-                            android:gravity="center"
-                            android:text="成员"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:textColor="@color/gray_text"
-                            android:layout_width="94dp"
-                            android:layout_height="40dp"
-                            android:gravity="center"
-                            android:text="移出"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:textColor="@color/gray_text"
-                            android:layout_width="94dp"
-                            android:layout_height="40dp"
-                            android:gravity="center"
-                            android:text="聊天禁言"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:textColor="@color/gray_text"
-                            android:layout_width="94dp"
-                            android:layout_height="40dp"
-                            android:gravity="center"
-                            android:text="上下讲台"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:textColor="@color/gray_text"
-                            android:layout_width="94dp"
-                            android:layout_height="40dp"
-                            android:gravity="center"
-                            android:text="麦克风"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:textColor="@color/gray_text"
-                            android:layout_width="94dp"
-                            android:layout_height="40dp"
-                            android:gravity="center"
-                            android:text="摄像头"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-                </LinearLayout>
-            </com.example.trtc_client.MyHorizontalScrollView>
-        </LinearLayout>
-
-        <!-- 此部分是内容部分 用ScrollView实现上下滚动效果 -->
-
-        <ScrollView
+        android:layout_height="280dp"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <LinearLayout
+            <include
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:id="@+id/listview_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                layout="@layout/member_list_title"
+                android:layout_height="wrap_content">
+            </include>
 
-                <!-- 左侧内容的父容器 -->
+            <ListView
+                android:id="@+id/member_list"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/listview_title"
+                app:layout_constraintTop_creator="1"
+                app:layout_constraintRight_creator="1"
+                app:layout_constraintBottom_creator="1"
+                app:layout_constraintLeft_creator="1" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
-<!--                <LinearLayout-->
-<!--                    android:id="@+id/left_container"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:layout_weight="3"-->
-<!--                    android:gravity="center_vertical"-->
-<!--                    android:orientation="vertical">-->
-
-<!--                    <ListView-->
-<!--                        android:id="@+id/left_container_listview"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="match_parent" />-->
-<!--                </LinearLayout>-->
-
-                <!-- 右侧内容的父容器 实现水平滚动 -->
-
-                <com.example.trtc_client.MyHorizontalScrollView
-                    android:id="@+id/content_horsv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:scrollbars="none">
-
-                    <LinearLayout
-                        android:id="@+id/right_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ListView
-                            android:id="@+id/right_container_listview"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-
-                    </LinearLayout>
-                </com.example.trtc_client.MyHorizontalScrollView>
-            </LinearLayout>
-        </ScrollView>
-
-    </LinearLayout>
 </LinearLayout>

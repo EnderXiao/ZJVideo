@@ -2,20 +2,19 @@ package com.example.trtc_client;
 
 public class MemberItem {
     private String name;
-    private String item1;
-    private String item2;
-    private String item3;
-    private String item4;
-    private String item5;
+    private boolean chatControl;
+    private boolean speakControl;
+    private boolean audioControl;
+    private boolean videoControl;
+    private boolean boardControl;
 
-
-    public MemberItem(String name, String item1, String item2, String item3, String item4, String item5) {
+    public MemberItem(String name, boolean chatControl, boolean speakControl, boolean audioControl, boolean boardControl, boolean videoControl) {
         this.name = name;
-        this.item1 = item1;
-        this.item2 = item2;
-        this.item3 = item3;
-        this.item4 = item4;
-        this.item5 = item5;
+        this.chatControl = chatControl;
+        this.speakControl = speakControl;
+        this.audioControl = audioControl;
+        this.videoControl = videoControl;
+        this.boardControl = boardControl;
     }
 
     public String getName() {
@@ -26,43 +25,43 @@ public class MemberItem {
         this.name = name;
     }
 
-    public String getItem1() {
-        return item1;
+    public boolean getChatControl() {
+        return chatControl;
     }
 
-    public void setItem1(String item1) {
-        this.item1 = item1;
+    public void setChatControl(boolean chatControl) {
+        this.chatControl = chatControl;
     }
 
-    public String getItem2() {
-        return item2;
+    public boolean getSpeakControl() {
+        return speakControl;
     }
 
-    public void setItem2(String item2) {
-        this.item2 = item2;
+    public void setSpeakControl(boolean speakControl) {
+        this.speakControl = speakControl;
     }
 
-    public String getItem3() {
-        return item3;
+    public boolean getAudioControl() {
+        return audioControl;
     }
 
-    public void setItem3(String item3) {
-        this.item3 = item3;
+    public void setAudioControl(boolean audioControl) {
+        this.audioControl = audioControl;
     }
 
-    public String getItem4() {
-        return item4;
+    public boolean getVideoControl() {
+        return videoControl;
     }
 
-    public void setItem4(String item4) {
-        this.item4 = item4;
+    public void setVideoControl(boolean videoControl) {
+        this.videoControl = videoControl;
     }
 
-    public String getItem5() {
-        return item5;
+    public boolean getBoardControl() {
+        return boardControl;
     }
 
-    public void setItem5(String item5) {
-        this.item5 = item5;
+    public void setBoardControl(boolean boardControl) {
+        this.boardControl = boardControl;
     }
 }

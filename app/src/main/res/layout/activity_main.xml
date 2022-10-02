@@ -598,6 +598,7 @@
         android:id="@+id/hand_btn"
         android:layout_width="50dp"
         android:layout_height="0dp"
+        android:onClick="showHandsUpBtn"
         app:layout_constraintStart_toEndOf="@id/member_btn"
         app:layout_constraintBottom_toBottomOf="@+id/group_buttons"
         app:layout_constraintTop_toTopOf="@+id/group_buttons"

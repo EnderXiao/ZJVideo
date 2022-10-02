@@ -1,6 +1,8 @@
 package com.example.trtc_client;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -8,20 +10,27 @@ import android.annotation.SuppressLint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.trtc_client.adapter.HandsUpListViewAdapter;
+import com.example.trtc_client.adapter.MemberListViewAdapter;
 import com.example.trtc_client.adapter.TabBarAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.tencent.imsdk.v2.V2TIMCallback;
@@ -62,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 //    private final String[] tabs = {"视频列表", "聊天讨论", "互动答题"};
 
     public final static String TAG = "Ender_MainActivity";
-    private TRTCCloud mTRTCCloud;
+    private static TRTCCloud mTRTCCloud;
     private TRTCCloudDef.TRTCParams myTRTCParams;
     private TXCloudVideoView mTXCVVTeacherPreviewView;
     private RelativeLayout teacherTRTCBackground;
@@ -74,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView cameraBtn;
     private ImageView audioBtn;
     private TextView teacher_name_view;
+    private Group group_btn;
 
     public static String mTeacherId;
 
@@ -87,11 +97,11 @@ public class MainActivity extends AppCompatActivity {
     public static int mUserCount = 0;
 
 
-    private  String UserId = "hongyi";
-    private  String UserSig = "eJwtzMsOgjAURdF-6diQS180JM5wYogTH3NiW7g0YAMEi8Z-F7HDs06y3*RSnpPZDCQnNAGy2zZq009ocePm0dcLxmfUrvIeNclTDiBTpRj8HxM8DmZ1IQQFiDph9zMpWcY5ZzRWsF7DT7fQonRZw07FUjFwVzOH49jeEahxXW91c7DpLfiX2pPPF4cTMsg_";
+    public static String UserId = "xgy";
+    private  String UserSig = "eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwhXplVDh4pTsxIKCzBQlK0MTAwMzQwsLYwOITGpFQWZRKlDc1NTUyMAAKlqSmQsSMzMztjA2MzA3gZqSmQ40NSTF2D03uDy41D9GvzAjPK00Ijkp0cCp1DMiOczC1ai8sig4wNzXJKm4yNDXVqkWAPVmMWI_";
     //private  String UserSig = "eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwhn5eemVmYZQqeKU7MSCgswUJStDEwMDM0MLC2MDiExqRUFmUSpQ3NTU1MjAACpakpkLEjMzMzY3AQKoaHFmOtDk8AJH70LPYkN-Y*1w11y3EHdLH9fgLE-X-Arf8OCqlNBgIw-PIA9PL9OMQFulWgCKxDFd";
     //private  String UserSig = "eJwtzE8LgjAcxvH3snPINrc5hA4FHfpDmOWhY7TpfohrLbVF9N4z8-h8Hvi*0Wl3jHrtUYpohNFs3KC0baGEkc3NVi*g0-VQ9cU5UCglDGNBpIzx-9HBgdeDc84pxpO20PxMiDhhjHE6VaAayudyv*mSA*-q7dX1RaaCaaxc*-syN6tFFp69zXOqNSXFHH2*tlYy5A__";
-    private  String Roomid  = "911";
+    public static String Roomid  = "750795";
     private  int SDKappID =1400618830;
 
     //即时通信相关
@@ -112,11 +122,32 @@ public class MainActivity extends AppCompatActivity {
     private Boolean BoardStatus=false;
     private TEduBoardController.TEduBoardCallback mBoardCallback;
 
+    //TabBarFragment
+    private final ChatRoomFragment chatRoomFragment = new ChatRoomFragment();
+    private final VideoListFragment videoListFragment =  new VideoListFragment();
+    private final AnswerQuestionFragment answerQuestionFragment = new AnswerQuestionFragment();
+
+    // 成员列表
+    private static View memberPopupView;
+    private static ListView memberList;
+
+    // 举手列表
+    private View handsUpPopupView;
+    private ListView handsUpList;
+    public HandsUpListViewAdapter handsUpListViewAdapter;
+    public List<HandsUpItem> handsUpItemList = new ArrayList<>();
+
+    // UI消息监听器
+    public Handler handler;
+
+
+    @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ChatRoomFragment chatRoomFragment=new ChatRoomFragment();
-        VideoListFragment videoListFragment = new VideoListFragment();
-        AnswerQuestionFragment answerQuestionFragment = new AnswerQuestionFragment();
+
+
+        List<MemberDataBean> testList1 = new ArrayList<>();
+
         mFragmenglist.add(videoListFragment);
         mFragmenglist.add(chatRoomFragment);
         mFragmenglist.add(answerQuestionFragment);
@@ -135,6 +166,11 @@ public class MainActivity extends AppCompatActivity {
         teacherTRTCBackground = findViewById(R.id.teacher_background);
 
         // 获取底部按钮
+        handsUpPopupView = getLayoutInflater().inflate(R.layout.hands_up_pop_window, null);
+        handsUpList = handsUpPopupView.findViewById(R.id.hands_up_list);
+        memberPopupView = getLayoutInflater().inflate(R.layout.member_list_pop_window, null);
+        memberList = memberPopupView.findViewById(R.id.member_list);
+        group_btn = findViewById(R.id.group_buttons);
         canvasBtn = findViewById(R.id.canvas_btn);
         boardBtn = findViewById(R.id.board_btn);
         contentBtn = findViewById(R.id.content_btn);
@@ -160,11 +196,164 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        handler = new Handler() {
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                if(msg.what == 1) {
+                    setHandsUpData();
+                }
+            }
+        };
 
+        initHandsUpList();
+        initMemberList();
         initTIM();
-
         initTabBarNavigation();
         enterLiveRoom();
+    }
+
+    public void setHandsUpData() {
+        handsUpItemList.clear();
+        List<HandsUpItem> tempHandsUpItemList = new ArrayList<>();
+        for (int i = 0; i < AnswerActivity.handsUpList.size(); i++) {
+            tempHandsUpItemList.add(new HandsUpItem(AnswerActivity.handsUpList.get(i).getName(), AnswerActivity.handsUpList.get(i).getUserId(), false));
+        }
+        for (int i =0; i< tempHandsUpItemList.size(); i++) {
+            Log.e(TAG, "updateHandsUpList: "  + tempHandsUpItemList.get(i).toString());
+        }
+        handsUpItemList.addAll(tempHandsUpItemList);
+        handsUpListViewAdapter.notifyDataSetChanged();
+    }
+
+    public void initHandsUpList() {
+        if(AnswerActivity.handsUpList != null) {
+            for (int i = 0; i < AnswerActivity.handsUpList.size(); i++) {
+                handsUpItemList.add(new HandsUpItem(AnswerActivity.handsUpList.get(i).getName(), AnswerActivity.handsUpList.get(i).getUserId(), false));
+                Log.e(TAG, "initHandsUpList: "  + AnswerActivity.handsUpList.get(i).toString());
+            }
+
+        }
+        handsUpListViewAdapter = new HandsUpListViewAdapter(this, handsUpList, handsUpItemList);
+        handsUpList.setAdapter(handsUpListViewAdapter);
+
+        handsUpList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(MainActivity.this, "Click Item" + i , Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        handsUpListViewAdapter.setOnSpeakerControllerClickListener(new HandsUpListViewAdapter.onSpeakerControllerListener() {
+            @Override
+            public void onSpeakControllerClick(int i) {
+                upToSpeaking(i);
+            }
+        });
+    }
+    // 上讲台处理
+    public void upToSpeaking(int position) {
+        Toast.makeText(this, "举手成员 " + position + " 上讲台被点击了", Toast.LENGTH_SHORT).show();
+    }
+
+    public void initMemberList() {
+        List<MemberItem> memberDataList = new ArrayList<>();
+        HttpActivity.getMemberList();
+//        memberList.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+        if(AnswerActivity.joinList != null) {
+            for (int i = 0; i < AnswerActivity.joinList.size(); i++) {
+                memberDataList.add(new MemberItem(AnswerActivity.joinList.get(i).getName(), true, true, true, false, true));
+                Log.e(TAG, "initMemberList: " + AnswerActivity.joinList.get(i).toString());
+            }
+        }
+        if(AnswerActivity.ketangList != null) {
+            for (int i = 0; i < AnswerActivity.ketangList.size(); i++) {
+                memberDataList.add(new MemberItem(AnswerActivity.ketangList.get(i).getName(), true, true, true, false, true));
+                Log.e(TAG, "initMemberList: " + AnswerActivity.ketangList.get(i).toString());
+            }
+        }
+
+//        for (int i = 0; i < 10; i ++){
+//            memberDataList.add(new MemberItem("测试", Integer.toString(i), "2", "3", "4", "5"));
+//        }
+        MemberListViewAdapter listViewAdapter = new MemberListViewAdapter(this, memberList, memberDataList);
+        memberList.setAdapter(listViewAdapter);
+
+        listViewAdapter.setOnItemButtonListener(new MemberListViewAdapter.onItemButtonListener() {
+            @Override
+            public void onMoveOutClick(int i) {
+                Toast.makeText(MainActivity.this, "成员 " + i + " 移除按钮被点击", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onChatControlClick(int i) {
+                MemberItem item = listViewAdapter.getItem(i);
+                if(item != null){
+                    if(item.getChatControl()){
+                        item.setChatControl(false);
+                    } else {
+                        item.setChatControl(true);
+                    }
+                    Toast.makeText(MainActivity.this, "成员 " + i + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
+                    listViewAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(MainActivity.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onSpeakControlClick(int i) {
+                MemberItem item = listViewAdapter.getItem(i);
+                if(item != null){
+                    if(item.getSpeakControl()){
+                        item.setSpeakControl(false);
+                    } else {
+                        item.setSpeakControl(true);
+                    }
+                    Toast.makeText(MainActivity.this, "成员 " + i + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
+                    listViewAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(MainActivity.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onAudioControlClick(int i) {
+                MemberItem item = listViewAdapter.getItem(i);
+                if(item != null){
+                    if(item.getAudioControl()){
+                        item.setAudioControl(false);
+                    } else {
+                        item.setAudioControl(true);
+                    }
+                    Toast.makeText(MainActivity.this, "成员 " + i + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
+                    listViewAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(MainActivity.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onVideoControlClick(int i) {
+                Toast.makeText(MainActivity.this, "成员 " + i + " 禁视频按钮被点击", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onBoardControlClick(int i) {
+                MemberItem item = listViewAdapter.getItem(i);
+                if(item != null){
+                    if(item.getBoardControl()){
+                        item.setBoardControl(false);
+                    } else {
+                        item.setBoardControl(true);
+                    }
+                    Toast.makeText(MainActivity.this, "成员 " + i + " 禁绘画按钮被点击", Toast.LENGTH_SHORT).show();
+                    listViewAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(MainActivity.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     public void initTabBarNavigation() {
@@ -174,6 +363,9 @@ public class MainActivity extends AppCompatActivity {
         TabBarAdapter tabBarAdapter = new TabBarAdapter(getSupportFragmentManager());
         tabBarAdapter.setmFragment(mFragmenglist);
         viewPager.setAdapter(tabBarAdapter);
+
+        //设置ViewPager的最大缓存数
+        viewPager.setOffscreenPageLimit(3);
 
         //将TabLayout与ViewPager绑定在一起
         TabLayout mTabLayout = findViewById(R.id.tab_bar_table_layout);
@@ -187,8 +379,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     // 退出房间
-    public static void exitRoom() {}
-
+    public static void exitRoom() {
+        mTRTCCloud.exitRoom();
+        HttpActivity.stopHandsUpTimer();
+    }
     public static class MyTRTCCloudListener extends TRTCCloudListener {
         private WeakReference<MainActivity> mContext;
 
@@ -201,6 +395,7 @@ public class MainActivity extends AppCompatActivity {
         public void onEnterRoom(long result) {
             MainActivity activity = mContext.get();
             if(result > 0) {
+                activity.initMemberList();
                 Log.e(TAG, "onEnterRoom: 进入房间成功，耗时: " + result);
                 Toast.makeText(activity, "进入房间成功，耗时: " + "[" + result+ "]" , Toast.LENGTH_SHORT).show();
             } else {
@@ -210,12 +405,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
+        public void onUserAudioAvailable(String userId, boolean available) {
+            MainActivity activity = mContext.get();
+            Log.d(TAG, "onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
+            System.out.println("onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
+            System.out.println("onUserVideoAvailable:"+userId);
+            activity.videoListFragment.setAudio(userId, available, activity, activity.mTRTCCloud);
+        }
+
+        @Override
         public void onUserVideoAvailable(String userId, boolean available) {
             MainActivity activity = mContext.get();
+            activity.initMemberList();
             Log.d(TAG, "onUserVideoAvailable userId " + userId + ", mUserCount " + mUserCount + ",available " + available);
             Toast.makeText(activity, "onUserVideoAvailable userId " + userId + ", mUserCount " + mUserCount + ",available " + available , Toast.LENGTH_SHORT).show();
             System.out.println("onUserVideoAvailable userId " + userId + ", mUserCount " + mUserCount + ",available " + available);
-            int index = mUserList.indexOf(userId);
             System.out.println("onUserVideoAvailable:"+userId);
 //            if (userId.equals(mTeacherId+"_camera")&&!available){
 //                System.out.println("mingming_camera exit room");
@@ -223,49 +427,33 @@ public class MainActivity extends AppCompatActivity {
 //                teacher_enable=false;
 //                return;
 //            }
-            if (available) {
-                if (index != -1) {
-                    return;
-                }
-                mUserList.add(userId);
-//                refreshRemoteVideoViews();
-            } else {
-                if (index == -1) {
-                    return;
-                }
-                mUserList.remove(index);
-//                refreshRemoteVideoViews();
+            if(available) {
+                if(AnswerActivity.findMemberInKetangList(userId) != null)
+                    mUserList.add(userId);
             }
-            for(int i =0;i<mUserList.size();i++){
-                System.out.println(mUserList.get(i)+" : "+mUserList.get(i));
-            }
+            else
+                mUserList.remove(userId);
+            activity.videoListFragment.setVideo(userId, available, activity, activity.mTRTCCloud);
 
         }
 
         @Override
         public void onRemoteUserEnterRoom(String userId){
-            VideoListFragment videoListFragment = new VideoListFragment();
-            Bundle bundle = new Bundle();
-            bundle.putStringArrayList("mUserList", mUserList);
-            videoListFragment.setArguments(bundle);
-            videoListFragment.RefreshingCameraView(mUserList);
             MainActivity activity = mContext.get();
+            activity.initMemberList();
             Log.e(TAG, "onRemoteUserEnterRoom: userId" + userId );
             System.out.println("onRemoteUserEnterRoom userId " + userId );
             Toast.makeText(activity, "onRemoteUserEnterRoom userId " + userId , Toast.LENGTH_SHORT).show();
-
+            activity.videoListFragment.addCameraView(userId, activity.mTRTCCloud);
         }
 
         @Override
         public void onRemoteUserLeaveRoom(String userId, int reason){
             MainActivity activity = mContext.get();
-            System.out.println("onRemoteUserLeaveRoom userId " + userId );
-            Toast.makeText(activity, "onRemoteUserLeaveRoom userId " + userId , Toast.LENGTH_SHORT).show();
-            if (userId.equals(mTeacherId+"_camera")){
-                System.out.println("mingming_camera exit room");
-                exitRoom();
-//                teacher_enable=false;
-            }
+            activity.initMemberList();
+            activity.videoListFragment.leaveRoom(userId, reason, activity,
+                    activity.mTRTCCloud);
+//            Toast.makeText(activity, "onRemoteUserLeaveRoom userId " + userId , Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -333,7 +521,8 @@ public class MainActivity extends AppCompatActivity {
         teacher_name_mic_icon.setBounds(0,0,20,20);
         teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
 
-
+        // 开启举手监听事件
+        HttpActivity.startHandsUpTimer(this);
     }
 
 
@@ -370,7 +559,6 @@ public class MainActivity extends AppCompatActivity {
             mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
             musicOn = true;
             audioBtn.getDrawable().setLevel(5);
-
             // 设置图标
             @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = getResources().getDrawable(R.drawable.mic_on);
             teacher_name_mic_icon.setBounds(0,0,20,20);
@@ -379,16 +567,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sentToVideoList(Bundle bundle) {
-        VideoListFragment videoListFragment = new VideoListFragment();
     }
 
     public void showMemberListBtn(View view) {
-        View popupView = getLayoutInflater().inflate(R.layout.member_list_pop_window, null);
-        PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        int offsetX = Math.abs(popupWindow.getContentView().getMeasuredWidth() - view.getWidth())/2;
-        int offsetY = -1000;
+        PopupWindow popupWindow = new PopupWindow(memberPopupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        memberPopupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        int offsetX = - memberPopupView.getMeasuredWidth() / 4;
+        int offsetY = - memberPopupView.getMeasuredHeight() - (view.getHeight()) - 10;
         popupWindow.showAsDropDown(view, offsetX, offsetY, Gravity.START);
+        for (int i = 0; i < AnswerActivity.joinList.size(); i++) {
+            Log.e(TAG, "showMemberListBtn: " + AnswerActivity.joinList.get(i).toString());
+        }
+    }
 
+    public void showHandsUpBtn(View view) {
+        PopupWindow popupWindow = new PopupWindow(handsUpPopupView, 300, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        handsUpPopupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        int offsetX = - handsUpPopupView.getMeasuredWidth() /4;
+        int offsetY = - handsUpPopupView.getMeasuredHeight() - (view.getHeight()) - 10;
+        popupWindow.showAsDropDown(view, offsetX, offsetY, Gravity.START);
     }
 
     //初始化白板

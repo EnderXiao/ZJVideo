@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.tencent.edu:TEduBoardSdk:2.7.8.199@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/c2b56ed8b769ddcddc1ec4a0bc74d288/transformed/TEduBoardSdk-2.7.8.199/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/c2b56ed8b769ddcddc1ec4a0bc74d288/transformed/TEduBoardSdk-2.7.8.199/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/c2b56ed8b769ddcddc1ec4a0bc74d288/transformed/TEduBoardSdk-2.7.8.199/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.tencent.edu/TEduBoardSdk/2.7.8.199/c6d1d6c24d4f7995df8588fdd0a2e2f6cf4662d0/TEduBoardSdk-2.7.8.199-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
