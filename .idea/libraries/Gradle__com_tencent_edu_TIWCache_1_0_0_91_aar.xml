@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.tencent.edu:TIWCache:1.0.0.91@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/c00ab846879ff4761e66d5105e62c8f4/transformed/TIWCache-1.0.0.91/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/c00ab846879ff4761e66d5105e62c8f4/transformed/TIWCache-1.0.0.91/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/c00ab846879ff4761e66d5105e62c8f4/transformed/TIWCache-1.0.0.91/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.tencent.edu/TIWCache/1.0.0.91/b8f09a0de6812a5e7315d515cb5703fcc324af02/TIWCache-1.0.0.91-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

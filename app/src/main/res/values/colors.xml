@@ -44,8 +44,15 @@
 
     <!--    zyl-->
     <color name="backgroung_chat_input">#505A6C</color>
-    <color name="bg_select_menu">#234739</color>
+    <color name="bg_select_menu">#424242</color>
+    <color name="bg_selected_menu">#525156</color>
 
+    <color name="setboardbgcolor01">#DD3232</color>
+    <color name="setboardbgcolor02">#FFFFFF</color>
+    <color name="setboardbgcolor03">#000000</color>
+    <color name="setboardbgcolor04">#234B37</color>
+    <color name="setboardbgcolor05">#B8631E</color>
+    <color name="setboardbgcolor06">#21439A</color>
 
     <!--    wly-->
     <color name="purple_200">#FFBB86FC</color>
