@@ -1,26 +1,18 @@
 package com.example.trtc_client;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.tencent.liteav.TXLiteAVCode;
-import com.tencent.rtmp.ui.TXCloudVideoView;
 import com.tencent.trtc.TRTCCloud;
-import com.tencent.trtc.TRTCCloudDef;
-import com.tencent.trtc.TRTCCloudListener;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Stack;
 import java.util.TreeMap;
@@ -38,6 +30,7 @@ public class VideoListFragment extends Fragment {
     // TRTC监听器
 //    public static TRTCCloud mTRTCCloud;
 //    public static TRTCCloudListener myListener;
+
     public static ArrayList<CameraFragment> videoFragmentList = new ArrayList<>();
 
     public static LinearLayout ScrollContainer;
@@ -64,6 +57,7 @@ public class VideoListFragment extends Fragment {
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         videoFragmentList = new ArrayList<>();
+
         videoFragmentList.add((CameraFragment) fragmentManager.findFragmentById(R.id.camera_1));
         this.hideFragment(fragmentTransaction,videoFragmentList.get(0));
         availableFragment.push(0);

@@ -10,8 +10,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.trtc_client.HandsUpItem;
-import com.example.trtc_client.MemberDataBean;
-import com.example.trtc_client.MemberItem;
 import com.example.trtc_client.R;
 
 import java.util.List;

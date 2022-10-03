@@ -87,12 +87,18 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
+
                 <TextView
+                    android:id="@+id/tx_huizong"
                     android:text="汇总数据"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
-                    android:layout_marginLeft="20dp"/>
+                    android:paddingLeft="20dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:textColor="#FFFFFF"
+                    android:background="#007947"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -200,27 +206,29 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:visibility="invisible"
                     android:id="@+id/linear_answer"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:layout_margin="5dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="invisible">
                     <!--答案-->
+
                     <TextView
                         android:id="@+id/tx_answer1"
-                        android:text="答案: "
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dp"
+                        android:text="答案: "
                         android:textColor="#ed1941" />
+
                     <TextView
                         android:id="@+id/tx_answer2"
-                        android:text="B"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="B"
                         android:textColor="#ed1941" />
                 </LinearLayout>
 
@@ -234,8 +242,18 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
+            <TextView
+                android:id="@+id/tx_noanswer"
+                android:text="没有人提交答案。"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
             <!--答题详情 -->
             <ScrollView
+                android:visibility="gone"
                 android:id="@+id/slStusAnswers"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

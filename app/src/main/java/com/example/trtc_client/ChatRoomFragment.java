@@ -5,9 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RadioButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -20,18 +21,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 public class ChatRoomFragment extends Fragment {
     private List<Chat_Msg> data= new ArrayList<Chat_Msg>();
     private ChatMsgAdapter chatMsgAdapter;
-
     public ChatMsgAdapter getChatMsgAdapter() {
         return chatMsgAdapter;
     }
-
     public void setChatMsgAdapter(ChatMsgAdapter chatMsgAdapter) {
         this.chatMsgAdapter = chatMsgAdapter;
     }
-
     private ListView chatlv;
 
     public ListView getChatlv() {
@@ -43,7 +42,6 @@ public class ChatRoomFragment extends Fragment {
     }
 
     public void setData(Chat_Msg msg){
-        System.out.println("+++你好，我是ChatRoomFragment里面的setData函数");
         data.add(msg);
     }
 
@@ -55,11 +53,13 @@ public class ChatRoomFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        System.out.println("+++你好，我是ChatRoomFragment里面的onCreateView函数");
         View view = inflater.inflate(R.layout.chat_room, container, false);
         chatlv =  view.findViewById(R.id.chatlv);
+
         chatMsgAdapter=new ChatMsgAdapter(view.getContext(), R.layout.item_response,data);
+
         chatlv.setAdapter(chatMsgAdapter);
+
         TextView cleanall = view.findViewById(R.id.cleanall);
         cleanall.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,14 +68,13 @@ public class ChatRoomFragment extends Fragment {
                 chatMsgAdapter.notifyDataSetChanged();
             }
         });
-        TextView stopchat = view.findViewById(R.id.stopchat);
 
-        RadioButton radioButton =view.findViewById(R.id.allnochat);
-        stopchat.setOnClickListener(new View.OnClickListener() {
+        Switch sw = view.findViewById(R.id.stopchat);
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 MainActivity activity = (MainActivity) getActivity();
-                activity.stopAllchat(!radioButton.isChecked());
+                activity.stopAllchat(isChecked);
             }
         });
 
@@ -90,9 +89,10 @@ public class ChatRoomFragment extends Fragment {
                 }else {
                     //创建消息
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                    Chat_Msg msg = new Chat_Msg("hongyi2",sdf.format(new Date()),edtext.getText().toString(),1);
+                    Chat_Msg msg = new Chat_Msg(MainActivity.UserId,sdf.format(new Date()),edtext.getText().toString(),1);
                     //发送给别人
                     MainActivity activity = (MainActivity) getActivity();
+
                     activity.sendMsg(msg);//activity中的方法
 
                     //自己这里显示
@@ -101,6 +101,7 @@ public class ChatRoomFragment extends Fragment {
 
                     //清空输入框
                     edtext.setText("");
+                    edtext.setHint("请输入讨论的内容");
                 }
 
             }
@@ -111,8 +112,6 @@ public class ChatRoomFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println("+++你好，我是ChatRoomFragment里面的onCreat函数");
-
     }
 
 

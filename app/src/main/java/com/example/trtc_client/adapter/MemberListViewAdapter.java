@@ -2,7 +2,6 @@ package com.example.trtc_client.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,6 @@ import android.widget.TextView;
 
 import com.example.trtc_client.MemberItem;
 import com.example.trtc_client.R;
-import com.tencent.liteav.base.util.CommonUtil;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 

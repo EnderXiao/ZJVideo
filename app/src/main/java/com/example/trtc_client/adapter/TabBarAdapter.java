@@ -5,10 +5,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.example.trtc_client.AnswerQuestionFragment;
-import com.example.trtc_client.ChatRoomFragment;
-import com.example.trtc_client.VideoListFragment;
-
 import java.util.List;
 
 public class TabBarAdapter extends FragmentPagerAdapter {

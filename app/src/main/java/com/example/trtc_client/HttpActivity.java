@@ -29,6 +29,7 @@ import java.util.TimerTask;
 
 public class HttpActivity extends AnswerActivity {
 
+    private static final String TAG = "xiao";
     private static Timer getHandsUpTimer;
     private static String baseUrl = "http://www.cn901.com";
 
@@ -121,6 +122,7 @@ public class HttpActivity extends AnswerActivity {
             e.printStackTrace();
         }
     }
+
 
 
     public static void getMemberList() {
