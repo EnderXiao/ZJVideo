@@ -1,15 +1,13 @@
 package com.example.trtc_client.setBoardFragment;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.RadioButton;
 import android.widget.Switch;
+
+import androidx.fragment.app.Fragment;
 
 import com.example.trtc_client.MainActivity;
 import com.example.trtc_client.R;
@@ -78,7 +76,6 @@ private Switch sw01,sw02,sw03;
                 sw01.setChecked(activity.getmBoard().isHandwritingEnable());
             }
         }
-//        isHandwritingEnable
         return view;
     }
 }

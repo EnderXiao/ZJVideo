@@ -2,14 +2,13 @@ package com.example.trtc_client.setBoardFragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+
+import androidx.fragment.app.Fragment;
 
 import com.example.trtc_client.MainActivity;
 import com.example.trtc_client.R;
@@ -46,7 +45,7 @@ public class Set_paint_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(40);
+                activity.getmBoard().setBrushThin(40);
                 setpaintsize1.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -56,7 +55,7 @@ public class Set_paint_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(70);
+                activity.getmBoard().setBrushThin(70);
                 setpaintsize2.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -66,7 +65,7 @@ public class Set_paint_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(100);
+                activity.getmBoard().setBrushThin(100);
                 setpaintsize3.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -76,7 +75,7 @@ public class Set_paint_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(150);
+                activity.getmBoard().setBrushThin(150);
                 setpaintsize4.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -86,7 +85,7 @@ public class Set_paint_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(200);
+                activity.getmBoard().setBrushThin(200);
                 setpaintsize5.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -96,7 +95,7 @@ public class Set_paint_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(250);
+                activity.getmBoard().setBrushThin(250);
                 setpaintsize6.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });

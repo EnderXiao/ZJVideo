@@ -1,16 +1,14 @@
 package com.example.trtc_client.setBoardFragment;
 
-import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+
+import androidx.fragment.app.Fragment;
 
 import com.example.trtc_client.MainActivity;
 import com.example.trtc_client.R;
@@ -58,7 +56,7 @@ public class Set_geometry_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(40);
+                activity.getmBoard().setBrushThin(40);
                 setgeometrysize1.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -67,7 +65,7 @@ public class Set_geometry_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(70);
+                activity.getmBoard().setBrushThin(70);
                 setgeometrysize2.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -77,7 +75,7 @@ public class Set_geometry_Fragment extends Fragment {
             public void onClick(View v) {
                 setLinSizestatus();
 
-                activity.getmBoard().setTextSize(100);
+                activity.getmBoard().setBrushThin(100);
                 setgeometrysize3.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -86,7 +84,7 @@ public class Set_geometry_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(150);
+                activity.getmBoard().setBrushThin(150);
                 setgeometrysize4.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -94,7 +92,7 @@ public class Set_geometry_Fragment extends Fragment {
         geometrysize5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.getmBoard().setTextSize(200);
+                activity.getmBoard().setBrushThin(200);
                 setgeometrysize5.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -103,7 +101,7 @@ public class Set_geometry_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(250);
+                activity.getmBoard().setBrushThin(250);
                 setgeometrysize6.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });

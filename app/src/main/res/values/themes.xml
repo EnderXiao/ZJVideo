@@ -6,4 +6,13 @@
         <item name="android:statusBarColor" tools:targetApi="l">@color/blue_white</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Theme.TRTC_Client.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.TRTC_Client.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.TRTC_Client.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

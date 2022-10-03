@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -21,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 
 public class ChatRoomFragment extends Fragment {
     private List<Chat_Msg> data= new ArrayList<Chat_Msg>();

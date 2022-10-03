@@ -26,6 +26,24 @@ import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+import com.example.trtc_client.adapter.MyAdapter;
+import com.example.trtc_client.utils.MyScrollView;
+import com.example.trtc_client.utils.SwZoomDragImageView;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.utils.ViewPortHandler;
+
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -41,39 +59,6 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 
-
-        import com.bumptech.glide.Glide;
-        import com.example.trtc_client.adapter.MyAdapter;
-        import com.example.trtc_client.utils.MyScrollView;
-        import com.example.trtc_client.utils.SwZoomDragImageView;
-
-        import com.github.mikephil.charting.charts.BarChart;
-        import com.github.mikephil.charting.components.AxisBase;
-        import com.github.mikephil.charting.components.Legend;
-        import com.github.mikephil.charting.components.XAxis;
-        import com.github.mikephil.charting.components.YAxis;
-        import com.github.mikephil.charting.data.BarData;
-        import com.github.mikephil.charting.data.BarDataSet;
-        import com.github.mikephil.charting.data.BarEntry;
-        import com.github.mikephil.charting.data.Entry;
-        import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-        import com.github.mikephil.charting.formatter.IValueFormatter;
-        import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-        import com.github.mikephil.charting.utils.ViewPortHandler;
-
-        import java.security.SecureRandom;
-        import java.security.cert.CertificateException;
-        import java.security.cert.X509Certificate;
-        import java.util.ArrayList;
-        import java.util.Arrays;
-        import java.util.List;
-
-        import javax.net.ssl.HostnameVerifier;
-        import javax.net.ssl.HttpsURLConnection;
-        import javax.net.ssl.SSLContext;
-        import javax.net.ssl.SSLSession;
-        import javax.net.ssl.TrustManager;
-        import javax.net.ssl.X509TrustManager;
 
 
 

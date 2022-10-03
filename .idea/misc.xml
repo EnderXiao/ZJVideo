@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+<<<<<<< HEAD
         <entry key="..\:/xgy/ZJVideo/app/src/main/res/drawable-mdpi/bg_select_default.xml" value="0.233" />
         <entry key="..\:/xgy/ZJVideo/app/src/main/res/drawable/bgset_select.xml" value="0.2155" />
         <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout-land/pw_select_set.xml" value="0.9838709677419355" />
@@ -22,6 +23,18 @@
         <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/set_more_fragment.xml" value="0.75" />
         <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/set_paint_fragment.xml" value="0.75" />
         <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/set_text_fragment.xml" value="0.75" />
+=======
+        <entry key="..\:/Android/TRTC_ClientBundle/TRTC_Client/app/src/main/res/layout/activity_main.xml" value="0.190625" />
+        <entry key="..\:/Android/TRTC_ClientBundle/TRTC_Client/app/src/main/res/layout/hands_up_list_item.xml" value="0.3034188034188034" />
+        <entry key="..\:/Android/TRTC_ClientBundle/TRTC_Client/app/src/main/res/layout/hands_up_list_title.xml" value="0.3697916666666667" />
+        <entry key="..\:/Android/TRTC_ClientBundle/TRTC_Client/app/src/main/res/layout/hands_up_pop_window.xml" value="0.37083333333333335" />
+        <entry key="..\:/Android/TRTC_ClientBundle/TRTC_Client/app/src/main/res/layout/hands_up_pop_windwo.xml" value="0.3697916666666667" />
+        <entry key="..\:/Android/TRTC_ClientBundle/TRTC_Client/app/src/main/res/layout/member_list_item.xml" value="0.37083333333333335" />
+        <entry key="..\:/Android/TRTC_ClientBundle/TRTC_Client/app/src/main/res/layout/member_list_pop_window.xml" value="0.22021812080536912" />
+        <entry key="..\:/Android/TRTC_ClientBundle/TRTC_Client/app/src/main/res/layout/member_list_title.xml" value="0.2" />
+        <entry key="..\:/Android/TRTC_ClientBundle/TRTC_Client/app/src/main/res/layout/stusnamelist_item.xml" value="0.15185185185185185" />
+        <entry key="..\:/Android/TRTC_ClientBundle/TRTC_Client/app/src/main/res/layout/video_list.xml" value="0.1527777777777778" />
+>>>>>>> aa9c6cf273276f41792649ca02fc957d16bdb8ff
       </map>
     </option>
   </component>
