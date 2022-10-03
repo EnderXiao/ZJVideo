@@ -55,6 +55,8 @@ public class MemberListViewAdapter extends BaseAdapter {
         public ImageView audioControl;
         public ImageView videoControl;
         public ImageView boardControl;
+        public TextView videoClose;
+        public TextView audioClose;
 
     }
 
@@ -111,6 +113,8 @@ public class MemberListViewAdapter extends BaseAdapter {
             viewHolder.audioControl = (ImageView) convertView.findViewById(R.id.member_audio_control);
             viewHolder.videoControl = (ImageView) convertView.findViewById(R.id.member_video_control);
             viewHolder.boardControl = (ImageView) convertView.findViewById(R.id.member_board_control);
+            viewHolder.audioClose = (TextView) convertView.findViewById(R.id.member_audio_close);
+            viewHolder.videoClose = (TextView) convertView.findViewById(R.id.member_video_close);
 
             //批量设置各列TextView背景颜色透明
 //            CommonUtil.ClearListViewOldRowBackgroundColor(viewHolder);
@@ -126,9 +130,23 @@ public class MemberListViewAdapter extends BaseAdapter {
 
         viewHolder.chatControl.setImageResource(goods.getChatControl() ? R.drawable.chat_controller_on : R.drawable.chat_controller_off);
         viewHolder.speakControl.setImageResource(!goods.getSpeakControl() ? R.drawable.speaker_controller_on : R.drawable.speaker_controller_off);
-        viewHolder.audioControl.setImageResource(goods.getAudioControl() ? R.drawable.audio_controller_on : R.drawable.audio_controller_off);
+        if(goods.getUserType() == 0) {
+            viewHolder.audioControl.setVisibility(View.VISIBLE);
+            viewHolder.audioClose.setVisibility(View.INVISIBLE);
+            viewHolder.audioControl.setImageResource(goods.getAudioControl() ? R.drawable.audio_controller_on : R.drawable.audio_controller_off);
+        } else {
+            viewHolder.audioControl.setVisibility(View.INVISIBLE);
+            viewHolder.audioClose.setVisibility(View.VISIBLE);
+        }
+        if(goods.getUserType() == 0) {
+            viewHolder.videoControl.setVisibility(View.VISIBLE);
+            viewHolder.videoClose.setVisibility(View.INVISIBLE);
+            viewHolder.videoControl.setImageResource(goods.getVideoControl() ? R.drawable.camera_controller_on : R.drawable.camera_controller_off);
+        } else {
+            viewHolder.videoControl.setVisibility(View.INVISIBLE);
+            viewHolder.videoClose.setVisibility(View.VISIBLE);
+        }
         viewHolder.boardControl.setImageResource(goods.getBoardControl() ? R.drawable.board_controller_on : R.drawable.board_controller_off);
-        viewHolder.videoControl.setImageResource(goods.getVideoControl() ? R.drawable.camera_controller_on : R.drawable.camera_controller_off);
 
         // 点击事件
         viewHolder.moveOut.setOnClickListener(new View.OnClickListener() {

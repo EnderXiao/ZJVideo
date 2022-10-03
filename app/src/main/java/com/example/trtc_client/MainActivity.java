@@ -13,11 +13,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -26,6 +28,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView cameraBtn;
     private ImageView audioBtn;
     private TextView teacher_name_view;
+    private ImageView overClassBtn;
     private Group group_btn;
 
     public static String mTeacherId;
@@ -97,11 +101,14 @@ public class MainActivity extends AppCompatActivity {
     public static int mUserCount = 0;
 
 
-    public static String UserId = "xgy";
+    public static String userId = "xgy";
+    public static String userName = "xgy";
+    public static String keTangName = "keTang";
+    public static String keTangId = "keTangId";
     private  String UserSig = "eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwhXplVDh4pTsxIKCzBQlK0MTAwMzQwsLYwOITGpFQWZRKlDc1NTUyMAAKlqSmQsSMzMztjA2MzA3gZqSmQ40NSTF2D03uDy41D9GvzAjPK00Ijkp0cCp1DMiOczC1ai8sig4wNzXJKm4yNDXVqkWAPVmMWI_";
     //private  String UserSig = "eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwhn5eemVmYZQqeKU7MSCgswUJStDEwMDM0MLC2MDiExqRUFmUSpQ3NTU1MjAACpakpkLEjMzMzY3AQKoaHFmOtDk8AJH70LPYkN-Y*1w11y3EHdLH9fgLE-X-Arf8OCqlNBgIw-PIA9PL9OMQFulWgCKxDFd";
     //private  String UserSig = "eJwtzE8LgjAcxvH3snPINrc5hA4FHfpDmOWhY7TpfohrLbVF9N4z8-h8Hvi*0Wl3jHrtUYpohNFs3KC0baGEkc3NVi*g0-VQ9cU5UCglDGNBpIzx-9HBgdeDc84pxpO20PxMiDhhjHE6VaAayudyv*mSA*-q7dX1RaaCaaxc*-syN6tFFp69zXOqNSXFHH2*tlYy5A__";
-    public static String Roomid  = "750795";
+    public static String roomid  = "750795";
     private  int SDKappID =1400618830;
 
     //即时通信相关
@@ -130,12 +137,14 @@ public class MainActivity extends AppCompatActivity {
     // 成员列表
     private static View memberPopupView;
     private static ListView memberList;
+    private static MemberListViewAdapter listViewAdapter;
 
     // 举手列表
     private View handsUpPopupView;
     private ListView handsUpList;
     public HandsUpListViewAdapter handsUpListViewAdapter;
     public List<HandsUpItem> handsUpItemList = new ArrayList<>();
+    public Switch handsUpSwitchBtn;
 
     // UI消息监听器
     public Handler handler;
@@ -167,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 获取底部按钮
         handsUpPopupView = getLayoutInflater().inflate(R.layout.hands_up_pop_window, null);
+        handsUpSwitchBtn = handsUpPopupView.findViewById(R.id.hands_up_controller);
         handsUpList = handsUpPopupView.findViewById(R.id.hands_up_list);
         memberPopupView = getLayoutInflater().inflate(R.layout.member_list_pop_window, null);
         memberList = memberPopupView.findViewById(R.id.member_list);
@@ -178,7 +188,27 @@ public class MainActivity extends AppCompatActivity {
         handBtn = findViewById(R.id.hand_btn);
         audioBtn = findViewById(R.id.mic_btn);
         cameraBtn = findViewById(R.id.camera_btn);
+        overClassBtn = findViewById(R.id.exit_btn);
         teacher_name_view = findViewById(R.id.teacher_name);
+
+        MainActivity that = this;
+        handsUpSwitchBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    HttpActivity.memberController("", "", "", "handAllNo", "", -1, that);
+                } else {
+                    HttpActivity.memberController("", "", "", "handAllYes", "", -1, that);
+                }
+            }
+        });
+
+        overClassBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onExitLiveRoom();
+            }
+        });
 
         boardBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -200,8 +230,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
-                if(msg.what == 1) {
-                    setHandsUpData();
+                int position = -1;
+                switch (msg.what) {
+                    case 1:
+                        setHandsUpData();
+                        break;
+                    case 2:
+                        position = msg.getData().getInt("position");
+                        switchMemberListAudioIcon(position);
+                        break;
+                    case 3:
+                        position = msg.getData().getInt("position");
+                        switchMemberListChatIcon(position);
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        position = msg.getData().getInt("position");
+                        switchSpeakerIcon(position);
+                        break;
+                    default:
+                        break;
                 }
             }
         };
@@ -224,6 +273,40 @@ public class MainActivity extends AppCompatActivity {
         }
         handsUpItemList.addAll(tempHandsUpItemList);
         handsUpListViewAdapter.notifyDataSetChanged();
+    }
+
+    public void switchMemberListAudioIcon(int position) {
+        MemberItem item = listViewAdapter.getItem(position);
+        if(item != null){
+            Log.e(TAG, "switchMemberListAudioIcon: 获取用户item " + item.getName());
+            item.setAudioControl(!item.getAudioControl());
+            Toast.makeText(MainActivity.this, "成员 " + position + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
+            listViewAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(MainActivity.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void switchMemberListChatIcon(int position) {
+        MemberItem item = listViewAdapter.getItem(position);
+        if(item != null){
+            item.setChatControl(!item.getChatControl());
+            Toast.makeText(MainActivity.this, "成员 " + position + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
+            listViewAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(MainActivity.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void switchSpeakerIcon(int position) {
+        MemberItem item = listViewAdapter.getItem(position);
+        if(item != null){
+            item.setSpeakControl(!item.getSpeakControl());
+            Toast.makeText(MainActivity.this, "成员 " + position + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
+            listViewAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(MainActivity.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void initHandsUpList() {
@@ -262,13 +345,13 @@ public class MainActivity extends AppCompatActivity {
 //        memberList.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         if(AnswerActivity.joinList != null) {
             for (int i = 0; i < AnswerActivity.joinList.size(); i++) {
-                memberDataList.add(new MemberItem(AnswerActivity.joinList.get(i).getName(), true, true, true, false, true));
+                memberDataList.add(new MemberItem(AnswerActivity.joinList.get(i).getName(), AnswerActivity.joinList.get(i).getUserId(), 1 ,true, true, true, false, true));
                 Log.e(TAG, "initMemberList: " + AnswerActivity.joinList.get(i).toString());
             }
         }
         if(AnswerActivity.ketangList != null) {
             for (int i = 0; i < AnswerActivity.ketangList.size(); i++) {
-                memberDataList.add(new MemberItem(AnswerActivity.ketangList.get(i).getName(), true, true, true, false, true));
+                memberDataList.add(new MemberItem(AnswerActivity.ketangList.get(i).getName(), AnswerActivity.joinList.get(i).getUserId(), 0 , true, true, true, false, true));
                 Log.e(TAG, "initMemberList: " + AnswerActivity.ketangList.get(i).toString());
             }
         }
@@ -276,7 +359,8 @@ public class MainActivity extends AppCompatActivity {
 //        for (int i = 0; i < 10; i ++){
 //            memberDataList.add(new MemberItem("测试", Integer.toString(i), "2", "3", "4", "5"));
 //        }
-        MemberListViewAdapter listViewAdapter = new MemberListViewAdapter(this, memberList, memberDataList);
+        MainActivity that = this;
+        listViewAdapter = new MemberListViewAdapter(this, memberList, memberDataList);
         memberList.setAdapter(listViewAdapter);
 
         listViewAdapter.setOnItemButtonListener(new MemberListViewAdapter.onItemButtonListener() {
@@ -290,9 +374,9 @@ public class MainActivity extends AppCompatActivity {
                 MemberItem item = listViewAdapter.getItem(i);
                 if(item != null){
                     if(item.getChatControl()){
-                        item.setChatControl(false);
+                        HttpActivity.memberController("", "", "closeWords", "", item.getUserId(), i, that);
                     } else {
-                        item.setChatControl(true);
+                        HttpActivity.memberController("", "", "openWords", "", item.getUserId(), i, that);
                     }
                     Toast.makeText(MainActivity.this, "成员 " + i + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
@@ -306,9 +390,9 @@ public class MainActivity extends AppCompatActivity {
                 MemberItem item = listViewAdapter.getItem(i);
                 if(item != null){
                     if(item.getSpeakControl()){
-                        item.setSpeakControl(false);
+                        HttpActivity.speakerController(item.getUserId(), item.getName(), "down", i, that);
                     } else {
-                        item.setSpeakControl(true);
+                        HttpActivity.speakerController(item.getUserId(), item.getName(), "up", i, that);
                     }
                     Toast.makeText(MainActivity.this, "成员 " + i + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
@@ -322,9 +406,9 @@ public class MainActivity extends AppCompatActivity {
                 MemberItem item = listViewAdapter.getItem(i);
                 if(item != null){
                     if(item.getAudioControl()){
-                        item.setAudioControl(false);
+                        HttpActivity.memberController("closeMic", "", "", "", item.getUserId(), i, that);
                     } else {
-                        item.setAudioControl(true);
+                        HttpActivity.memberController("openMic", "", "", "", item.getUserId(), i, that);
                     }
                     Toast.makeText(MainActivity.this, "成员 " + i + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
@@ -343,8 +427,10 @@ public class MainActivity extends AppCompatActivity {
                 MemberItem item = listViewAdapter.getItem(i);
                 if(item != null){
                     if(item.getBoardControl()){
+                        drawAuthority( "drawAuthority", "no", item.getUserId());
                         item.setBoardControl(false);
                     } else {
+                        drawAuthority("drawAuthority" , "yes", item.getUserId());
                         item.setBoardControl(true);
                     }
                     Toast.makeText(MainActivity.this, "成员 " + i + " 禁绘画按钮被点击", Toast.LENGTH_SHORT).show();
@@ -428,8 +514,10 @@ public class MainActivity extends AppCompatActivity {
 //                return;
 //            }
             if(available) {
-                if(AnswerActivity.findMemberInKetangList(userId) != null)
+                if(AnswerActivity.findMemberInKetangList(userId) != null) {
+
                     mUserList.add(userId);
+                }
             }
             else
                 mUserList.remove(userId);
@@ -480,8 +568,8 @@ public class MainActivity extends AppCompatActivity {
 //        String userId = "mingming";
         myTRTCParams = new TRTCCloudDef.TRTCParams();
         myTRTCParams.sdkAppId = GenerateTestUserSig.SDKAPPID;
-        myTRTCParams.userId = UserId;
-        myTRTCParams.roomId = Integer.parseInt(Roomid);
+        myTRTCParams.userId = userId;
+        myTRTCParams.roomId = Integer.parseInt(roomid);
         myTRTCParams.userSig = GenerateTestUserSig.genTestUserSig(myTRTCParams.userId);
 //        myTRTCParams.userSig = "eJwtzMEKgkAUheF3mXXI9eoMKbTQiFoE4WQQ7dSZ4jY0mVoa0btn6vJ8B-4PS7d756UrFjJ0gM2GTUrbhs40cEfZHdzpqZXJypIUC10fQCAEyMdHdyVVunfOOQLAqA3d-iYE*p6HPJgqdOnD-ukooyQNjELZbeQhf7ytKAp7Xc7XBmFXJzxvoyes4nbBvj8x1DFE";
 
@@ -520,6 +608,13 @@ public class MainActivity extends AppCompatActivity {
         @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = getResources().getDrawable(R.drawable.mic_on);
         teacher_name_mic_icon.setBounds(0,0,20,20);
         teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
+
+        // 初始化房间信息
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int screenWidth = dm.widthPixels;
+        int screenHeight = dm.heightPixels;
+        HttpActivity.initClass(screenWidth, screenHeight, "skydt", this);
 
         // 开启举手监听事件
         HttpActivity.startHandsUpTimer(this);
@@ -575,9 +670,6 @@ public class MainActivity extends AppCompatActivity {
         int offsetX = - memberPopupView.getMeasuredWidth() / 4;
         int offsetY = - memberPopupView.getMeasuredHeight() - (view.getHeight()) - 10;
         popupWindow.showAsDropDown(view, offsetX, offsetY, Gravity.START);
-        for (int i = 0; i < AnswerActivity.joinList.size(); i++) {
-            Log.e(TAG, "showMemberListBtn: " + AnswerActivity.joinList.get(i).toString());
-        }
     }
 
     public void showHandsUpBtn(View view) {
@@ -594,7 +686,7 @@ public class MainActivity extends AppCompatActivity {
         //（1）鉴权配置
         System.out.println("+++开始初始化白板");
         TEduBoardController.TEduBoardAuthParam authParam = new TEduBoardController.TEduBoardAuthParam(
-                SDKappID , UserId, UserSig);
+                SDKappID , userId, UserSig);
         //（2）白板默认配置
         TEduBoardController.TEduBoardInitParam initParam = new TEduBoardController.TEduBoardInitParam();
         initParam.timSync=false;
@@ -634,7 +726,7 @@ public class MainActivity extends AppCompatActivity {
                 if (message.getCustomElem() != null) {
                     message.getCustomElem().setExtension("TXWhiteBoardExt".getBytes());
                 }
-                V2TIMManager.getInstance().getConversationManager().getConversation(Roomid, new V2TIMValueCallback<V2TIMConversation>() {
+                V2TIMManager.getInstance().getConversationManager().getConversation(roomid, new V2TIMValueCallback<V2TIMConversation>() {
                     @Override
                     public void onError(int i, String s) {
                         // 获取回话失败
@@ -642,7 +734,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     @Override
                     public void onSuccess(V2TIMConversation v2TIMConversation) {
-                        V2TIMManager.getInstance().getMessageManager().sendMessage(message, null, Roomid, 1, false, null,  new V2TIMSendCallback<V2TIMMessage>() {
+                        V2TIMManager.getInstance().getMessageManager().sendMessage(message, null, roomid, 1, false, null,  new V2TIMSendCallback<V2TIMMessage>() {
                             @Override
                             public void onSuccess(V2TIMMessage v2TIMMessage) {
                                 // 发送 IM 消息成功
@@ -857,7 +949,7 @@ public class MainActivity extends AppCompatActivity {
 
         mBoard.addCallback(mBoardCallback);
         //（4）进行初始化
-        mBoard.init(authParam,  Integer.parseInt(Roomid), initParam);
+        mBoard.init(authParam,  Integer.parseInt(roomid), initParam);
         //（2）获取白板 View
         boardview = mBoard.getBoardRenderView();
         // 初始化白板的按钮功能
@@ -900,7 +992,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void LoginTIM(){
-        V2TIMManager.getInstance().login(UserId, UserSig, new V2TIMCallback() {
+        V2TIMManager.getInstance().login(userId, UserSig, new V2TIMCallback() {
             @Override
             public void onError(int i, String s) {
                 System.out.println("++++++登陆失败"+s);
@@ -953,7 +1045,7 @@ public class MainActivity extends AppCompatActivity {
                     String value = jsonmsg.get("value").toString();
                     JSONObject jsonoperator = new JSONObject(value);
                     String operator =jsonoperator.get("operator").toString();
-                    if(operator!=UserId){
+                    if(operator!=userId){
                         mBoard.addSyncData(msg);
                     }
                 } catch (JSONException e) {
@@ -966,7 +1058,7 @@ public class MainActivity extends AppCompatActivity {
         });
     };
     public void createGroup(){
-        V2TIMManager.getInstance().createGroup(V2TIMManager.GROUP_TYPE_MEETING, Roomid, Roomid, new V2TIMValueCallback<String>() {
+        V2TIMManager.getInstance().createGroup(V2TIMManager.GROUP_TYPE_MEETING, roomid, roomid, new V2TIMValueCallback<String>() {
             @Override
             public void onSuccess(String s) {
                 // 创建群组成功
@@ -977,7 +1069,7 @@ public class MainActivity extends AppCompatActivity {
             public void onError(int code, String desc) {
                 // 创建群组失败
                 if(10021==code){
-                    V2TIMManager.getInstance().joinGroup(Roomid, Roomid, new V2TIMCallback() {
+                    V2TIMManager.getInstance().joinGroup(roomid, roomid, new V2TIMCallback() {
                         @Override
                         public void onSuccess() {
                             // 加群成功
@@ -1287,11 +1379,25 @@ public class MainActivity extends AppCompatActivity {
         menu10.setBackgroundResource(R.mipmap.menu_10);
         menu11.setBackgroundResource(R.mipmap.menu_11_bg);
     }
+
+    /**
+     * 白板控制
+     *
+     * @param extension 消息类型
+     * @param action    操作动作
+     * @param id        操作对象ID
+     */
+
+    public void drawAuthority(String extension, String action, String id) {
+
+    }
+
+
     public void sendMsg(Chat_Msg msg){
         // 创建文本消息
         V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createTextMessage( "{\"text\":\""+msg.getContent()+"\",\"date\":\""+msg.getDate()+"\"}");
         // 发送消息
-        V2TIMManager.getMessageManager().sendMessage(v2TIMMessage, null,Roomid, V2TIMMessage.V2TIM_PRIORITY_NORMAL, false, null, new V2TIMSendCallback<V2TIMMessage>() {
+        V2TIMManager.getMessageManager().sendMessage(v2TIMMessage, null,roomid, V2TIMMessage.V2TIM_PRIORITY_NORMAL, false, null, new V2TIMSendCallback<V2TIMMessage>() {
             @Override
             public void onProgress(int progress) {
                 // 文本消息不会回调进度
@@ -1312,7 +1418,7 @@ public class MainActivity extends AppCompatActivity {
     public void stopAllchat(Boolean isstop){
         // 全员禁言
         V2TIMGroupInfo info = new V2TIMGroupInfo();
-        info.setGroupID(Roomid);
+        info.setGroupID(roomid);
         info.setAllMuted(isstop);
         V2TIMManager.getGroupManager().setGroupInfo(info, new V2TIMCallback() {
             @Override
@@ -1345,6 +1451,12 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void onExitLiveRoom() {
+
+        HttpActivity.overClass("leave", "skydt", this);
+        mTRTCCloud.exitRoom();
     }
 
     //下课 销毁白板  反初始化IM
