@@ -1269,12 +1269,9 @@ public class MainActivity extends AppCompatActivity {
                             mBoard.addSyncData(new String(msg.getCustomElem().getData()));
                         }else if("TBKTExt".equals(Msg_Extension)){
                             //文本消息
-                            SimpleDateFormat format = new SimpleDateFormat("hh:mm");
-
+                            SimpleDateFormat format = new SimpleDateFormat("HH:mm");
                             Chat_Msg msg_rec = new Chat_Msg(msg.getUserID(),format.format(new Date(msg.getTimestamp()*1000)),new String(msg.getCustomElem().getData()),0);// type  0 别人 1 自己
-
                             ChatRoomFragment f = (ChatRoomFragment)getmFragmenglist().get(1);
-
                             f.setData(msg_rec);
                             f.getChatMsgAdapter().notifyDataSetChanged();
                             f.getChatlv().setSelection(f.getChatlv().getBottom());

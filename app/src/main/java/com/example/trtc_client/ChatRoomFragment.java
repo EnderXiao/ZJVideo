@@ -89,7 +89,7 @@ public class ChatRoomFragment extends Fragment {
                 }else {
                     //创建消息
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                    Chat_Msg msg = new Chat_Msg("hongyi2",sdf.format(new Date()),edtext.getText().toString(),1);
+                    Chat_Msg msg = new Chat_Msg(MainActivity.UserId,sdf.format(new Date()),edtext.getText().toString(),1);
                     //发送给别人
                     MainActivity activity = (MainActivity) getActivity();
 

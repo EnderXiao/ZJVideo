@@ -65,11 +65,16 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
                 <TextView
+                    android:id="@+id/tx_huizong"
                     android:text="汇总数据"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
-                    android:layout_marginLeft="20dp"/>
+                    android:paddingLeft="20dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:textColor="#FFFFFF"
+                    android:background="#007947"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -124,8 +129,18 @@
 
             </ScrollView>
 
+            <TextView
+                android:id="@+id/tx_noanswer"
+                android:text="没有人提交答案。"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
             <!--答题详情 -->
             <ScrollView
+                android:visibility="gone"
                 android:id="@+id/slStusAnswers"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

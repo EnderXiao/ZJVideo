@@ -96,17 +96,15 @@
         android:background="@color/popupWindow_container"
         android:orientation="vertical" >
 
-
-
         <ImageView
-            android:id="@+id/member_audio_control"
+            android:id="@+id/member_board_control"
             android:layout_width="20dp"
             android:layout_height="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/audio_controller_on"
+            android:src="@drawable/board_controller_off"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -120,16 +118,32 @@
         android:background="@color/popupWindow_container"
         android:orientation="vertical" >
 
+
+
         <ImageView
-            android:id="@+id/member_board_control"
+            android:id="@+id/member_audio_control"
             android:layout_width="20dp"
             android:layout_height="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/board_controller_off"
+            android:src="@drawable/audio_controller_on"
+            android:visibility="visible"
             />
+        <TextView
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@color/white"
+            android:text="--"
+            android:textSize="15sp"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -153,8 +167,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:visibility="visible"
             android:src="@drawable/camera_controller_on"
             />
+        <TextView
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@color/white"
+            android:text="--"
+            android:visibility="invisible"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
