@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 public class StudentDataBean extends MemberDataBean {
 
     public StudentDataBean(String name, String id) {
-        super(name, id);
+        super(1, name, id);
     }
 
     @NonNull

@@ -14,12 +14,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.Button;
@@ -59,6 +61,8 @@ import com.example.trtc_client.setBoardFragment.Set_more_Fragment;
 import com.example.trtc_client.setBoardFragment.Set_paint_Fragment;
 import com.example.trtc_client.setBoardFragment.Set_text_Fragment;
 import com.example.trtc_client.utils.UriUtils;
+import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.badge.BadgeUtils;
 import com.google.android.material.tabs.TabLayout;
 import com.tencent.cos.xml.CosXmlService;
 import com.tencent.cos.xml.CosXmlServiceConfig;
@@ -105,6 +109,7 @@ import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -113,6 +118,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Timer timer;
 
     private static Handler handlerCount = new Handler();
     private static Runnable runnablere_mBoardaddResouce;
@@ -126,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
     public void setmFragmenglist(List<Fragment> mFragmenglist) {this.mFragmenglist = mFragmenglist;}
 
     public final static String TAG = "Ender_MainActivity";
-    private static TRTCCloud mTRTCCloud;
+    public static TRTCCloud mTRTCCloud;
     private TRTCCloudDef.TRTCParams myTRTCParams;
     private TXCloudVideoView mTXCVVTeacherPreviewView;
     private RelativeLayout teacherTRTCBackground;
@@ -134,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView canvasBtn;  //文件 按钮  现在是画笔按钮
 
     private ImageView contentBtn;  //文件夹按钮  现在是授课内容
-    private ImageView membesw;
+    private ImageView memberBtn;
     private ImageView handBtn;
     private ImageView cameraBtn;
     private ImageView audioBtn;
@@ -215,6 +222,7 @@ public class MainActivity extends AppCompatActivity {
     private String CurBoardID=null;   //当前白板页ID
     private String CurType=null;   // 初试为空   两种类型  Board和File
     private static Boolean isquestion=false;  //用于记录是不是  题目保存调用快照
+    private static TextView headerCountString;
 
     private Button choosefile,uploadfile;
     private TextView msgTips,filename;
@@ -223,6 +231,9 @@ public class MainActivity extends AppCompatActivity {
     private Boolean isincludeType  = false;  //判断文件格式是否上传
     private String curfilepath,curfilename;
     private LinearLayout uploadprogress;
+    private TextView classTitle;
+    private TextView classTime;
+    private long baseTimer;
 
     //TabBarFragment
     private final ChatRoomFragment chatRoomFragment = new ChatRoomFragment();
@@ -231,14 +242,19 @@ public class MainActivity extends AppCompatActivity {
 
     // 成员列表
     private static View memberPopupView;
+    private static ImageView memberPopupCloseBtn;
     private static ListView memberList;
     private static MemberListViewAdapter listViewAdapter;
+    private static TextView memberListCountString;
+    private List<MemberItem> memberDataList;
 
     // 举手列表
     private View handsUpPopupView;
+    private static ImageView handsUpPopupCloseBtn;
     private ListView handsUpList;
     public HandsUpListViewAdapter handsUpListViewAdapter;
     public List<HandsUpItem> handsUpItemList = new ArrayList<>();
+    private TextView handBtnBadge;
     public Switch handsUpSwitchBtn;
 
     // UI消息监听器
@@ -310,21 +326,28 @@ public class MainActivity extends AppCompatActivity {
 
         alert_text = findViewById(R.id.alert_text);
         upload_btn= findViewById(R.id.upload_btn);
+        headerCountString = findViewById(R.id.student_num);
+        classTime = findViewById(R.id.class_time);
+        classTitle = findViewById(R.id.class_title);
 
         // 获取底部按钮
 
         handsUpPopupView = getLayoutInflater().inflate(R.layout.hands_up_pop_window, null);
         handsUpSwitchBtn = handsUpPopupView.findViewById(R.id.hands_up_controller);
+        handsUpPopupCloseBtn = handsUpPopupView.findViewById(R.id.hands_up_list_pop_close);
         handsUpList = handsUpPopupView.findViewById(R.id.hands_up_list);
         memberPopupView = getLayoutInflater().inflate(R.layout.member_list_pop_window, null);
+        memberListCountString = memberPopupView.findViewById(R.id.member_list_pop_title);
+        memberPopupCloseBtn = memberPopupView.findViewById(R.id.member_list_pop_close);
         memberList = memberPopupView.findViewById(R.id.member_list);
         group_btn = findViewById(R.id.group_buttons);
         canvasBtn = findViewById(R.id.canvas_btn);
         exit_btn = findViewById(R.id.exit_btn);
+        handBtnBadge = findViewById(R.id.hand_btn_badge);
 
         boardBtn = findViewById(R.id.board_btn);
         contentBtn = findViewById(R.id.content_btn);
-        membesw = findViewById(R.id.member_btn);
+        memberBtn = findViewById(R.id.member_btn);
         handBtn = findViewById(R.id.hand_btn);
         audioBtn = findViewById(R.id.mic_btn);
         cameraBtn = findViewById(R.id.camera_btn);
@@ -473,7 +496,6 @@ public class MainActivity extends AppCompatActivity {
          rf_bottommenu = findViewById(R.id.menu_bottom);
          rf_shoukeneirong = findViewById(R.id.bg_shoukeneirong);
 
-
          //白板按钮
         boardBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -511,6 +533,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+
         handler = new Handler() {
             @Override
             public void handleMessage(@NonNull Message msg) {
@@ -534,30 +557,97 @@ public class MainActivity extends AppCompatActivity {
                         position = msg.getData().getInt("position");
                         switchSpeakerIcon(position);
                         break;
+                    case 6:
+                        setClassTime((String) msg.obj);
+                        break;
+                    case 7:
+                        updateMemberList();
+                        break;
                     default:
                         break;
                 }
             }
         };
-
+        setClassTitle("测试课堂");
         //初始化存储桶服务
         InitBucket(this);
         initHandsUpList();
         initMemberList();
         initTabBarNavigation();
         enterLiveRoom();
+        // 开启计时器
+        startTime();
+    }
+
+    public void startTime() {
+        MainActivity that = this;
+        baseTimer = SystemClock.elapsedRealtime();
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                int time = (int)((SystemClock.elapsedRealtime() - that.baseTimer) / 1000);
+                String hh = new DecimalFormat("00").format(time / 3600);
+                String mm = new DecimalFormat("00").format(time % 3600 / 60);
+                String ss = new DecimalFormat("00").format(time % 60);
+                String timeFormat = new String(hh + ":" + mm + ":" + ss);
+                Message msg = new Message();
+                msg.what = 6;
+                msg.obj = timeFormat;
+                that.handler.sendMessage(msg);
+            }
+        }, 0, 1000L);
+    }
+
+    public void stopTime() {
+        if(timer != null)
+            timer.cancel();
+    }
+
+    public void setClassTitle(String title) {
+        classTitle.setText(title);
+    }
+
+    public void setClassTime(String time) {
+        classTime.setText(time);
+    }
+
+    public void setCountMember(int classNum, int studentNum) {
+        String title = "成员 (同步课堂: " + String.valueOf(classNum) + "  移动端: " + String.valueOf(studentNum) +")";
+        headerCountString.setText(title);
+        memberListCountString.setText(title);
+    }
+
+    public TRTCCloud getmTRTCCloud() {
+        return mTRTCCloud;
+    }
+
+    public void setHandBtnBadge(int num) {
+        if(num > 0) {
+            handBtnBadge.setVisibility(View.VISIBLE);
+            if(num > 99)
+                handBtnBadge.setText("99+");
+            else
+                handBtnBadge.setText(String.valueOf(num));
+        } else {
+            handBtnBadge.setText("0");
+            handBtnBadge.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void setHandsUpData() {
+        MainActivity that = this;
         handsUpItemList.clear();
         List<HandsUpItem> tempHandsUpItemList = new ArrayList<>();
         for (int i = 0; i < AnswerActivity.handsUpList.size(); i++) {
-            tempHandsUpItemList.add(new HandsUpItem(AnswerActivity.handsUpList.get(i).getName(), AnswerActivity.handsUpList.get(i).getUserId(), false));
+            tempHandsUpItemList.add(new HandsUpItem( AnswerActivity.handsUpList.get(i).getUserType(), AnswerActivity.handsUpList.get(i).getName(), AnswerActivity.handsUpList.get(i).getUserId(), false));
         }
         for (int i =0; i< tempHandsUpItemList.size(); i++) {
             Log.e(TAG, "updateHandsUpList: "  + tempHandsUpItemList.get(i).toString());
         }
         handsUpItemList.addAll(tempHandsUpItemList);
+        setHandBtnBadge(handsUpItemList.size());
+//        UtilTools.QBadge(this, handBtn, AnswerActivity.handsUpList.size());
         handsUpListViewAdapter.notifyDataSetChanged();
     }
 
@@ -587,6 +677,7 @@ public class MainActivity extends AppCompatActivity {
     public void switchSpeakerIcon(int position) {
         MemberItem item = listViewAdapter.getItem(position);
         if(item != null){
+            this.videoListFragment.setVideo(item.getUserId(),item.getAudioControl(),this, mTRTCCloud );
             item.setSpeakControl(!item.getSpeakControl());
             Toast.makeText(MainActivity.this, "成员 " + position + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
@@ -595,23 +686,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // 初始化举手列表
     public void initHandsUpList() {
         if(AnswerActivity.handsUpList != null) {
             for (int i = 0; i < AnswerActivity.handsUpList.size(); i++) {
-                handsUpItemList.add(new HandsUpItem(AnswerActivity.handsUpList.get(i).getName(), AnswerActivity.handsUpList.get(i).getUserId(), false));
+                handsUpItemList.add(new HandsUpItem(AnswerActivity.handsUpList.get(i).getUserType() ,AnswerActivity.handsUpList.get(i).getName(), AnswerActivity.handsUpList.get(i).getUserId(), false));
                 Log.e(TAG, "initHandsUpList: "  + AnswerActivity.handsUpList.get(i).toString());
             }
 
         }
         handsUpListViewAdapter = new HandsUpListViewAdapter(this, handsUpList, handsUpItemList);
         handsUpList.setAdapter(handsUpListViewAdapter);
-
-        handsUpList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(MainActivity.this, "Click Item" + i , Toast.LENGTH_SHORT).show();
-            }
-        });
 
         handsUpListViewAdapter.setOnSpeakerControllerClickListener(new HandsUpListViewAdapter.onSpeakerControllerListener() {
             @Override
@@ -620,14 +705,55 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
     // 上讲台处理
     public void upToSpeaking(int position) {
+        HandsUpItem item = handsUpListViewAdapter.getItem(position);
+        // 将消息从请求列表中移除
+        handsUpItemList.remove(position);
+        // 更新小红点
+        setHandBtnBadge(handsUpItemList.size());
+        handsUpListViewAdapter.notifyDataSetChanged();
+        HttpActivity.speakerController(item.getUserId(), item.getName(), "up", position, this);
+
+        // 更改MemberList中的状态
+        int memberPosition = listViewAdapter.getItemPositionById(item.getUserId());
+        if(memberPosition != -1){
+            MemberItem memberNow = listViewAdapter.getItem(memberPosition);
+            memberNow.setUserType(0);
+            switchSpeakerIcon(memberPosition);
+            listViewAdapter.notifyDataSetChanged();
+        }
+        this.videoListFragment.addCameraView(item.getUserId(), mTRTCCloud);
+
         Toast.makeText(this, "举手成员 " + position + " 上讲台被点击了", Toast.LENGTH_SHORT).show();
     }
 
+
+    // 更新成员列表
+    public void updateMemberList() {
+        memberDataList.clear();
+        if(AnswerActivity.joinList != null) {
+            for (int i = 0; i < AnswerActivity.joinList.size(); i++) {
+                memberDataList.add(new MemberItem(AnswerActivity.joinList.get(i).getName(), AnswerActivity.joinList.get(i).getUserId(), 1 ,true, true, true, false, true));
+                Log.e(TAG, "initMemberList: " + AnswerActivity.joinList.get(i).toString());
+            }
+        }
+        if(AnswerActivity.ketangList != null) {
+            for (int i = 0; i < AnswerActivity.ketangList.size(); i++) {
+                memberDataList.add(new MemberItem(AnswerActivity.ketangList.get(i).getName(), AnswerActivity.joinList.get(i).getUserId(), 0 , true, true, true, false, true));
+                Log.e(TAG, "initMemberList: " + AnswerActivity.ketangList.get(i).toString());
+            }
+        }
+        setCountMember(AnswerActivity.ketangList.size(), AnswerActivity.joinList.size());
+        listViewAdapter.notifyDataSetChanged();
+    }
+
+    // 初始化成员列表
     public void initMemberList() {
-        List<MemberItem> memberDataList = new ArrayList<>();
-        HttpActivity.getMemberList();
+        memberDataList = new ArrayList<>();
+        HttpActivity.getMemberList(this);
 //        memberList.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         if(AnswerActivity.joinList != null) {
             for (int i = 0; i < AnswerActivity.joinList.size(); i++) {
@@ -645,6 +771,7 @@ public class MainActivity extends AppCompatActivity {
 //        for (int i = 0; i < 10; i ++){
 //            memberDataList.add(new MemberItem("测试", Integer.toString(i), "2", "3", "4", "5"));
 //        }
+        setCountMember(AnswerActivity.ketangList.size(), AnswerActivity.joinList.size());
         MainActivity that = this;
         listViewAdapter = new MemberListViewAdapter(this, memberList, memberDataList);
         memberList.setAdapter(listViewAdapter);
@@ -676,8 +803,19 @@ public class MainActivity extends AppCompatActivity {
                 MemberItem item = listViewAdapter.getItem(i);
                 if(item != null){
                     if(item.getSpeakControl()){
+                        item.setUserType(0);
                         HttpActivity.speakerController(item.getUserId(), item.getName(), "down", i, that);
+                        that.videoListFragment.leaveRoom(item.getUserId(), 12580, that, getmTRTCCloud());
+                        that.videoListFragment.addCameraView(item.getUserId(), getmTRTCCloud());
                     } else {
+                        ClassDataBean memberInKetangList = AnswerActivity.findMemberInKetangList(item.getUserId());
+                        StudentDataBean studentDataBean = AnswerActivity.findMemberInJoinList(item.getUserId());
+                        if(memberInKetangList != null)
+                            item.setUserType(0);
+                        if(studentDataBean != null) {
+                            that.videoListFragment.leaveRoom(item.getUserId(), 12580, that, getmTRTCCloud());
+                            item.setUserType(1);
+                        }
                         HttpActivity.speakerController(item.getUserId(), item.getName(), "up", i, that);
                     }
                     Toast.makeText(MainActivity.this, "成员 " + i + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
@@ -787,7 +925,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onUserVideoAvailable(String userId, boolean available) {
             MainActivity activity = mContext.get();
-            activity.initMemberList();
             Log.d(TAG, "onUserVideoAvailable userId " + userId + ", mUserCount " + mUserCount + ",available " + available);
             Toast.makeText(activity, "onUserVideoAvailable userId " + userId + ", mUserCount " + mUserCount + ",available " + available , Toast.LENGTH_SHORT).show();
             System.out.println("onUserVideoAvailable userId " + userId + ", mUserCount " + mUserCount + ",available " + available);
@@ -806,26 +943,28 @@ public class MainActivity extends AppCompatActivity {
             }
             else
                 mUserList.remove(userId);
-            activity.videoListFragment.setVideo(userId, available, activity, activity.mTRTCCloud);
+            if(AnswerActivity.findMemberInKetangList((userId)) != null)
+                activity.videoListFragment.setVideo(userId, available, activity, activity.mTRTCCloud);
 
         }
 
         @Override
         public void onRemoteUserEnterRoom(String userId){
             MainActivity activity = mContext.get();
-            activity.initMemberList();
+            HttpActivity.getMemberList(activity);
             Log.e(TAG, "onRemoteUserEnterRoom: userId" + userId );
             System.out.println("onRemoteUserEnterRoom userId " + userId );
             Toast.makeText(activity, "onRemoteUserEnterRoom userId " + userId , Toast.LENGTH_SHORT).show();
-            activity.videoListFragment.addCameraView(userId, activity.mTRTCCloud);
+            if(AnswerActivity.findMemberInKetangList(userId) != null)
+                activity.videoListFragment.addCameraView(userId, activity.mTRTCCloud);
         }
 
         @Override
         public void onRemoteUserLeaveRoom(String userId, int reason){
             MainActivity activity = mContext.get();
-            activity.initMemberList();
             activity.videoListFragment.leaveRoom(userId, reason, activity,
                     activity.mTRTCCloud);
+            HttpActivity.getMemberList(activity);
 //            Toast.makeText(activity, "onRemoteUserLeaveRoom userId " + userId , Toast.LENGTH_SHORT).show();
         }
 
@@ -953,6 +1092,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void showMemberListBtn(View view) {
         PopupWindow popupWindow = new PopupWindow(memberPopupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        memberPopupCloseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
         memberPopupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         int offsetX = - memberPopupView.getMeasuredWidth() / 4;
         int offsetY = - memberPopupView.getMeasuredHeight() - (view.getHeight()) - 10;
@@ -961,6 +1106,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void showHandsUpBtn(View view) {
         PopupWindow popupWindow = new PopupWindow(handsUpPopupView, 300, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        handsUpPopupCloseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
         handsUpPopupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         int offsetX = - handsUpPopupView.getMeasuredWidth() /4;
         int offsetY = - handsUpPopupView.getMeasuredHeight() - (view.getHeight()) - 10;
@@ -2373,6 +2524,7 @@ public class MainActivity extends AppCompatActivity {
     public void onExitLiveRoom() {
 
         HttpActivity.overClass("leave", "skydt", this);
+        stopTime();
         mTRTCCloud.exitRoom();
     }
 

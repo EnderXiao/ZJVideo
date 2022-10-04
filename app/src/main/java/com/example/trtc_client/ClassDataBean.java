@@ -5,7 +5,7 @@ public class ClassDataBean extends MemberDataBean {
 
 
     public ClassDataBean(String name, String id, int num) {
-        super(name, id);
+        super(0, name, id);
         this.num = num;
     }
 

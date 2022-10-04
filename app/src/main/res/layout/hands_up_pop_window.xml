@@ -22,11 +22,11 @@
             android:layout_height="wrap_content" />
 
         <ImageView
-            android:layout_centerVertical="true"
             android:id="@+id/hands_up_list_pop_close"
-            android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:src="@drawable/close" />
     </RelativeLayout>
 

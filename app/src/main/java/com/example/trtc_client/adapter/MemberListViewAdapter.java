@@ -22,7 +22,6 @@ public class MemberListViewAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private onItemButtonListener mOnItemButtonListener;
 
-    private int selectedItem = -1;
     public MemberListViewAdapter(Context context, ListView memberList, List<MemberItem> list) {
         this.list = list;
         this.memberList = memberList;
@@ -36,6 +35,16 @@ public class MemberListViewAdapter extends BaseAdapter {
         void onAudioControlClick(int i);
         void onVideoControlClick(int i);
         void onBoardControlClick(int i);
+    }
+
+    public int getItemPositionById(String userId) {
+        for (int i = 0; i < list.size(); i++){
+            MemberItem itemNow = list.get(i);
+            if(itemNow.getUserId().equals(userId)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public void setOnItemButtonListener(onItemButtonListener onItemButtonListener){
@@ -70,11 +79,6 @@ public class MemberListViewAdapter extends BaseAdapter {
             return list.get(position);
         }
         return null;
-    }
-
-    public void setSelectedItem(int selectedItem) {
-        this.selectedItem = selectedItem;
-        this.notifyDataSetChanged(); //必须调养该方法，否则getView不会重新触发，背景色就不会改变
     }
 
     //设置行不可点击

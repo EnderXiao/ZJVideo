@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -125,7 +126,7 @@ public class HttpActivity extends AnswerActivity {
 
 
 
-    public static void getMemberList() {
+    public static void getMemberList(MainActivity mainActivity) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -176,6 +177,9 @@ public class HttpActivity extends AnswerActivity {
                         }
                         joinList = tempJoinList;
                         ketangList = tempKetangList;
+                        Message msg = new Message();
+                        msg.what = 7;
+                        mainActivity.handler.sendMessage(msg);
                         Log.e(TAG, "getMemberList: " + jsonObject);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -292,9 +296,10 @@ public class HttpActivity extends AnswerActivity {
                     URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_savePlatform.do?"
                             + "roomId=" + roomId
                             + "&studId=" + userId
-                            + "&stuName=" + stuName
+                            + "&name=" + URLEncoder.encode(stuName, "utf-8")
                             + "&type=" + type
                     );
+                    Log.e(TAG, "speakerController: " +  url);
 
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("GET");
@@ -318,7 +323,7 @@ public class HttpActivity extends AnswerActivity {
                     inputStream.close();
                     httpURLConnection.disconnect();
 
-                    Log.e(TAG, "audioController: " +  buffer.toString());
+                    Log.e(TAG, "speakerController: " +  buffer.toString());
                     try{
                         String backLogJsonStr = buffer.toString();
 //                        String backLogJsonStr = "{\"joinlist\":[{\"value\":\"李龙龙\",\"key\":\"ming6001\"}],\"ketanglist\":[{\"num\":\"60\",\"value\":\"我校2022级葛舸班\",\"key\":\"4195ketang\"}]}";
@@ -358,9 +363,9 @@ public class HttpActivity extends AnswerActivity {
                     URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_deleteMemcached.do?"
                             + "roomId=" + roomId
                             + "&keTangId=" + keTangId
-                            + "&keTangName=" + keTangName
+                            + "&keTangName=" + URLEncoder.encode(keTangName, "utf-8")
                             + "&userId=" + userId
-                            + "&name=" + userName
+                            + "&name=" + URLEncoder.encode(userName, "utf-8")
                             + "&source=" + source
                             + "&width=" + screenWidth
                             + "&height=" + screenHeight
@@ -423,9 +428,9 @@ public class HttpActivity extends AnswerActivity {
                     URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_hostJoinOrLeaveRoom.do?"
                             + "roomId=" + roomId
                             + "&keTangId=" + keTangId
-                            + "&keTangName=" + keTangName
+                            + "&keTangName=" + URLEncoder.encode(keTangName, "utf-8")
                             + "&userId=" + userId
-                            + "&name=" + userName
+                            + "&name=" + URLEncoder.encode(userName, "utf-8")
                             + "&type=" + type
                             + "&source=" + source
                     );
