@@ -18,6 +18,16 @@
         <entry key="..\:/Android/TRTC_ClientBundle/TRTC_Client/app/src/main/res/layout/round_text_view_style.xml" value="0.3703125" />
         <entry key="..\:/Android/TRTC_ClientBundle/TRTC_Client/app/src/main/res/layout/stusnamelist_item.xml" value="0.15185185185185185" />
         <entry key="..\:/Android/TRTC_ClientBundle/TRTC_Client/app/src/main/res/layout/video_list.xml" value="0.1527777777777778" />
+        <entry key="..\:/AndroidStudioCodeTest/TeacherTest/TeacherTest-GitNew/ZJVideo/app/src/main/res/drawable/btn_begin_enable.xml" value="0.1695" />
+        <entry key="..\:/AndroidStudioCodeTest/TeacherTest/TeacherTest-GitNew/ZJVideo/app/src/main/res/drawable/btn_begin_unenable.xml" value="0.126" />
+        <entry key="..\:/AndroidStudioCodeTest/TeacherTest/TeacherTest-GitNew/ZJVideo/app/src/main/res/layout/answer_question.xml" value="0.23157894736842105" />
+        <entry key="..\:/AndroidStudioCodeTest/TeacherTest/TeacherTest-GitNew/ZJVideo/app/src/main/res/layout/choosenum_list.xml" value="0.18645833333333334" />
+        <entry key="..\:/AndroidStudioCodeTest/TeacherTest/TeacherTest-GitNew/ZJVideo/app/src/main/res/layout/luru_question_analysis.xml" value="0.16041666666666668" />
+        <entry key="..\:/AndroidStudioCodeTest/TeacherTest/TeacherTest-GitNew/ZJVideo/app/src/main/res/layout/single_question_analysis.xml" value="0.16041666666666668" />
+        <entry key="..\:/AndroidStudioCodeTest/TeacherTest/TeacherTest-GitNew/ZJVideo/app/src/main/res/layout/single_question_answers.xml" value="0.16041666666666668" />
+        <entry key="..\:/AndroidStudioCodeTest/TeacherTest/TeacherTest-GitNew/ZJVideo/app/src/main/res/layout/suiji_qiangda_selectstu.xml" value="0.16041666666666668" />
+        <entry key="..\:/AndroidStudioCodeTest/TeacherTest/TeacherTest-GitNew/ZJVideo/app/src/main/res/layout/suiji_qiangda_setanswer.xml" value="0.16041666666666668" />
+        <entry key="..\:/AndroidStudioCodeTest/TeacherTest/TeacherTest-GitNew/ZJVideo/app/src/main/res/layout/suiji_qiangda_stuanswer.xml" value="0.16041666666666668" />
       </map>
     </option>
   </component>
