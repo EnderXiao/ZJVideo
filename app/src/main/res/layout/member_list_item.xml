@@ -132,6 +132,7 @@
             android:visibility="visible"
             />
         <TextView
+            android:id="@+id/member_audio_close"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -171,6 +172,7 @@
             android:src="@drawable/camera_controller_on"
             />
         <TextView
+            android:id="@+id/member_video_close"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

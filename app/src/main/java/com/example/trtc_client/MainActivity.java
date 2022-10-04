@@ -14,12 +14,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -136,8 +138,10 @@ public class MainActivity extends AppCompatActivity {
     private ImageView handBtn;
     private ImageView cameraBtn;   //关闭摄像头按钮
     private ImageView audioBtn;
+
     private ImageView exit_btn;     //下课按钮
     private TextView teacher_name_view; //显示教师名称
+    private ImageView overClassBtn;
     private Group group_btn;
 
     public static String mTeacherId;
@@ -156,13 +160,24 @@ public class MainActivity extends AppCompatActivity {
     private String MsecretId = "AKID5ybx2rPggPr23oHUR8YhZBWZLr6xaw2r";                 //存储桶   永久密钥 secretId
     private String MsecretKey = "auxjESQCk11lEQL0O5WhbEZdRyEDwOYR";                    //存储桶    永久密钥 secretKey
 
-    protected static   String UserId = "";                                             //用户ID
+//    protected static   String UserId = "";
+
+    public static String userId = "";                                          //用户ID
     private  String UserSig ="";                                                       //腾讯服务签名
 //    private  String UserSig =GenerateTestUserSig.genTestUserSig(UserId);
-    protected static  String Roomid  = "";                                              // 互动白板 房间号
+//    protected static  String Roomid  = "";                                              // 互动白板 房间号
+    public static String roomid  = "750795";
     private static String subjectId = "subjectid";                                      //学科ID
 
     private  int SDKappID =1400618830;                                                  //SDKAppID
+
+
+
+    public static String userName = "xgy";
+    public static String keTangName = "keTang";
+    public static String keTangId = "keTangId";
+
+
 
     //即时通信相关
     private V2TIMManager v2TIMManager;                                        //IM实例
@@ -226,12 +241,14 @@ public class MainActivity extends AppCompatActivity {
     // 成员列表
     private static View memberPopupView;
     private static ListView memberList;
+    private static MemberListViewAdapter listViewAdapter;
 
     // 举手列表
     private View handsUpPopupView;
     private ListView handsUpList;
     public HandsUpListViewAdapter handsUpListViewAdapter;
     public List<HandsUpItem> handsUpItemList = new ArrayList<>();
+    public Switch handsUpSwitchBtn;
 
     // UI消息监听器
     public Handler handler;
@@ -271,8 +288,8 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("+++参数"+intent.getExtras().get("subjectid"));
         System.out.println("+++参数"+intent.getExtras().get("roomid"));
         System.out.println("+++参数"+intent.getExtras().get("userid"));
-        UserId=intent.getExtras().get("userid").toString();
-        Roomid = intent.getExtras().get("roomid").toString();
+        userId=intent.getExtras().get("userid").toString();
+        roomid = intent.getExtras().get("roomid").toString();
         subjectId = intent.getExtras().get("subjectid").toString();
         UserSig =GenerateTestUserSig.genTestUserSig(intent.getExtras().get("userid").toString());
 
@@ -287,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TextView class_id_text_view = findViewById(R.id.class_id);
-        class_id_text_view.setText(Roomid);
+        class_id_text_view.setText(roomid);
         @SuppressLint("UseCompatLoadingForDrawables") Drawable class_id_icon = getResources().getDrawable(R.drawable.copy);
         class_id_icon.setBounds(0,0,15,15);
         class_id_text_view.setCompoundDrawables(null, null, class_id_icon,null);
@@ -304,6 +321,7 @@ public class MainActivity extends AppCompatActivity {
         // 获取底部按钮
 
         handsUpPopupView = getLayoutInflater().inflate(R.layout.hands_up_pop_window, null);
+        handsUpSwitchBtn = handsUpPopupView.findViewById(R.id.hands_up_controller);
         handsUpList = handsUpPopupView.findViewById(R.id.hands_up_list);
         memberPopupView = getLayoutInflater().inflate(R.layout.member_list_pop_window, null);
         memberList = memberPopupView.findViewById(R.id.member_list);
@@ -317,9 +335,28 @@ public class MainActivity extends AppCompatActivity {
         handBtn = findViewById(R.id.hand_btn);
         audioBtn = findViewById(R.id.mic_btn);
         cameraBtn = findViewById(R.id.camera_btn);
+        overClassBtn = findViewById(R.id.exit_btn);
         teacher_name_view = findViewById(R.id.teacher_name);
 
-        teacher_name_view.setText(UserId+"老师");
+        MainActivity that = this;
+        handsUpSwitchBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    HttpActivity.memberController("", "", "", "handAllNo", "", -1, that);
+                } else {
+                    HttpActivity.memberController("", "", "", "handAllYes", "", -1, that);
+                }
+            }
+        });
+
+        overClassBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onExitLiveRoom();
+            }
+        });
+        teacher_name_view.setText(userId+"老师");
         //文件上传部分按钮
         select_resources=findViewById(R.id.select_resources);
         proBar = findViewById(R.id.proBar);
@@ -387,7 +424,7 @@ public class MainActivity extends AppCompatActivity {
                     msgTips.setText("正在上传中：");
                     Time time = new Time("GMT+8");
                     time.setToNow();
-                    String cosprefix = "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+Roomid+"/res/";
+                    String cosprefix = "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/res/";
                     UploadToBucket(cosprefix,curfilepath,curfilename,false);
                 }
             }
@@ -437,7 +474,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //白板需要用到的一些组件 初始化
-         addBoardlayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+         addBoardlayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
          Board_container = findViewById(R.id.teachingcontent);
          rf_leftmenu = findViewById(R.id.menu_left);
          rf_bottommenu = findViewById(R.id.menu_bottom);
@@ -485,8 +522,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
-                if(msg.what == 1) {
-                    setHandsUpData();
+                int position = -1;
+                switch (msg.what) {
+                    case 1:
+                        setHandsUpData();
+                        break;
+                    case 2:
+                        position = msg.getData().getInt("position");
+                        switchMemberListAudioIcon(position);
+                        break;
+                    case 3:
+                        position = msg.getData().getInt("position");
+                        switchMemberListChatIcon(position);
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        position = msg.getData().getInt("position");
+                        switchSpeakerIcon(position);
+                        break;
+                    default:
+                        break;
                 }
             }
         };
@@ -510,6 +566,40 @@ public class MainActivity extends AppCompatActivity {
         }
         handsUpItemList.addAll(tempHandsUpItemList);
         handsUpListViewAdapter.notifyDataSetChanged();
+    }
+
+    public void switchMemberListAudioIcon(int position) {
+        MemberItem item = listViewAdapter.getItem(position);
+        if(item != null){
+            Log.e(TAG, "switchMemberListAudioIcon: 获取用户item " + item.getName());
+            item.setAudioControl(!item.getAudioControl());
+            Toast.makeText(MainActivity.this, "成员 " + position + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
+            listViewAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(MainActivity.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void switchMemberListChatIcon(int position) {
+        MemberItem item = listViewAdapter.getItem(position);
+        if(item != null){
+            item.setChatControl(!item.getChatControl());
+            Toast.makeText(MainActivity.this, "成员 " + position + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
+            listViewAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(MainActivity.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void switchSpeakerIcon(int position) {
+        MemberItem item = listViewAdapter.getItem(position);
+        if(item != null){
+            item.setSpeakControl(!item.getSpeakControl());
+            Toast.makeText(MainActivity.this, "成员 " + position + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
+            listViewAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(MainActivity.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void initHandsUpList() {
@@ -548,13 +638,13 @@ public class MainActivity extends AppCompatActivity {
 //        memberList.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         if(AnswerActivity.joinList != null) {
             for (int i = 0; i < AnswerActivity.joinList.size(); i++) {
-                memberDataList.add(new MemberItem(AnswerActivity.joinList.get(i).getName(), true, true, true, false, true));
+                memberDataList.add(new MemberItem(AnswerActivity.joinList.get(i).getName(), AnswerActivity.joinList.get(i).getUserId(), 1 ,true, true, true, false, true));
                 Log.e(TAG, "initMemberList: " + AnswerActivity.joinList.get(i).toString());
             }
         }
         if(AnswerActivity.ketangList != null) {
             for (int i = 0; i < AnswerActivity.ketangList.size(); i++) {
-                memberDataList.add(new MemberItem(AnswerActivity.ketangList.get(i).getName(), true, true, true, false, true));
+                memberDataList.add(new MemberItem(AnswerActivity.ketangList.get(i).getName(), AnswerActivity.joinList.get(i).getUserId(), 0 , true, true, true, false, true));
                 Log.e(TAG, "initMemberList: " + AnswerActivity.ketangList.get(i).toString());
             }
         }
@@ -562,7 +652,8 @@ public class MainActivity extends AppCompatActivity {
 //        for (int i = 0; i < 10; i ++){
 //            memberDataList.add(new MemberItem("测试", Integer.toString(i), "2", "3", "4", "5"));
 //        }
-        MemberListViewAdapter listViewAdapter = new MemberListViewAdapter(this, memberList, memberDataList);
+        MainActivity that = this;
+        listViewAdapter = new MemberListViewAdapter(this, memberList, memberDataList);
         memberList.setAdapter(listViewAdapter);
 
         listViewAdapter.setOnItemButtonListener(new MemberListViewAdapter.onItemButtonListener() {
@@ -576,9 +667,9 @@ public class MainActivity extends AppCompatActivity {
                 MemberItem item = listViewAdapter.getItem(i);
                 if(item != null){
                     if(item.getChatControl()){
-                        item.setChatControl(false);
+                        HttpActivity.memberController("", "", "closeWords", "", item.getUserId(), i, that);
                     } else {
-                        item.setChatControl(true);
+                        HttpActivity.memberController("", "", "openWords", "", item.getUserId(), i, that);
                     }
                     Toast.makeText(MainActivity.this, "成员 " + i + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
@@ -592,9 +683,9 @@ public class MainActivity extends AppCompatActivity {
                 MemberItem item = listViewAdapter.getItem(i);
                 if(item != null){
                     if(item.getSpeakControl()){
-                        item.setSpeakControl(false);
+                        HttpActivity.speakerController(item.getUserId(), item.getName(), "down", i, that);
                     } else {
-                        item.setSpeakControl(true);
+                        HttpActivity.speakerController(item.getUserId(), item.getName(), "up", i, that);
                     }
                     Toast.makeText(MainActivity.this, "成员 " + i + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
@@ -608,9 +699,9 @@ public class MainActivity extends AppCompatActivity {
                 MemberItem item = listViewAdapter.getItem(i);
                 if(item != null){
                     if(item.getAudioControl()){
-                        item.setAudioControl(false);
+                        HttpActivity.memberController("closeMic", "", "", "", item.getUserId(), i, that);
                     } else {
-                        item.setAudioControl(true);
+                        HttpActivity.memberController("openMic", "", "", "", item.getUserId(), i, that);
                     }
                     Toast.makeText(MainActivity.this, "成员 " + i + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
@@ -629,8 +720,10 @@ public class MainActivity extends AppCompatActivity {
                 MemberItem item = listViewAdapter.getItem(i);
                 if(item != null){
                     if(item.getBoardControl()){
+                        drawAuthority( "drawAuthority", "no", item.getUserId());
                         item.setBoardControl(false);
                     } else {
+                        drawAuthority("drawAuthority" , "yes", item.getUserId());
                         item.setBoardControl(true);
                     }
                     Toast.makeText(MainActivity.this, "成员 " + i + " 禁绘画按钮被点击", Toast.LENGTH_SHORT).show();
@@ -714,8 +807,10 @@ public class MainActivity extends AppCompatActivity {
 //                return;
 //            }
             if(available) {
-                if(AnswerActivity.findMemberInKetangList(userId) != null)
+                if(AnswerActivity.findMemberInKetangList(userId) != null) {
+
                     mUserList.add(userId);
+                }
             }
             else
                 mUserList.remove(userId);
@@ -766,8 +861,8 @@ public class MainActivity extends AppCompatActivity {
 //        String userId = "mingming";
         myTRTCParams = new TRTCCloudDef.TRTCParams();
         myTRTCParams.sdkAppId = GenerateTestUserSig.SDKAPPID;
-        myTRTCParams.userId = UserId;
-        myTRTCParams.roomId = Integer.parseInt(Roomid);
+        myTRTCParams.userId = userId;
+        myTRTCParams.roomId = Integer.parseInt(roomid);
         myTRTCParams.userSig = GenerateTestUserSig.genTestUserSig(myTRTCParams.userId);
 //        myTRTCParams.userSig = "eJwtzMEKgkAUheF3mXXI9eoMKbTQiFoE4WQQ7dSZ4jY0mVoa0btn6vJ8B-4PS7d756UrFjJ0gM2GTUrbhs40cEfZHdzpqZXJypIUC10fQCAEyMdHdyVVunfOOQLAqA3d-iYE*p6HPJgqdOnD-ukooyQNjELZbeQhf7ytKAp7Xc7XBmFXJzxvoyes4nbBvj8x1DFE";
 
@@ -806,6 +901,13 @@ public class MainActivity extends AppCompatActivity {
         @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = getResources().getDrawable(R.drawable.mic_on);
         teacher_name_mic_icon.setBounds(0,0,20,20);
         teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
+
+        // 初始化房间信息
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int screenWidth = dm.widthPixels;
+        int screenHeight = dm.heightPixels;
+        HttpActivity.initClass(screenWidth, screenHeight, "skydt", this);
 
         // 开启举手监听事件
         HttpActivity.startHandsUpTimer(this);
@@ -863,9 +965,6 @@ public class MainActivity extends AppCompatActivity {
         int offsetX = - memberPopupView.getMeasuredWidth() / 4;
         int offsetY = - memberPopupView.getMeasuredHeight() - (view.getHeight()) - 10;
         popupWindow.showAsDropDown(view, offsetX, offsetY, Gravity.START);
-        for (int i = 0; i < AnswerActivity.joinList.size(); i++) {
-            Log.e(TAG, "showMemberListBtn: " + AnswerActivity.joinList.get(i));
-        }
     }
 
     public void showHandsUpBtn(View view) {
@@ -884,7 +983,7 @@ public class MainActivity extends AppCompatActivity {
         mBoard=null;
         mBoardCallback=null;
         TEduBoardController.TEduBoardAuthParam authParam = new TEduBoardController.TEduBoardAuthParam(
-                SDKappID , UserId, UserSig);
+                SDKappID , userId, UserSig);
         //（2）白板默认配置
         TEduBoardController.TEduBoardInitParam initParam = new TEduBoardController.TEduBoardInitParam();
         initParam.timSync=false;
@@ -935,6 +1034,7 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onTEBSyncData(String data) {
+                findViewById(R.id.setBoardWindow).setVisibility(View.GONE);
                 final V2TIMMessage message = V2TIMManager.getMessageManager().createCustomMessage(data.getBytes(), "", "TXWhiteBoardExt".getBytes());
                 if (message.getCustomElem() != null) {
                     message.getCustomElem().setExtension("TXWhiteBoardExt".getBytes());
@@ -942,7 +1042,7 @@ public class MainActivity extends AppCompatActivity {
                     message.getCustomElem().setDescription("");
                     message.getCustomElem().setData(data.getBytes());
                 }
-                V2TIMManager.getInstance().getConversationManager().getConversation(Roomid, new V2TIMValueCallback<V2TIMConversation>() {
+                V2TIMManager.getInstance().getConversationManager().getConversation(roomid, new V2TIMValueCallback<V2TIMConversation>() {
                     @Override
                     public void onError(int i, String s) {
                         // 获取回话失败
@@ -950,7 +1050,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     @Override
                     public void onSuccess(V2TIMConversation v2TIMConversation) {
-                        V2TIMManager.getInstance().getMessageManager().sendMessage(message, null, Roomid, 1, false, null,  new V2TIMSendCallback<V2TIMMessage>() {
+                        V2TIMManager.getInstance().getMessageManager().sendMessage(message, null, roomid, 1, false, null,  new V2TIMSendCallback<V2TIMMessage>() {
                             @Override
                             public void onSuccess(V2TIMMessage v2TIMMessage) {
                                 // 发送 IM 消息成功
@@ -1166,7 +1266,7 @@ public class MainActivity extends AppCompatActivity {
                     Time time = new Time("GMT+8");
                     time.setToNow();
                     // isquestion  用来区分本次快照是题目的快照还是 切换的时候保存的快照
-                    String cosprefix = isquestion?"class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+Roomid+"/question/" : "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+Roomid+"/capture/";
+                    String cosprefix = isquestion?"class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/question/" : "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/capture/";
                     UploadToBucket(cosprefix,path,name,true);
 
                 }else {
@@ -1207,7 +1307,7 @@ public class MainActivity extends AppCompatActivity {
 
         mBoard.addCallback(mBoardCallback);
         //（4）进行初始化
-        mBoard.init(authParam,  Integer.parseInt(Roomid), initParam);
+        mBoard.init(authParam,  Integer.parseInt(roomid), initParam);
         //（2）获取白板 View
         // 初始化白板的按钮功能
         initBoardMenu();
@@ -1249,9 +1349,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
     public void LoginTIM(){
-        V2TIMManager.getInstance().login(UserId, UserSig, new V2TIMCallback() {
+        V2TIMManager.getInstance().login(userId, UserSig, new V2TIMCallback() {
             @Override
             public void onError(int i, String s) {
                 System.out.println("++++++登陆失败"+s);
@@ -1296,8 +1395,8 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
-    public void createGroup(){
-        V2TIMManager.getInstance().createGroup(V2TIMManager.GROUP_TYPE_MEETING, Roomid, Roomid, new V2TIMValueCallback<String>() {
+                public void createGroup(){
+        V2TIMManager.getInstance().createGroup(V2TIMManager.GROUP_TYPE_MEETING, roomid, roomid, new V2TIMValueCallback<String>() {
             @Override
             public void onSuccess(String s) {
                 // 创建群组成功
@@ -1307,7 +1406,7 @@ public class MainActivity extends AppCompatActivity {
             public void onError(int code, String desc) {
                 // 创建群组失败
                 if(10021==code){
-                    V2TIMManager.getInstance().joinGroup(Roomid, Roomid, new V2TIMCallback() {
+                    V2TIMManager.getInstance().joinGroup(roomid, roomid, new V2TIMCallback() {
                         @Override
                         public void onSuccess() {
                             // 加群成功
@@ -2202,7 +2301,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //聊天Fragment 调用此方法  发送消息
+    /**
+     * 白板控制
+     *
+     * @param extension 消息类型
+     * @param action    操作动作
+     * @param id        操作对象ID
+     */
+
+    public void drawAuthority(String extension, String action, String id) {
+
+    }
+
     public void sendMsg(Chat_Msg msg){
         // 创建文本消息
         //        V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createTextMessage( "{\"text\":\""+msg.getContent()+"\",\"date\":\""+msg.getDate()+"\"}");
@@ -2215,7 +2325,7 @@ public class MainActivity extends AppCompatActivity {
             v2TIMMessage.getCustomElem().setData(msg.getContent().getBytes());
         }
 
-        V2TIMManager.getMessageManager().sendMessage(v2TIMMessage, null,Roomid, V2TIMMessage.V2TIM_PRIORITY_NORMAL, false, null, new V2TIMSendCallback<V2TIMMessage>() {
+        V2TIMManager.getMessageManager().sendMessage(v2TIMMessage, null,roomid, V2TIMMessage.V2TIM_PRIORITY_NORMAL, false, null, new V2TIMSendCallback<V2TIMMessage>() {
             @Override
             public void onProgress(int progress) {
                 // 文本消息不会回调进度
@@ -2238,7 +2348,7 @@ public class MainActivity extends AppCompatActivity {
     public void stopAllchat(Boolean isstop){
         // 全员禁言
         V2TIMGroupInfo info = new V2TIMGroupInfo();
-        info.setGroupID(Roomid);
+        info.setGroupID(roomid);
         info.setAllMuted(isstop);
         V2TIMManager.getGroupManager().setGroupInfo(info, new V2TIMCallback() {
             @Override
@@ -2274,6 +2384,13 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    public void onExitLiveRoom() {
+
+        HttpActivity.overClass("leave", "skydt", this);
+        mTRTCCloud.exitRoom();
     }
 
     //下课 销毁白板实例

@@ -64,20 +64,6 @@
         android:text="上下讲台" />
 
     <TextView
-        android:id="@+id/text_check_audio"
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:gravity="center"
-        android:paddingBottom="10dp"
-        android:paddingTop="11sp"
-        android:singleLine="true"
-        android:text="麦克风"
-        android:textColor="@color/popupWindow_text_gray"
-        android:background="@color/popupWindow_container"
-        android:textSize="11sp" />
-
-    <TextView
         android:id="@+id/text_board_control"
         android:layout_width="50dp"
         android:layout_height="match_parent"
@@ -90,6 +76,20 @@
         android:textSize="11sp"
         android:gravity="center"
         android:text="白板控制" />
+
+    <TextView
+        android:id="@+id/text_check_audio"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingTop="11sp"
+        android:singleLine="true"
+        android:text="麦克风"
+        android:textColor="@color/popupWindow_text_gray"
+        android:background="@color/popupWindow_container"
+        android:textSize="11sp" />
 
     <TextView
         android:id="@+id/text_check_video"
