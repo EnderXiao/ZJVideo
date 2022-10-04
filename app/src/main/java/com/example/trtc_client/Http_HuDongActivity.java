@@ -14,7 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class Http_HuDongActivity extends HuDongDataActivity{
+public class Http_HuDongActivity extends AnswerActivity{
 
     //http访问服务器请求,开始答题、结束答题等接口
     @SuppressLint("LongLogTag")
@@ -26,12 +26,12 @@ public class Http_HuDongActivity extends HuDongDataActivity{
         try {
             System.out.println("http访问服务器请求,开始答题、结束答题等接口！！！！！！！！！！！！！！！！！！！");
             //试题id、房间号、自己的课堂id
-//            HuDongDataActivity.answerQuestionId = "9c411703-91ef-4400-941f-01d8d660016e";
-            HuDongDataActivity.roomId = "740171";
-            HuDongDataActivity.currentketangId = "4193";
-            String roomId = HuDongDataActivity.roomId;
-            String answerQuestionId = HuDongDataActivity.answerQuestionId;
-            String currentketangId = HuDongDataActivity.currentketangId;
+//            AnswerActivity.answerQuestionId = "9c411703-91ef-4400-941f-01d8d660016e";
+            AnswerActivity.roomId = "740171";
+            AnswerActivity.currentketangId = "4193";
+            String roomId = AnswerActivity.roomId;
+            String answerQuestionId = AnswerActivity.answerQuestionId;
+            String currentketangId = AnswerActivity.currentketangId;
             //1,找水源--创建URL
             URL url;
             if(questionAction.equals("stopAnswer")){
@@ -48,7 +48,7 @@ public class Http_HuDongActivity extends HuDongDataActivity{
                         + "&answerQuestionId="
                         + answerQuestionId
                         + "&answerQuestionTime="
-                        + HuDongDataActivity.startTime
+                        + AnswerActivity.startTime
                         + "&currentketangId="
                         + currentketangId
                         + "&versionFlag="
@@ -107,13 +107,13 @@ public class Http_HuDongActivity extends HuDongDataActivity{
                 System.out.println("从服务器端获取Json对象==>" + jsonObject);
 
                 if(questionAction.indexOf("start") >= 0){
-                    HuDongDataActivity.startTime = jsonObject.getLong("time");
-                    System.out.println("开始时间==>" + HuDongDataActivity.startTime);
+                    AnswerActivity.startTime = jsonObject.getLong("time");
+                    System.out.println("开始时间==>" + AnswerActivity.startTime);
                 }
-                HuDongDataActivity.isSuccess = jsonObject.getString("success").equals("success")
+                AnswerActivity.isSuccess = jsonObject.getString("success").equals("success")
                         ? true : false ;
-                System.out.println("HuDongDataActivity.isSuccess==>" + HuDongDataActivity.isSuccess);
-                return HuDongDataActivity.isSuccess;
+                System.out.println("AnswerActivity.isSuccess==>" + AnswerActivity.isSuccess);
+                return AnswerActivity.isSuccess;
             }catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -131,12 +131,12 @@ public class Http_HuDongActivity extends HuDongDataActivity{
     public static void getSubmitAnswerStuNum() {
         try {
             //试题id、房间号、自己的课堂id
-//            HuDongDataActivity.answerQuestionId = "9c411703-91ef-4400-941f-01d8d660016e";
-            HuDongDataActivity.roomId = "740171";
-            HuDongDataActivity.currentketangId = "4193";
-            String roomId = HuDongDataActivity.roomId;
-            String answerQuestionId = HuDongDataActivity.answerQuestionId;
-            String currentketangId = HuDongDataActivity.currentketangId;
+//            AnswerActivity.answerQuestionId = "9c411703-91ef-4400-941f-01d8d660016e";
+            AnswerActivity.roomId = "740171";
+            AnswerActivity.currentketangId = "4193";
+            String roomId = AnswerActivity.roomId;
+            String answerQuestionId = AnswerActivity.answerQuestionId;
+            String currentketangId = AnswerActivity.currentketangId;
             //1,找水源--创建URL
             URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_getStuAnswerNum.do?roomId="
                                     + roomId
@@ -177,8 +177,8 @@ public class Http_HuDongActivity extends HuDongDataActivity{
                 System.out.println("已作答学生人数从服务器端获取Json对象==>" + jsonObject);
 
                 int stuNum = jsonObject.getInt("answerNum");
-                HuDongDataActivity.answerNum = stuNum;
-                System.out.println("已作答学生人数==>" + HuDongDataActivity.answerNum);
+                AnswerActivity.answerNum = stuNum;
+                System.out.println("已作答学生人数==>" + AnswerActivity.answerNum);
             }catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -195,12 +195,12 @@ public class Http_HuDongActivity extends HuDongDataActivity{
         System.out.println("开始获取已经提交答案的课堂的学生答案汇总！！！！！！！！！！！！！！！！！！！！！！！！");
         try {
             //试题id、房间号、自己的课堂id
-//            HuDongDataActivity.answerQuestionId = "9c411703-91ef-4400-941f-01d8d660016e";
-            HuDongDataActivity.roomId = "740171";
-            HuDongDataActivity.currentketangId = "4193";
-            String roomId = HuDongDataActivity.roomId;
-            String answerQuestionId = HuDongDataActivity.answerQuestionId;
-            String currentketangId = HuDongDataActivity.currentketangId;
+//            AnswerActivity.answerQuestionId = "9c411703-91ef-4400-941f-01d8d660016e";
+            AnswerActivity.roomId = "740171";
+            AnswerActivity.currentketangId = "4193";
+            String roomId = AnswerActivity.roomId;
+            String answerQuestionId = AnswerActivity.answerQuestionId;
+            String currentketangId = AnswerActivity.currentketangId;
             //1,找水源--创建URL
             URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_initDataChartsKt.do?roomId="
                     + roomId
@@ -247,8 +247,8 @@ public class Http_HuDongActivity extends HuDongDataActivity{
 
                 //是否有人作答
                 boolean status = jsonObject.getBoolean("status");
-                HuDongDataActivity.submitAnswerStatus = status;
-                System.out.println("是否有人提交答案==>" + HuDongDataActivity.submitAnswerStatus);
+                AnswerActivity.submitAnswerStatus = status;
+                System.out.println("是否有人提交答案==>" + AnswerActivity.submitAnswerStatus);
 
                 if(status){
                     return jsonObject;
@@ -272,10 +272,10 @@ public class Http_HuDongActivity extends HuDongDataActivity{
         System.out.println("开始设置答案！！！！！！！！！！！！！！！！！！！！！！！！");
         try {
             //试题id、房间号、自己的课堂id
-//            HuDongDataActivity.answerQuestionId = "9c411703-91ef-4400-941f-01d8d660016e";
-            HuDongDataActivity.roomId = "740171";
-            String roomId = HuDongDataActivity.roomId;
-            String answerQuestionId = HuDongDataActivity.answerQuestionId;
+//            AnswerActivity.answerQuestionId = "9c411703-91ef-4400-941f-01d8d660016e";
+            AnswerActivity.roomId = "740171";
+            String roomId = AnswerActivity.roomId;
+            String answerQuestionId = AnswerActivity.answerQuestionId;
             //1,找水源--创建URL
             URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_saveQueAnswer.do?roomId="
                     + roomId
@@ -340,12 +340,12 @@ public class Http_HuDongActivity extends HuDongDataActivity{
         System.out.println("开始获取已经提交主观题答案的课堂的学生答案汇总！！！！！！！！！！！！！！！！！！！！！！！！");
         try {
             //试题id、房间号、自己的课堂id
-//            HuDongDataActivity.answerQuestionId = "9c411703-91ef-4400-941f-01d8d660016e";
-            HuDongDataActivity.roomId = "740171";
-            HuDongDataActivity.currentketangId = "4193";
-            String roomId = HuDongDataActivity.roomId;
-            String answerQuestionId = HuDongDataActivity.answerQuestionId;
-            String currentketangId = HuDongDataActivity.currentketangId;
+//            AnswerActivity.answerQuestionId = "9c411703-91ef-4400-941f-01d8d660016e";
+            AnswerActivity.roomId = "740171";
+            AnswerActivity.currentketangId = "4193";
+            String roomId = AnswerActivity.roomId;
+            String answerQuestionId = AnswerActivity.answerQuestionId;
+            String currentketangId = AnswerActivity.currentketangId;
             //1,找水源--创建URL
             URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_initDataContentKt.do?roomId="
                     + roomId
@@ -390,7 +390,7 @@ public class Http_HuDongActivity extends HuDongDataActivity{
 
                 //是否有人作答
                 boolean status = jsonObject.getBoolean("status");
-                HuDongDataActivity.submitAnswerStatus_zhuguan = status;
+                AnswerActivity.submitAnswerStatus_zhuguan = status;
                 System.out.println("是否有人作答==>" + status);
 
                 if(status){
@@ -415,8 +415,8 @@ public class Http_HuDongActivity extends HuDongDataActivity{
         System.out.println("开始获取随机或者抢答的学生姓名，学生id！！！！！！！！！！！！！！！！！！！！！！！！");
         try {
             //房间号
-            HuDongDataActivity.roomId = "740171";
-            String roomId = HuDongDataActivity.roomId;
+            AnswerActivity.roomId = "740171";
+            String roomId = AnswerActivity.roomId;
             //1,找水源--创建URL
             URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_getSjOrQdStudent.do?roomId="
                     + roomId
@@ -456,17 +456,17 @@ public class Http_HuDongActivity extends HuDongDataActivity{
                 System.out.println("Json对象==>" + jsonObject);
 
                 //选中的是课堂或移动端的学生
-                HuDongDataActivity.flag = jsonObject.getString("flag");
-                System.out.println("选中的是课堂或移动端的学生==>" + HuDongDataActivity.flag);
+                AnswerActivity.flag = jsonObject.getString("flag");
+                System.out.println("选中的是课堂或移动端的学生==>" + AnswerActivity.flag);
                 //ketangId
-                HuDongDataActivity.ketangId = jsonObject.getString("ketangId");
-                System.out.println("ketangId==>" + HuDongDataActivity.ketangId);
+                AnswerActivity.ketangId = jsonObject.getString("ketangId");
+                System.out.println("ketangId==>" + AnswerActivity.ketangId);
                 //stuId
-                HuDongDataActivity.stuId = jsonObject.getString("stuId");
-                System.out.println("stuId==>" + HuDongDataActivity.stuId);
+                AnswerActivity.stuId = jsonObject.getString("stuId");
+                System.out.println("stuId==>" + AnswerActivity.stuId);
                 //stuName
-                HuDongDataActivity.stuName = jsonObject.getString("stuName");
-                System.out.println("stuName==>" + HuDongDataActivity.stuName);
+                AnswerActivity.stuName = jsonObject.getString("stuName");
+                System.out.println("stuName==>" + AnswerActivity.stuName);
             }catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -482,10 +482,10 @@ public class Http_HuDongActivity extends HuDongDataActivity{
     public static void getSjOrQdAnswer() {
         System.out.println("开始获取随机或者抢答的学生提交的答案！！！！！！！！！！！！！！！！！！！！！！！！");
         try {
-//            HuDongDataActivity.answerQuestionId = "9c411703-91ef-4400-941f-01d8d660016e";
+//            AnswerActivity.answerQuestionId = "9c411703-91ef-4400-941f-01d8d660016e";
             //1,找水源--创建URL
             URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_getSjOrQdAnswer.do?questionId="
-                    + HuDongDataActivity.answerQuestionId);
+                    + AnswerActivity.answerQuestionId);
             System.out.println(url);
             //2,开水闸--openConnection
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -521,10 +521,10 @@ public class Http_HuDongActivity extends HuDongDataActivity{
 
                 if(jsonObject.getString("status").equals("yes")){
                     //学生答案
-                    HuDongDataActivity.answer_sjOrQd = jsonObject.getString("answer");
-                    System.out.println("学生答案==>" + HuDongDataActivity.answer_sjOrQd);
+                    AnswerActivity.answer_sjOrQd = jsonObject.getString("answer");
+                    System.out.println("学生答案==>" + AnswerActivity.answer_sjOrQd);
                 }else{
-                    HuDongDataActivity.answer_sjOrQd = "";
+                    AnswerActivity.answer_sjOrQd = "";
                     System.out.println("学生答案未提交答案！！！！！！！");
                 }
 

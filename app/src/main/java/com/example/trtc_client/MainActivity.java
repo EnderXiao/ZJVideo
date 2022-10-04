@@ -2705,7 +2705,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 //白板快照   王璐瑶调用
-    private static void ScreenShotBoard(Context context,String answerQuestionId,TEduBoardController mBoard){
+    public static void ScreenShotBoard(Context context,String answerQuestionId,TEduBoardController mBoard){
         isquestion=true;//调用的时候把这个值设置为true  后面改变存储的路径
         //白板快照
         TEduBoardController.TEduBoardSnapshotInfo path = new TEduBoardController.TEduBoardSnapshotInfo();

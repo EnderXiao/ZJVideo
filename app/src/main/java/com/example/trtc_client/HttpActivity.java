@@ -157,8 +157,8 @@ public class HttpActivity extends AnswerActivity {
                     httpURLConnection.disconnect();
                     Log.e(TAG, "getMemberList: " + buffer.toString());
                     try{
-//                        String backLogJsonStr = buffer.toString();
-                        String backLogJsonStr = "{\"joinlist\":[{\"value\":\"李龙龙\",\"key\":\"ming6001\"}],\"ketanglist\":[{\"num\":\"60\",\"value\":\"我校2022级葛舸班\",\"key\":\"4195ketang\"}]}";
+                        String backLogJsonStr = buffer.toString();
+//                        String backLogJsonStr = "{\"joinlist\":[{\"value\":\"李龙龙\",\"key\":\"ming6001\"}],\"ketanglist\":[{\"num\":\"60\",\"value\":\"我校2022级葛舸班\",\"key\":\"4195ketang\"}]}";
                         JSONObject jsonObject = stringToJson(backLogJsonStr);
                         JSONArray joinListJsonArray = jsonObject.getJSONArray("joinlist");
                         JSONArray ketangListJsonArray = jsonObject.getJSONArray("ketanglist");
