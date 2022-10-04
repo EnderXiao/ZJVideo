@@ -2830,13 +2830,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-<<<<<<< HEAD
 //白板快照   王璐瑶调用
     public static void ScreenShotBoard(Context context,String answerQuestionId,TEduBoardController mBoard){
-=======
-    //白板快照   答题部分   保存当前题目  题面
-    public  void ScreenShotBoard(Context context,String answerQuestionId,TEduBoardController mBoard){
->>>>>>> a778572e660935aea05ec2124a4ace92362a760e
         isquestion=true;//调用的时候把这个值设置为true  后面改变存储的路径
         //白板快照
         TEduBoardController.TEduBoardSnapshotInfo path = new TEduBoardController.TEduBoardSnapshotInfo();

@@ -27,7 +27,7 @@ public class Http_HuDongActivity extends AnswerActivity{
             System.out.println("http访问服务器请求,开始答题、结束答题等接口！！！！！！！！！！！！！！！！！！！");
             //试题id、房间号、自己的课堂id
 //            AnswerActivity.answerQuestionId = "9c411703-91ef-4400-941f-01d8d660016e";
-            AnswerActivity.roomId = "740171";
+            AnswerActivity.roomId = MainActivity.roomid;
             AnswerActivity.currentketangId = "4193";
             String roomId = AnswerActivity.roomId;
             String answerQuestionId = AnswerActivity.answerQuestionId;
@@ -132,7 +132,7 @@ public class Http_HuDongActivity extends AnswerActivity{
         try {
             //试题id、房间号、自己的课堂id
 //            AnswerActivity.answerQuestionId = "9c411703-91ef-4400-941f-01d8d660016e";
-            AnswerActivity.roomId = "740171";
+            AnswerActivity.roomId = MainActivity.roomid;
             AnswerActivity.currentketangId = "4193";
             String roomId = AnswerActivity.roomId;
             String answerQuestionId = AnswerActivity.answerQuestionId;
@@ -196,7 +196,7 @@ public class Http_HuDongActivity extends AnswerActivity{
         try {
             //试题id、房间号、自己的课堂id
 //            AnswerActivity.answerQuestionId = "9c411703-91ef-4400-941f-01d8d660016e";
-            AnswerActivity.roomId = "740171";
+            AnswerActivity.roomId = MainActivity.roomid;
             AnswerActivity.currentketangId = "4193";
             String roomId = AnswerActivity.roomId;
             String answerQuestionId = AnswerActivity.answerQuestionId;
@@ -273,7 +273,7 @@ public class Http_HuDongActivity extends AnswerActivity{
         try {
             //试题id、房间号、自己的课堂id
 //            AnswerActivity.answerQuestionId = "9c411703-91ef-4400-941f-01d8d660016e";
-            AnswerActivity.roomId = "740171";
+            AnswerActivity.roomId = MainActivity.roomid;
             String roomId = AnswerActivity.roomId;
             String answerQuestionId = AnswerActivity.answerQuestionId;
             //1,找水源--创建URL
@@ -341,7 +341,7 @@ public class Http_HuDongActivity extends AnswerActivity{
         try {
             //试题id、房间号、自己的课堂id
 //            AnswerActivity.answerQuestionId = "9c411703-91ef-4400-941f-01d8d660016e";
-            AnswerActivity.roomId = "740171";
+            AnswerActivity.roomId = MainActivity.roomid;
             AnswerActivity.currentketangId = "4193";
             String roomId = AnswerActivity.roomId;
             String answerQuestionId = AnswerActivity.answerQuestionId;
@@ -415,7 +415,7 @@ public class Http_HuDongActivity extends AnswerActivity{
         System.out.println("开始获取随机或者抢答的学生姓名，学生id！！！！！！！！！！！！！！！！！！！！！！！！");
         try {
             //房间号
-            AnswerActivity.roomId = "740171";
+            AnswerActivity.roomId = MainActivity.roomid;
             String roomId = AnswerActivity.roomId;
             //1,找水源--创建URL
             URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_getSjOrQdStudent.do?roomId="

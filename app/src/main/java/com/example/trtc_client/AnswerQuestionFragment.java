@@ -562,10 +562,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
     //加载加入课堂的成员（ming、gege、其它移动端）
     private void initJoinClassInformation(){
-//        KeTangBean huizong = new KeTangBean("all" , "" , 120);
-//        if(AnswerActivity.classList != null && AnswerActivity.classList.size() > 0){
-//        }
-        //模拟，后续直接从AnswerActivity.classList获取就好（肖赋值）
+        //直接从AnswerActivity.ketangList   AnswerActivity.joinList获取就好（肖赋值）
         if(AnswerActivity.classList != null){
             AnswerActivity.classList.clear();
         }
@@ -713,12 +710,15 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                                 barChart.setVisibility(View.INVISIBLE); //不加入该语句：柱状图还是显示上一个班级的作答情况
                                 barChart.setVisibility(View.VISIBLE);
 
+                                tx_noanswer.setVisibility(View.GONE);
+
                                 isShowMoreInformation(aflag , index);
 
                                 setAxis(AnswerActivity.xlist); // 设置坐标轴
                                 setLegend(); // 设置图例
                                 setData(AnswerActivity.xlist, AnswerActivity.ylist);  // 设置数据
                             }else{ //答题详情
+                                tx_noanswer.setVisibility(View.GONE);
                                 isShowMoreInformation(aflag , index);
                                 showStusAnswers(v); //显示“答案详情”
                             }
@@ -802,37 +802,11 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
         barChart.setScaleEnabled(true);// 是否可以缩放
 
         slStusAnswers = v.findViewById(R.id.slStusAnswers);
-//        final String[][] labelName = {
-//                {"对" , "错" , "未答"},
-//                {"A", "B", "未答"},
-//                {"A", "B", "C", "未答"},
-//                {"A", "B", "C", "D", "未答"},
-//                {"A", "B", "C", "D", "E", "未答"},
-//                {"A", "B", "C", "D", "E", "F", "未答"},
-//                {"A", "B", "C", "D", "E", "F", "G", "未答"},
-//                {"A", "B", "C", "D", "E", "F", "G", "H", "未答"},
-//                {"AB", "BCD", "ACD", "ABDE", "ADEFGH", "DFG", "AGH", "ABCDEFGH", "BDE", "AEF", "DF" , "DE" , "ABG" , "DEF" , "未答"}};
-//        final int[][] labelCount = {
-//                {39, 5, 8},
-//                {39, 5, 8},
-//                {2, 39, 5, 8},
-//                {2, 39, 5, 8, 3},
-//                {6, 39, 5, 8, 20, 7},
-//                {6, 20, 5, 8, 25, 7 , 2},
-//                {6, 30, 7, 8, 25, 7 , 10 , 2},
-//                {6, 30, 7, 8, 25, 7 , 10 , 5 , 2},
-//                {6, 30, 7, 8, 25, 7 , 10 , 5 , 2 , 7 , 11 , 12 , 13 , 14 , 23}};
 
         //要显示的数据(左侧班级信息)
-<<<<<<< HEAD
         List<String> listitem = new ArrayList<>();
         for (int i = 0; i < AnswerActivity.classList.size() ; i++) {
             String temp = AnswerActivity.classList.get(i).keTangName;
-=======
-        listitem = new ArrayList<>();
-        for (int i = 0; i < HuDongDataActivity.classList.size() ; i++) {
-            String temp = HuDongDataActivity.classList.get(i).keTangName;
->>>>>>> a778572e660935aea05ec2124a4ace92362a760e
             listitem.add(temp);
         }
 
@@ -1882,6 +1856,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                                 tx_dati2.setText((int)(answer_count * 1.0 / all_count * 100) + "%");
                                 System.out.println("总人数:  " + all_count + " ,  作答人数:  " + answer_count + " ,  答题率:  " + (int)(answer_count * 1.0 / all_count * 100));
                             }
+                            tx_noanswer_zhuguan.setVisibility(View.GONE);
                             if(aflag == 1){ //答案内容
                                 showStudentsAnswer_img(v);
                             }else{ //答题详情
@@ -1890,7 +1865,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                         }
                     });
                 }else{
-                    Toast.makeText(getActivity(), "没有人提交答案" + answer, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "没有人提交答案" + answer, Toast.LENGTH_SHORT).show();
                     getActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             slStusAnswers_zhuguan.setVisibility(View.GONE);
@@ -2037,6 +2012,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                                 tx_dati2.setText((int)(answer_count * 1.0 / all_count * 100) + "%");
                                 System.out.println("总人数:  " + all_count + " ,  作答人数:  " + answer_count + " ,  答题率:  " + (int)(answer_count * 1.0 / all_count * 100));
                             }
+                            tx_noanswer_zhuguan.setVisibility(View.GONE);
                             if(aflag == 1){ //答案内容
                                 showStudentsAnswer_img(v);
                             }else{ //答题详情
@@ -2045,7 +2021,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                         }
                     });
                 }else{
-                    Toast.makeText(getActivity(), "没有人提交答案" + answer, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "没有人提交答案" + answer, Toast.LENGTH_SHORT).show();
                     getActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             slStusAnswers_zhuguan.setVisibility(View.GONE);
@@ -2062,7 +2038,6 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
     //显示弹框(主观题)
     private void showPopupWindow_luru(View v , int flag){
-//        initJoinClassInformation();  //初始设置加入课堂的班级信息
         //将popupWindow将要展示的弹窗内容view放入popupWindow中
 //        PopupWindow popupWindow = new PopupWindow(v ,
 //                1000,
@@ -3836,15 +3811,14 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             @Override
             public void run() {
                 if(actionName.indexOf("start") >= 0 && !actionName.equals("startAnswerQiangDa")){
-<<<<<<< HEAD
-                    getUUID();  //获取uuid
-                    MainActivity mActivity = (MainActivity) getActivity();
-                    mActivity.ScreenShotBoard(getActivity() , AnswerActivity.answerQuestionId , mActivity.getmBoard());
-=======
                     getUUID();//获取uuid
-                    MainActivity activity = (MainActivity)getActivity();
-                    activity.ScreenShotBoard(getContext(),HuDongDataActivity.answerQuestionId,activity.getmBoard());
->>>>>>> a778572e660935aea05ec2124a4ace92362a760e
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            MainActivity activity = (MainActivity)getActivity();
+                            activity.ScreenShotBoard(getContext(),AnswerActivity.answerQuestionId,activity.getmBoard());
+                        }
+                    });
                 }
                 int questionAnswerType = 0;  //答题类型
                 if(txType_tiwen.isSelected()){
