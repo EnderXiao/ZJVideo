@@ -118,12 +118,12 @@ public class Set_eraser_Fragment extends Fragment {
         return view;
     }
     public void setLinstatus(){
-        seterasersize1.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        seterasersize2.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        seterasersize3.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        seterasersize4.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        seterasersize5.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        seterasersize6.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
+        seterasersize1.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        seterasersize2.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        seterasersize3.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        seterasersize4.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        seterasersize5.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        seterasersize6.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
 
     }
 }
