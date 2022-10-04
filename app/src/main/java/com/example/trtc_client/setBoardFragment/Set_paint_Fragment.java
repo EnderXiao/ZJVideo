@@ -200,20 +200,20 @@ public class Set_paint_Fragment extends Fragment {
     }
 
     public void setLinSizestatus(){
-        setpaintsize1.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setpaintsize2.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setpaintsize3.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setpaintsize4.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setpaintsize5.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setpaintsize6.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
+        setpaintsize1.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setpaintsize2.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setpaintsize3.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setpaintsize4.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setpaintsize5.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setpaintsize6.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
     }
     public void setLinColorstatus(){
-        setpaintgray.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setpaintblack.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setpaintblue.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setpaintgreen.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setpaintyellow.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setpaintred.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
+        setpaintgray.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setpaintblack.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setpaintblue.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setpaintgreen.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setpaintyellow.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setpaintred.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
     }
 
 }

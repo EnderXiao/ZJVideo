@@ -207,19 +207,19 @@ public class Set_geometry_Fragment extends Fragment {
     }
 
     public void setLinSizestatus(){
-        setgeometrysize1.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setgeometrysize2.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setgeometrysize3.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setgeometrysize4.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setgeometrysize5.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setgeometrysize6.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
+        setgeometrysize1.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setgeometrysize2.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setgeometrysize3.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setgeometrysize4.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setgeometrysize5.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setgeometrysize6.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
     }
     public void setLinColorstatus(){
-        setgeometrygray.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setgeometryblack.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setgeometryblue.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setgeometrygreen.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setgeometryyellow.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        setgeometryred.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
+        setgeometrygray.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setgeometryblack.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setgeometryblue.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setgeometrygreen.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setgeometryyellow.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        setgeometryred.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
     }
 }

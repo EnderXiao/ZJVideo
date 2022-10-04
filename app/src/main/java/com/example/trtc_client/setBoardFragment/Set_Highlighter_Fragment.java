@@ -206,19 +206,19 @@ public class Set_Highlighter_Fragment extends Fragment {
     }
 
     public void setLinSizestatus(){
-        sethihtlightersize1.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        sethihtlightersize2.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        sethihtlightersize3.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        sethihtlightersize4.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        sethihtlightersize5.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        sethihtlightersize6.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
+        sethihtlightersize1.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        sethihtlightersize2.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        sethihtlightersize3.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        sethihtlightersize4.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        sethihtlightersize5.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        sethihtlightersize6.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
     }
     public void setLinColorstatus(){
-        sethihtlightergray.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        sethihtlighterblack.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        sethihtlighterblue.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        sethihtlightergreen.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        sethihtlighteryellow.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        sethihtlighterred.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
+        sethihtlightergray.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        sethihtlighterblack.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        sethihtlighterblue.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        sethihtlightergreen.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        sethihtlighteryellow.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        sethihtlighterred.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
     }
 }

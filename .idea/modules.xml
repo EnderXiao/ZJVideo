@@ -13,9 +13,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Debug/TRTC_Client.Debug.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Debug/TRTC_Client.Debug.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Debug/TRTC_Client.Debug.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/Debug/TRTC_Client.Debug.unitTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/TRTC_Client.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/TRTC_Client.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.TRTC_Client.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.TRTC_Client.app.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.TRTC_Client.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.TRTC_Client.app.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.TRTC_Client.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.TRTC_Client.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/TRTC_Client.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/TRTC_Client.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/TRTC_Client.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/TRTC_Client.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/TRTC_Client.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/TRTC_Client.app.unitTest.iml" />
     </modules>
   </component>
 </project>

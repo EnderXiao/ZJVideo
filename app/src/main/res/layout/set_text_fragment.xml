@@ -69,7 +69,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/bg_select_menu"
+                android:background="@drawable/bgset_select"
                 android:orientation="horizontal">
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -81,7 +81,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/textgray"
-                        android:background="@color/bg_select_menu"
+                        android:background="@color/bg_select_shadow"
                         android:src="@mipmap/text_gray"/>
                 </LinearLayout>
                 <LinearLayout
@@ -94,7 +94,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/textblack"
-                        android:background="@color/bg_select_menu"
+                        android:background="@color/bg_select_shadow"
                         android:src="@mipmap/text_black"/>
                 </LinearLayout>
                 <LinearLayout
@@ -107,7 +107,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/textblue"
-                        android:background="@color/bg_select_menu"
+                        android:background="@color/bg_select_shadow"
                         android:src="@mipmap/text_blue"/>
                 </LinearLayout>
                 <LinearLayout
@@ -120,7 +120,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/textgreen"
-                        android:background="@color/bg_select_menu"
+                        android:background="@color/bg_select_shadow"
                         android:src="@mipmap/text_green"/>
                 </LinearLayout>
                 <LinearLayout
@@ -133,7 +133,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/textyellow"
-                        android:background="@color/bg_select_menu"
+                        android:background="@color/bg_select_shadow"
                         android:src="@mipmap/text_yellow"/>
                 </LinearLayout>
                 <LinearLayout
@@ -146,7 +146,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/textred"
-                        android:background="@color/bg_select_menu"
+                        android:background="@color/bg_select_shadow"
                         android:src="@mipmap/text_red"/>
                 </LinearLayout>
 

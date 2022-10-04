@@ -104,6 +104,7 @@
         <FrameLayout
             android:id="@+id/teachingcontent"
             android:layout_width="match_parent"
+            android:background="@color/background"
             android:layout_height="match_parent" />
 
         <!-- 左侧画笔功能-->
@@ -184,7 +185,6 @@
                     android:gravity="center"
                     android:id="@+id/menu03RL"
                     android:layout_margin="3dp">
-
                     <ImageButton
                         android:id="@+id/menu03"
                         android:layout_width="wrap_content"
@@ -490,6 +490,7 @@
                     app:tabTextColor="@color/gray_text"
                     app:tabSelectedTextColor="@color/blue_white"
                     android:id="@+id/setboard_tar_bar"
+                    android:layout_gravity="center"
                     android:background="@color/bg_select_menu"
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"/>
@@ -635,38 +636,20 @@
         <RelativeLayout
             android:id="@+id/bg_shoukeneirong"
             android:layout_width="match_parent"
+            android:gravity="center"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/default_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:maxWidth="200dp"
-                android:maxHeight="200dp"
-                android:src="@drawable/video_temp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/default_image"
                 android:layout_centerHorizontal="true">
-
                 <TextView
                     android:id="@+id/alert_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="白板加载中,请稍等..."
                     android:textColor="@color/gray_text"
-                    android:textSize="20sp" />
-                <TextView
-                    android:id="@+id/upload_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:paddingLeft="5dp"
-                    android:text="载入"
-                    android:textColor="@color/common_green_bg"
                     android:textSize="20sp" />
             </LinearLayout>
         </RelativeLayout>
@@ -809,8 +792,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/background_chatroom"
                 app:layout_constraintTop_toBottomOf="@id/teacher_name"
-                app:tabPaddingStart="11dp"
-                app:tabPaddingEnd="11dp"
+                app:tabPaddingStart="5dp"
+                app:tabPaddingEnd="5dp"
                 app:tabRippleColor="@color/blue_white"
                 app:tabIndicatorColor="@color/blue_white"
                 app:tabTextAppearance="@style/TabBarTextStyle"

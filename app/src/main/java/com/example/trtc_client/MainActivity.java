@@ -14,12 +14,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -128,16 +130,18 @@ public class MainActivity extends AppCompatActivity {
     private TRTCCloudDef.TRTCParams myTRTCParams;
     private TXCloudVideoView mTXCVVTeacherPreviewView;
     private RelativeLayout teacherTRTCBackground;
-    private ImageView boardBtn;   //白板按钮
-    private ImageView canvasBtn;  //文件 按钮  现在是画笔按钮
+    private ImageView boardBtn;     //白板按钮
+    private ImageView canvasBtn;    //文件 按钮  现在是画笔按钮
 
     private ImageView contentBtn;  //文件夹按钮  现在是授课内容
     private ImageView membesw;
     private ImageView handBtn;
-    private ImageView cameraBtn;
+    private ImageView cameraBtn;   //关闭摄像头按钮
     private ImageView audioBtn;
-    private ImageView exit_btn;
-    private TextView teacher_name_view;
+
+    private ImageView exit_btn;     //下课按钮
+    private TextView teacher_name_view; //显示教师名称
+    private ImageView overClassBtn;
     private Group group_btn;
 
     public static String mTeacherId;
@@ -156,80 +160,95 @@ public class MainActivity extends AppCompatActivity {
     private String MsecretId = "AKID5ybx2rPggPr23oHUR8YhZBWZLr6xaw2r";                 //存储桶   永久密钥 secretId
     private String MsecretKey = "auxjESQCk11lEQL0O5WhbEZdRyEDwOYR";                    //存储桶    永久密钥 secretKey
 
-    protected static   String UserId = "";
-    private  String UserSig ="";
-//    private  String UserSig =GenerateTestUserSig.genTestUserSig(UserId);
-    protected static  String Roomid  = "";                                                     // 互动白板 房间号
-    private static String subjectId = "subjectid";
+//    protected static   String UserId = "";
 
-    private  int SDKappID =1400618830;
+    public static String userId = "";                                          //用户ID
+    private  String UserSig ="";                                                       //腾讯服务签名
+//    private  String UserSig =GenerateTestUserSig.genTestUserSig(UserId);
+//    protected static  String Roomid  = "";                                              // 互动白板 房间号
+    public static String roomid  = "750795";
+    private static String subjectId = "subjectid";                                      //学科ID
+
+    private  int SDKappID =1400618830;                                                  //SDKAppID
+
+
+
+    public static String userName = "xgy";
+    public static String keTangName = "keTang";
+    public static String keTangId = "keTangId";
+
+
 
     //即时通信相关
-    private V2TIMManager v2TIMManager;
-    private boolean IMLoginresult; //IM登录结果
-        //选择左侧工具相关
-    private Boolean menu_l_status=true; //true 代表展开
-    private ImageButton menu01,menu02,menu03,menu04,menu05,menu06,menu07,menu08,menu09,menu10,menu11,menu12;
-        //底部按钮
-    private Boolean menu_b_status=true; //true 代表展开
-    private TextView b_size,b_cur,b_sum,b_chu,b_per;
+    private V2TIMManager v2TIMManager;                                        //IM实例
+    private boolean IMLoginresult;                                            //IM登录结果
+
+    //白板左侧菜单栏
+    private Boolean menu_l_status=true;                                       //左侧工具栏状态   true 代表展开
+    private ImageButton menu01,menu02,menu03,menu04,menu05,menu06,menu07,menu08,menu09,menu10,menu11,menu12; //左侧工具栏图标 按钮
+    //白板底部菜单栏
+    private Boolean menu_b_status=true;                                        //底部工具栏状态  true 代表展开
+    private TextView b_size,b_cur,b_sum,b_chu,b_per;                           //底部工具栏中显示的文字  当前白板缩放比例  当前页数  总页数
     private ImageButton menub01,menub02,menub03,menub04,menub05,menub06,menub07,menub08,menub09,menub10,menub11;
         //聊天消息列表
     private List<Chat_Msg> data = new ArrayList<>();
 
     //互动白板相关
-    private TextView alert_text, upload_btn;
-    private View boardview;
-    private static TEduBoardController mBoard;
-    public TEduBoardController getmBoard() {return this.mBoard;}
-    private Boolean BoardStatus=false;  //记录白板初始化 状态
-    private Boolean addBoardtoFragmentstatus=false;//记录白板是否添加到了父容器中
-    private FrameLayout.LayoutParams addBoardlayoutParams;
-    private FrameLayout Board_container;
-    private ConstraintLayout rf_leftmenu;
-    private RelativeLayout rf_bottommenu,rf_shoukeneirong,select_resources;
-    private TEduBoardController.TEduBoardCallback mBoardCallback;
+    private TextView alert_text, upload_btn;                                    //提示白板当前的状态
+    private View boardview;                                                     //白板的view
+    private static TEduBoardController mBoard;                                  //白板实例
+    public TEduBoardController getmBoard() {return this.mBoard;}                //获取到白班实例
+    private Boolean BoardStatus=false;                                          //记录白板初始化 状态
+    private Boolean addBoardtoFragmentstatus=false;                             //记录白板是否添加到了父容器中
+    private FrameLayout.LayoutParams addBoardlayoutParams;                      //添加白板的时候用到的参数
+    private FrameLayout Board_container;                                        //显示白板的Fragment
+    private ConstraintLayout rf_leftmenu;                                       //白板左侧菜单栏
+    private RelativeLayout rf_bottommenu,rf_shoukeneirong,select_resources;     //白板底部菜单栏   中间默认状态布局    选择授课资源布局
+    private TEduBoardController.TEduBoardCallback mBoardCallback;               //白板回调
     private ImageButton geometry11,geometry12,geometry13,geometry14,geometry21,geometry22,geometry23,geometry24,geometry31,geometry32,geometry33,geometry34,geometry41,geometry42,geometry43,geometry44,geometry51,geometry52,geometry53,geometry61,geometry62,geometry63;
     private ImageButton teachingtools1,teachingtools2,teachingtools3,teachingtools4,teachingtools5;
-    private PopupWindow pw_selectpaint;
-    private PopupWindow pw_selecgeometry;
-    private PopupWindow pw_selectteachingtools;
-    private PopupWindow pw_selecteraser;
-    private List<Fragment>  mTabFragmenList = new ArrayList<>();
-    private ImageView menu02color,menu03color,menu04color;
+    private PopupWindow pw_selectpaint;                                 //选择画笔 一级弹窗
+    private PopupWindow pw_selecgeometry;                               //选择 几何工具  一级弹窗
+    private PopupWindow pw_selectteachingtools;                         //选择教学工具   一级弹窗
+    private PopupWindow pw_selecteraser;                                //选择橡皮   一级弹窗
+    private List<Fragment>  mTabFragmenList = new ArrayList<>();        // 右侧 视频列表 聊天列表  互动课堂  三个tabbar
+    private ImageView menu02color,menu03color,menu04color;              // 笔  文字   几何工具  显示右下角选择的颜色
     private TableLayout select_menu_top ,select_menu;
     private RelativeLayout menu01RL,menu02RL,menu03RL,menu04RL,menu05RL,menu06RL,menu07RL,menu08RL,menu09RL,menu10RL,menu11RL,menu12RL;
-    private CosXmlService cosXmlService;  //初始化 COS Service，获取实例
-    //记录当前文件ID 文件当前页ID，  白板页ID
-    private String FileID=null;       //当前文件ID
-    private String CurFileID=null;    //当前文件页面ID
-    private String BoardID="#DEFAULT";       //当前文件ID
-    private String CurBoardID=null;   //当前白板页ID
-    private String CurType=null;   // 初试为空   两种类型  Board和File
-    private static Boolean isquestion=false;  //用于记录是不是  题目保存调用快照
+    private CosXmlService cosXmlService;                                //初始化 COS Service，获取实例
 
-    private Button choosefile,uploadfile;
-    private TextView msgTips,filename;
-    private ProgressBar  proBar;
-    private ImageView close_select_resources,resupload;
-    private Boolean isincludeType  = false;  //判断文件格式是否上传
-    private String curfilepath,curfilename;
-    private LinearLayout uploadprogress;
+    // 记录当前文件ID 文件当前页ID，  白板页ID
+    private String FileID=null;                     //当前文件ID
+    private String CurFileID=null;                  //当前文件页面ID
+    private String BoardID="#DEFAULT";              //当前文件ID
+    private String CurBoardID=null;                 //当前白板页ID
+    private String CurType=null;                    // 初试为空   两种类型  Board和File
+    private static Boolean isquestion=false;        //用于记录是不是  题目保存调用快照
+
+    private Button choosefile,uploadfile;                       //选择文件弹窗  选择文件  上传文件 按钮
+    private TextView msgTips,filename;                          //选择文件弹窗  提示当前文件名称  提示当前文件状态
+    private ProgressBar  proBar;                                //上传文件 进度条
+    private ImageView close_select_resources,resupload;         //关闭选择文件弹窗  右上角本地上传
+    private Boolean isincludeType  = false;                     //判断文件格式是否上传
+    private String curfilepath,curfilename;                     //记录当前文件路径   当前文件名称
+    private LinearLayout uploadprogress;                        //选择文件弹窗布局  用来设置Visiable
 
     //TabBarFragment
-    private final ChatRoomFragment chatRoomFragment = new ChatRoomFragment();
-    private final VideoListFragment videoListFragment =  new VideoListFragment();
-    private final AnswerQuestionFragment answerQuestionFragment = new AnswerQuestionFragment();
+    private final ChatRoomFragment chatRoomFragment = new ChatRoomFragment();                       //右侧聊天的Fragment实例
+    private final VideoListFragment videoListFragment =  new VideoListFragment();                   //右侧视频列表的Fragment实例
+    private final AnswerQuestionFragment answerQuestionFragment = new AnswerQuestionFragment();     //右侧互动答题的Fragment实例
 
     // 成员列表
     private static View memberPopupView;
     private static ListView memberList;
+    private static MemberListViewAdapter listViewAdapter;
 
     // 举手列表
     private View handsUpPopupView;
     private ListView handsUpList;
     public HandsUpListViewAdapter handsUpListViewAdapter;
     public List<HandsUpItem> handsUpItemList = new ArrayList<>();
+    public Switch handsUpSwitchBtn;
 
     // UI消息监听器
     public Handler handler;
@@ -269,15 +288,14 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("+++参数"+intent.getExtras().get("subjectid"));
         System.out.println("+++参数"+intent.getExtras().get("roomid"));
         System.out.println("+++参数"+intent.getExtras().get("userid"));
-        UserId=intent.getExtras().get("userid").toString();
-        Roomid = intent.getExtras().get("roomid").toString();
+        userId=intent.getExtras().get("userid").toString();
+        roomid = intent.getExtras().get("roomid").toString();
         subjectId = intent.getExtras().get("subjectid").toString();
         UserSig =GenerateTestUserSig.genTestUserSig(intent.getExtras().get("userid").toString());
 
 
 
         List<MemberDataBean> testList1 = new ArrayList<>();
-
         mFragmenglist.add(videoListFragment);
         mFragmenglist.add(chatRoomFragment);
         mFragmenglist.add(answerQuestionFragment);
@@ -286,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TextView class_id_text_view = findViewById(R.id.class_id);
-        class_id_text_view.setText(Roomid);
+        class_id_text_view.setText(roomid);
         @SuppressLint("UseCompatLoadingForDrawables") Drawable class_id_icon = getResources().getDrawable(R.drawable.copy);
         class_id_icon.setBounds(0,0,15,15);
         class_id_text_view.setCompoundDrawables(null, null, class_id_icon,null);
@@ -299,11 +317,11 @@ public class MainActivity extends AppCompatActivity {
         teacherTRTCBackground = findViewById(R.id.teacher_background);
 
         alert_text = findViewById(R.id.alert_text);
-        upload_btn= findViewById(R.id.upload_btn);
 
         // 获取底部按钮
 
         handsUpPopupView = getLayoutInflater().inflate(R.layout.hands_up_pop_window, null);
+        handsUpSwitchBtn = handsUpPopupView.findViewById(R.id.hands_up_controller);
         handsUpList = handsUpPopupView.findViewById(R.id.hands_up_list);
         memberPopupView = getLayoutInflater().inflate(R.layout.member_list_pop_window, null);
         memberList = memberPopupView.findViewById(R.id.member_list);
@@ -317,9 +335,28 @@ public class MainActivity extends AppCompatActivity {
         handBtn = findViewById(R.id.hand_btn);
         audioBtn = findViewById(R.id.mic_btn);
         cameraBtn = findViewById(R.id.camera_btn);
+        overClassBtn = findViewById(R.id.exit_btn);
         teacher_name_view = findViewById(R.id.teacher_name);
 
-        teacher_name_view.setText(UserId+"老师");
+        MainActivity that = this;
+        handsUpSwitchBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    HttpActivity.memberController("", "", "", "handAllNo", "", -1, that);
+                } else {
+                    HttpActivity.memberController("", "", "", "handAllYes", "", -1, that);
+                }
+            }
+        });
+
+        overClassBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onExitLiveRoom();
+            }
+        });
+        teacher_name_view.setText(userId+"老师");
         //文件上传部分按钮
         select_resources=findViewById(R.id.select_resources);
         proBar = findViewById(R.id.proBar);
@@ -387,7 +424,7 @@ public class MainActivity extends AppCompatActivity {
                     msgTips.setText("正在上传中：");
                     Time time = new Time("GMT+8");
                     time.setToNow();
-                    String cosprefix = "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+Roomid+"/res/";
+                    String cosprefix = "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/res/";
                     UploadToBucket(cosprefix,curfilepath,curfilename,false);
                 }
             }
@@ -485,8 +522,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
-                if(msg.what == 1) {
-                    setHandsUpData();
+                int position = -1;
+                switch (msg.what) {
+                    case 1:
+                        setHandsUpData();
+                        break;
+                    case 2:
+                        position = msg.getData().getInt("position");
+                        switchMemberListAudioIcon(position);
+                        break;
+                    case 3:
+                        position = msg.getData().getInt("position");
+                        switchMemberListChatIcon(position);
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        position = msg.getData().getInt("position");
+                        switchSpeakerIcon(position);
+                        break;
+                    default:
+                        break;
                 }
             }
         };
@@ -510,6 +566,40 @@ public class MainActivity extends AppCompatActivity {
         }
         handsUpItemList.addAll(tempHandsUpItemList);
         handsUpListViewAdapter.notifyDataSetChanged();
+    }
+
+    public void switchMemberListAudioIcon(int position) {
+        MemberItem item = listViewAdapter.getItem(position);
+        if(item != null){
+            Log.e(TAG, "switchMemberListAudioIcon: 获取用户item " + item.getName());
+            item.setAudioControl(!item.getAudioControl());
+            Toast.makeText(MainActivity.this, "成员 " + position + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
+            listViewAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(MainActivity.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void switchMemberListChatIcon(int position) {
+        MemberItem item = listViewAdapter.getItem(position);
+        if(item != null){
+            item.setChatControl(!item.getChatControl());
+            Toast.makeText(MainActivity.this, "成员 " + position + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
+            listViewAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(MainActivity.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void switchSpeakerIcon(int position) {
+        MemberItem item = listViewAdapter.getItem(position);
+        if(item != null){
+            item.setSpeakControl(!item.getSpeakControl());
+            Toast.makeText(MainActivity.this, "成员 " + position + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
+            listViewAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(MainActivity.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void initHandsUpList() {
@@ -548,13 +638,13 @@ public class MainActivity extends AppCompatActivity {
 //        memberList.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         if(AnswerActivity.joinList != null) {
             for (int i = 0; i < AnswerActivity.joinList.size(); i++) {
-                memberDataList.add(new MemberItem(AnswerActivity.joinList.get(i).getName(), true, true, true, false, true));
+                memberDataList.add(new MemberItem(AnswerActivity.joinList.get(i).getName(), AnswerActivity.joinList.get(i).getUserId(), 1 ,true, true, true, false, true));
                 Log.e(TAG, "initMemberList: " + AnswerActivity.joinList.get(i).toString());
             }
         }
         if(AnswerActivity.ketangList != null) {
             for (int i = 0; i < AnswerActivity.ketangList.size(); i++) {
-                memberDataList.add(new MemberItem(AnswerActivity.ketangList.get(i).getName(), true, true, true, false, true));
+                memberDataList.add(new MemberItem(AnswerActivity.ketangList.get(i).getName(), AnswerActivity.joinList.get(i).getUserId(), 0 , true, true, true, false, true));
                 Log.e(TAG, "initMemberList: " + AnswerActivity.ketangList.get(i).toString());
             }
         }
@@ -562,7 +652,8 @@ public class MainActivity extends AppCompatActivity {
 //        for (int i = 0; i < 10; i ++){
 //            memberDataList.add(new MemberItem("测试", Integer.toString(i), "2", "3", "4", "5"));
 //        }
-        MemberListViewAdapter listViewAdapter = new MemberListViewAdapter(this, memberList, memberDataList);
+        MainActivity that = this;
+        listViewAdapter = new MemberListViewAdapter(this, memberList, memberDataList);
         memberList.setAdapter(listViewAdapter);
 
         listViewAdapter.setOnItemButtonListener(new MemberListViewAdapter.onItemButtonListener() {
@@ -576,9 +667,9 @@ public class MainActivity extends AppCompatActivity {
                 MemberItem item = listViewAdapter.getItem(i);
                 if(item != null){
                     if(item.getChatControl()){
-                        item.setChatControl(false);
+                        HttpActivity.memberController("", "", "closeWords", "", item.getUserId(), i, that);
                     } else {
-                        item.setChatControl(true);
+                        HttpActivity.memberController("", "", "openWords", "", item.getUserId(), i, that);
                     }
                     Toast.makeText(MainActivity.this, "成员 " + i + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
@@ -592,9 +683,9 @@ public class MainActivity extends AppCompatActivity {
                 MemberItem item = listViewAdapter.getItem(i);
                 if(item != null){
                     if(item.getSpeakControl()){
-                        item.setSpeakControl(false);
+                        HttpActivity.speakerController(item.getUserId(), item.getName(), "down", i, that);
                     } else {
-                        item.setSpeakControl(true);
+                        HttpActivity.speakerController(item.getUserId(), item.getName(), "up", i, that);
                     }
                     Toast.makeText(MainActivity.this, "成员 " + i + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
@@ -608,9 +699,9 @@ public class MainActivity extends AppCompatActivity {
                 MemberItem item = listViewAdapter.getItem(i);
                 if(item != null){
                     if(item.getAudioControl()){
-                        item.setAudioControl(false);
+                        HttpActivity.memberController("closeMic", "", "", "", item.getUserId(), i, that);
                     } else {
-                        item.setAudioControl(true);
+                        HttpActivity.memberController("openMic", "", "", "", item.getUserId(), i, that);
                     }
                     Toast.makeText(MainActivity.this, "成员 " + i + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
@@ -629,8 +720,10 @@ public class MainActivity extends AppCompatActivity {
                 MemberItem item = listViewAdapter.getItem(i);
                 if(item != null){
                     if(item.getBoardControl()){
+                        drawAuthority( "drawAuthority", "no", item.getUserId());
                         item.setBoardControl(false);
                     } else {
+                        drawAuthority("drawAuthority" , "yes", item.getUserId());
                         item.setBoardControl(true);
                     }
                     Toast.makeText(MainActivity.this, "成员 " + i + " 禁绘画按钮被点击", Toast.LENGTH_SHORT).show();
@@ -668,6 +761,7 @@ public class MainActivity extends AppCompatActivity {
         mTRTCCloud.exitRoom();
         HttpActivity.stopHandsUpTimer();
     }
+
     public static class MyTRTCCloudListener extends TRTCCloudListener {
         private WeakReference<MainActivity> mContext;
 
@@ -713,8 +807,10 @@ public class MainActivity extends AppCompatActivity {
 //                return;
 //            }
             if(available) {
-                if(AnswerActivity.findMemberInKetangList(userId) != null)
+                if(AnswerActivity.findMemberInKetangList(userId) != null) {
+
                     mUserList.add(userId);
+                }
             }
             else
                 mUserList.remove(userId);
@@ -765,8 +861,8 @@ public class MainActivity extends AppCompatActivity {
 //        String userId = "mingming";
         myTRTCParams = new TRTCCloudDef.TRTCParams();
         myTRTCParams.sdkAppId = GenerateTestUserSig.SDKAPPID;
-        myTRTCParams.userId = UserId;
-        myTRTCParams.roomId = Integer.parseInt(Roomid);
+        myTRTCParams.userId = userId;
+        myTRTCParams.roomId = Integer.parseInt(roomid);
         myTRTCParams.userSig = GenerateTestUserSig.genTestUserSig(myTRTCParams.userId);
 //        myTRTCParams.userSig = "eJwtzMEKgkAUheF3mXXI9eoMKbTQiFoE4WQQ7dSZ4jY0mVoa0btn6vJ8B-4PS7d756UrFjJ0gM2GTUrbhs40cEfZHdzpqZXJypIUC10fQCAEyMdHdyVVunfOOQLAqA3d-iYE*p6HPJgqdOnD-ukooyQNjELZbeQhf7ytKAp7Xc7XBmFXJzxvoyes4nbBvj8x1DFE";
 
@@ -805,6 +901,13 @@ public class MainActivity extends AppCompatActivity {
         @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = getResources().getDrawable(R.drawable.mic_on);
         teacher_name_mic_icon.setBounds(0,0,20,20);
         teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
+
+        // 初始化房间信息
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int screenWidth = dm.widthPixels;
+        int screenHeight = dm.heightPixels;
+        HttpActivity.initClass(screenWidth, screenHeight, "skydt", this);
 
         // 开启举手监听事件
         HttpActivity.startHandsUpTimer(this);
@@ -862,9 +965,6 @@ public class MainActivity extends AppCompatActivity {
         int offsetX = - memberPopupView.getMeasuredWidth() / 4;
         int offsetY = - memberPopupView.getMeasuredHeight() - (view.getHeight()) - 10;
         popupWindow.showAsDropDown(view, offsetX, offsetY, Gravity.START);
-        for (int i = 0; i < AnswerActivity.joinList.size(); i++) {
-            Log.e(TAG, "showMemberListBtn: " + AnswerActivity.joinList.get(i));
-        }
     }
 
     public void showHandsUpBtn(View view) {
@@ -883,7 +983,7 @@ public class MainActivity extends AppCompatActivity {
         mBoard=null;
         mBoardCallback=null;
         TEduBoardController.TEduBoardAuthParam authParam = new TEduBoardController.TEduBoardAuthParam(
-                SDKappID , UserId, UserSig);
+                SDKappID , userId, UserSig);
         //（2）白板默认配置
         TEduBoardController.TEduBoardInitParam initParam = new TEduBoardController.TEduBoardInitParam();
         initParam.timSync=false;
@@ -916,13 +1016,12 @@ public class MainActivity extends AppCompatActivity {
                 boardview = mBoard.getBoardRenderView();
                 initBoardMenu();
                 alert_text.setText("白板加载完成！");
-
-                //刚上来 初始化完白板就显示出来
-//                addBoardtoFragmentstatus =  mBoard.addBoardViewToContainer(Board_container,boardview,addBoardlayoutParams);
-//                rf_leftmenu.setVisibility(View.VISIBLE);
-//                rf_bottommenu.setVisibility(View.VISIBLE);
-//                rf_shoukeneirong.setVisibility(View.GONE);//默认图片那个消失
-
+                if(!addBoardtoFragmentstatus){
+                    addBoardtoFragmentstatus =  mBoard.addBoardViewToContainer(Board_container,boardview,addBoardlayoutParams);
+                    rf_leftmenu.setVisibility(View.VISIBLE);
+                    rf_bottommenu.setVisibility(View.VISIBLE);
+                    rf_shoukeneirong.setVisibility(View.GONE);//默认图片那个消失
+                }
             }
             @Override
             public void onTEBHistroyDataSyncCompleted() {
@@ -935,6 +1034,7 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onTEBSyncData(String data) {
+                findViewById(R.id.setBoardWindow).setVisibility(View.GONE);
                 final V2TIMMessage message = V2TIMManager.getMessageManager().createCustomMessage(data.getBytes(), "", "TXWhiteBoardExt".getBytes());
                 if (message.getCustomElem() != null) {
                     message.getCustomElem().setExtension("TXWhiteBoardExt".getBytes());
@@ -942,7 +1042,7 @@ public class MainActivity extends AppCompatActivity {
                     message.getCustomElem().setDescription("");
                     message.getCustomElem().setData(data.getBytes());
                 }
-                V2TIMManager.getInstance().getConversationManager().getConversation(Roomid, new V2TIMValueCallback<V2TIMConversation>() {
+                V2TIMManager.getInstance().getConversationManager().getConversation(roomid, new V2TIMValueCallback<V2TIMConversation>() {
                     @Override
                     public void onError(int i, String s) {
                         // 获取回话失败
@@ -950,7 +1050,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     @Override
                     public void onSuccess(V2TIMConversation v2TIMConversation) {
-                        V2TIMManager.getInstance().getMessageManager().sendMessage(message, null, Roomid, 1, false, null,  new V2TIMSendCallback<V2TIMMessage>() {
+                        V2TIMManager.getInstance().getMessageManager().sendMessage(message, null, roomid, 1, false, null,  new V2TIMSendCallback<V2TIMMessage>() {
                             @Override
                             public void onSuccess(V2TIMMessage v2TIMMessage) {
                                 // 发送 IM 消息成功
@@ -1166,7 +1266,7 @@ public class MainActivity extends AppCompatActivity {
                     Time time = new Time("GMT+8");
                     time.setToNow();
                     // isquestion  用来区分本次快照是题目的快照还是 切换的时候保存的快照
-                    String cosprefix = isquestion?"class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+Roomid+"/question/" : "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+Roomid+"/capture/";
+                    String cosprefix = isquestion?"class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/question/" : "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/capture/";
                     UploadToBucket(cosprefix,path,name,true);
 
                 }else {
@@ -1207,7 +1307,7 @@ public class MainActivity extends AppCompatActivity {
 
         mBoard.addCallback(mBoardCallback);
         //（4）进行初始化
-        mBoard.init(authParam,  Integer.parseInt(Roomid), initParam);
+        mBoard.init(authParam,  Integer.parseInt(roomid), initParam);
         //（2）获取白板 View
         // 初始化白板的按钮功能
         initBoardMenu();
@@ -1249,9 +1349,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
     public void LoginTIM(){
-        V2TIMManager.getInstance().login(UserId, UserSig, new V2TIMCallback() {
+        V2TIMManager.getInstance().login(userId, UserSig, new V2TIMCallback() {
             @Override
             public void onError(int i, String s) {
                 System.out.println("++++++登陆失败"+s);
@@ -1296,8 +1395,8 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
-    public void createGroup(){
-        V2TIMManager.getInstance().createGroup(V2TIMManager.GROUP_TYPE_MEETING, Roomid, Roomid, new V2TIMValueCallback<String>() {
+                public void createGroup(){
+        V2TIMManager.getInstance().createGroup(V2TIMManager.GROUP_TYPE_MEETING, roomid, roomid, new V2TIMValueCallback<String>() {
             @Override
             public void onSuccess(String s) {
                 // 创建群组成功
@@ -1307,7 +1406,7 @@ public class MainActivity extends AppCompatActivity {
             public void onError(int code, String desc) {
                 // 创建群组失败
                 if(10021==code){
-                    V2TIMManager.getInstance().joinGroup(Roomid, Roomid, new V2TIMCallback() {
+                    V2TIMManager.getInstance().joinGroup(roomid, roomid, new V2TIMCallback() {
                         @Override
                         public void onSuccess() {
                             // 加群成功
@@ -1360,6 +1459,7 @@ public class MainActivity extends AppCompatActivity {
         select_menu = findViewById(R.id.select_menu);
         select_menu_top = findViewById(R.id.select_menu_top);
 
+//        文件上传按钮
         resupload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1373,6 +1473,7 @@ public class MainActivity extends AppCompatActivity {
                 intoFileManager();
             }
         });
+        //关闭文件弹窗按钮
         close_select_resources.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1381,6 +1482,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //左侧功能栏  第一个按钮  鼠标按钮
         menu01 = findViewById(R.id.menu01);
         menu01.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1391,8 +1493,8 @@ public class MainActivity extends AppCompatActivity {
                 b_cur.setText((mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard())+1)+"");
             }
         });
+        //左侧功能栏  第2个按钮  画笔按钮
         menu02 = findViewById(R.id.menu02);
-        //选笔
         menu02.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1439,6 +1541,7 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+        //左侧功能栏  第3个按钮  文本 按钮
         menu03 = findViewById(R.id.menu03);
         menu03.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1446,12 +1549,10 @@ public class MainActivity extends AppCompatActivity {
                 mBoard.setToolType(11);
                 setLeftmenustatus(true);
                 menu03.setBackgroundResource(R.mipmap.menu_03_text1);
-                menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
-                menu04color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
                 menu03color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
             }
         });
-        //几何图形
+        //左侧功能栏  第4个按钮  选择几何图形按钮
         menu04 = findViewById(R.id.menu04);
         menu04.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1460,8 +1561,6 @@ public class MainActivity extends AppCompatActivity {
                 mBoard.setToolType(6);
                 setLeftmenustatus(true);
                 menu04.setBackgroundResource(R.mipmap.menu_04_jihe1);
-                menu03color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
-                menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
                 menu04color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
                 //开启 几何图形弹窗
                 View v_selectgeometry = getLayoutInflater().inflate(R.layout.pw_selectgeometry,null);
@@ -1773,6 +1872,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        //左侧功能栏  第5个按钮  框选工具按钮
         menu05 = findViewById(R.id.menu05);
         menu05.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1782,12 +1882,11 @@ public class MainActivity extends AppCompatActivity {
                 menu05.setBackgroundResource(R.mipmap.menu_05_select1);
             }
         });
-        //教学工具
+        //左侧功能栏  第6个按钮  选择教学工具按钮
         menu06 = findViewById(R.id.menu06);
         menu06.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setLeftmenustatus(true);
                 menu06.setBackgroundResource(R.mipmap.menu_06_tools1);
                 //开启教学工具弹窗
                 View v_selectteachingtools = getLayoutInflater().inflate(R.layout.pw_select_teachingtools,null);
@@ -1842,6 +1941,7 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+        //左侧功能栏  第7个按钮  移动缩放按钮
         menu07 = findViewById(R.id.menu07);
         menu07.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1852,7 +1952,7 @@ public class MainActivity extends AppCompatActivity {
                 menu07.setBackgroundResource(R.mipmap.menu_07_move1);
             }
         });
-        //橡皮擦
+        //左侧功能栏  第8个按钮  橡皮擦按钮
         menu08 = findViewById(R.id.menu08);
         menu08.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1892,16 +1992,16 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+        //左侧功能栏  第9个按钮  清空按钮
         menu09 = findViewById(R.id.menu09);
         menu09.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mBoard.clear(false);
                 mBoard.setToolType(0);
-                setLeftmenustatus(true);
-                menu09.setBackgroundResource(R.mipmap.menu_09_clean1);
             }
         });
+        //左侧功能栏  第10个按钮  激光笔 按钮
         menu10 = findViewById(R.id.menu10);
         menu10.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1912,7 +2012,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        //左侧功能栏  第11个按钮  设置 按钮
         menu11 = findViewById(R.id.menu11);
         menu11.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1920,10 +2020,8 @@ public class MainActivity extends AppCompatActivity {
                 RelativeLayout setBoardWindow = findViewById(R.id.setBoardWindow);
                 if(setBoardWindow.getVisibility()==View.VISIBLE){
                     setBoardWindow.setVisibility(View.GONE);
-                    menu11.setBackgroundResource(R.mipmap.menu_11_bg);
                 }else {
                     setBoardWindow.setVisibility(View.VISIBLE);
-                    menu11.setBackgroundResource(R.mipmap.menu_11_bg1);
                     //使用适配器将ViewPager与Fragment绑定在一起
                     ViewPager setboardviewPager = findViewById(R.id.set_board_tar_bar_viewpage);
                     setboardviewPager.setOffscreenPageLimit(3);
@@ -1975,12 +2073,13 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        //左侧功能栏  第12个按钮  状态栏 收起 展开按钮
         menu12 = findViewById(R.id.menu12);
         menu12.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 findViewById(R.id.setBoardWindow).setVisibility(View.GONE);
-                menu11.setBackgroundResource(R.mipmap.menu_11_bg);
 //                收起来
                 if(menu_l_status){
                     select_menu_top.setVisibility(View.VISIBLE);
@@ -2010,6 +2109,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        b_size.setText(mBoard.getBoardRatio());
 
+        //底部功能栏  第1个按钮  撤销按钮
         menub01 = findViewById(R.id.menub01);
         menub01.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2019,6 +2119,7 @@ public class MainActivity extends AppCompatActivity {
                 mBoard.undo();
             }
         });
+        //底部功能栏  第2个按钮  重做按钮
         menub02 = findViewById(R.id.menub02);
         menub02.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2027,6 +2128,7 @@ public class MainActivity extends AppCompatActivity {
                 menub02.setBackgroundResource(R.mipmap.menu_b021);
                 mBoard.redo();}
         });
+        //底部功能栏  第3个按钮  归位 按钮（缩放比例 成100%）
         menub03 = findViewById(R.id.menub03);
         menub03.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2036,6 +2138,7 @@ public class MainActivity extends AppCompatActivity {
                 mBoard.setBoardScale(100);
             }
         });
+        //底部功能栏  第4个按钮  缩小显示比例 按钮
         menub04 = findViewById(R.id.menub04);
         menub04.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2051,6 +2154,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        //底部功能栏  第5个按钮  放大显示比例 按钮
         menub05 = findViewById(R.id.menub05);
         menub05.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2066,6 +2170,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        //底部功能栏  第6个按钮  向前翻页 按钮
         menub06= findViewById(R.id.menub06);
         menub06.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2084,6 +2189,7 @@ public class MainActivity extends AppCompatActivity {
                 b_cur.setText((mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard())+1)+"");
             }
         });
+        //底部功能栏  第7个按钮  向后翻页 按钮
         menub07 = findViewById(R.id.menub07);
         menub07.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2101,6 +2207,7 @@ public class MainActivity extends AppCompatActivity {
                 b_cur.setText((mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard())+1)+"");
             }
         });
+        //底部功能栏  第8个按钮  新增一页 按钮
         menub08 = findViewById(R.id.menub08);
         menub08.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2111,6 +2218,7 @@ public class MainActivity extends AppCompatActivity {
                 mBoard.addBoard(null,TEduBoardController.TEduBoardImageFitMode.TEDU_BOARD_IMAGE_FIT_MODE_CENTER, TEduBoardController.TEduBoardBackgroundType.TEDU_BOARD_BACKGROUND_IMAGE,true);
             }
         });
+        //底部功能栏  第9个按钮  删除当前页 按钮
         menub09 = findViewById(R.id.menub09);
         menub09.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2123,11 +2231,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        //底部功能栏  第10个按钮  折叠展开底部菜单栏 按钮
         menub10 = findViewById(R.id.menub10);
         menub10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setLeftmenustatus(true);
+                setLeftmenustatus(true);//左边菜单栏  状态都改为未选中
                 if(menu_b_status){
                     menub03.setVisibility(View.GONE);
                     menub04.setVisibility(View.GONE);
@@ -2177,9 +2286,7 @@ public class MainActivity extends AppCompatActivity {
         menu06.setBackgroundResource(R.mipmap.menu_06_tools);
         menu07.setBackgroundResource(R.mipmap.menu_07_move);
         menu08.setBackgroundResource(R.mipmap.menu_08_earsea);
-        menu09.setBackgroundResource(R.mipmap.menu_09_clean);
         menu10.setBackgroundResource(R.mipmap.menu_10);
-        menu11.setBackgroundResource(R.mipmap.menu_11_bg);
         menub01.setBackgroundResource(R.mipmap.menu_b01);
         menub02.setBackgroundResource(R.mipmap.menu_b02);
         menub03.setBackgroundResource(R.mipmap.menu_b03);
@@ -2194,7 +2301,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //聊天Fragment 调用此方法  发送消息
+    /**
+     * 白板控制
+     *
+     * @param extension 消息类型
+     * @param action    操作动作
+     * @param id        操作对象ID
+     */
+
+    public void drawAuthority(String extension, String action, String id) {
+
+    }
+
     public void sendMsg(Chat_Msg msg){
         // 创建文本消息
         //        V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createTextMessage( "{\"text\":\""+msg.getContent()+"\",\"date\":\""+msg.getDate()+"\"}");
@@ -2207,7 +2325,7 @@ public class MainActivity extends AppCompatActivity {
             v2TIMMessage.getCustomElem().setData(msg.getContent().getBytes());
         }
 
-        V2TIMManager.getMessageManager().sendMessage(v2TIMMessage, null,Roomid, V2TIMMessage.V2TIM_PRIORITY_NORMAL, false, null, new V2TIMSendCallback<V2TIMMessage>() {
+        V2TIMManager.getMessageManager().sendMessage(v2TIMMessage, null,roomid, V2TIMMessage.V2TIM_PRIORITY_NORMAL, false, null, new V2TIMSendCallback<V2TIMMessage>() {
             @Override
             public void onProgress(int progress) {
                 // 文本消息不会回调进度
@@ -2230,7 +2348,7 @@ public class MainActivity extends AppCompatActivity {
     public void stopAllchat(Boolean isstop){
         // 全员禁言
         V2TIMGroupInfo info = new V2TIMGroupInfo();
-        info.setGroupID(Roomid);
+        info.setGroupID(roomid);
         info.setAllMuted(isstop);
         V2TIMManager.getGroupManager().setGroupInfo(info, new V2TIMCallback() {
             @Override
@@ -2268,7 +2386,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    //下课 销毁白板
+
+    public void onExitLiveRoom() {
+
+        HttpActivity.overClass("leave", "skydt", this);
+        mTRTCCloud.exitRoom();
+    }
+
+    //下课 销毁白板实例
     public void destroyBoard() {
         System.out.println("+++执行了销毁函数");
         CurType=null;
@@ -2295,7 +2420,7 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 12); //requestCode==1   用来记录是这里的操作
     }
 
-    //文件管理器选择了回调  requestCode==1的时候
+    //文件管理器选择了回调  requestCode==12的时候   支持的文件类型  MP3  MP4  doc  docx ppt  pptx  pdf  png  jpg
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -2379,7 +2504,7 @@ public class MainActivity extends AppCompatActivity {
         cosXmlService = new CosXmlService(context, serviceConfig, myCredentialProvider);
     }
 
-
+    //上传文件到存储桶  存储桶公共路径  、  文件本地路径  、   文件名称   、   是否删除本地缓存
     private void UploadToBucket(String cosprefix,String path,String name,boolean isdelete){
         isquestion=false;
         //cosprefix  存储桶目录    path 本地文件路径   name  名称
@@ -2524,13 +2649,13 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    //白板添加文件
+    //白板添加文件  添加上去的名称， 文件的网络地址
     private void mBoardAddTranscodeFile(String name,String url) {
-        System.out.println("+++开始执行添加文件任务"+url);
         TEduBoardController.TEduBoardTranscodeFileResult config = new TEduBoardController.TEduBoardTranscodeFileResult(name,url);
         mBoard.addTranscodeFile(config,true);
     }
 
+    //为了 接口获取到的数据（字符串）转成JSON格式
     public static JSONObject stringToJson(String str) {
         JSONObject jsonObject = null;
         str = str.substring(str.indexOf("{"), str.lastIndexOf("}") + 1);
@@ -2543,7 +2668,7 @@ public class MainActivity extends AppCompatActivity {
         return jsonObject;
     }
 
-    //创建转码任务
+    //创建转码任务 （pdf  doc   docx）
     private void CreateTranscode(String slink) {
         //开始创建转码任务
         new Thread(new Runnable() {
@@ -2608,6 +2733,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    //创建 转码任务 定时请求器
     public static void DescribeTranscodehandler(String secretId,String secretKey,String region,String sdkAppId,String taskId,TEduBoardController mBoard,ProgressBar progressBar) {
         Boardtimer.schedule(new TimerTask() {
             @Override
@@ -2704,8 +2830,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+<<<<<<< HEAD
 //白板快照   王璐瑶调用
     public static void ScreenShotBoard(Context context,String answerQuestionId,TEduBoardController mBoard){
+=======
+    //白板快照   答题部分   保存当前题目  题面
+    public  void ScreenShotBoard(Context context,String answerQuestionId,TEduBoardController mBoard){
+>>>>>>> a778572e660935aea05ec2124a4ace92362a760e
         isquestion=true;//调用的时候把这个值设置为true  后面改变存储的路径
         //白板快照
         TEduBoardController.TEduBoardSnapshotInfo path = new TEduBoardController.TEduBoardSnapshotInfo();
@@ -2740,7 +2871,7 @@ public class MainActivity extends AppCompatActivity {
         geometry63.setImageResource(R.mipmap.selectgeometry63);
     }
 
-    //用来设置颜色的时候  控制菜单一栏  画笔 文本  几何工具右下角的小颜色显示
+    //用来设置颜色的时候  控制菜单一栏  画笔 文本  几何工具右下角的小颜色显示   为了给设置的fragment调用
     public void forSetFragmentSet(String item,String params){
         if(item=="geometrycolor"){
             if(params=="gray"){

@@ -201,6 +201,15 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             "谢海玉" , "吴妙仁" , "孔国宁" , "陈思" , "马元兴" , "孟丹君"
     });
 
+    public void setListitem(List<String> listitem) {
+        this.listitem.clear();
+        this.listitem.addAll(listitem);
+        myAdapter.notifyDataSetChanged();
+
+    }
+
+    private  List<String> listitem;
+
 
 
 
@@ -815,9 +824,15 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 //                {6, 30, 7, 8, 25, 7 , 10 , 5 , 2 , 7 , 11 , 12 , 13 , 14 , 23}};
 
         //要显示的数据(左侧班级信息)
+<<<<<<< HEAD
         List<String> listitem = new ArrayList<>();
         for (int i = 0; i < AnswerActivity.classList.size() ; i++) {
             String temp = AnswerActivity.classList.get(i).keTangName;
+=======
+        listitem = new ArrayList<>();
+        for (int i = 0; i < HuDongDataActivity.classList.size() ; i++) {
+            String temp = HuDongDataActivity.classList.get(i).keTangName;
+>>>>>>> a778572e660935aea05ec2124a4ace92362a760e
             listitem.add(temp);
         }
 
@@ -3821,9 +3836,15 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             @Override
             public void run() {
                 if(actionName.indexOf("start") >= 0 && !actionName.equals("startAnswerQiangDa")){
+<<<<<<< HEAD
                     getUUID();  //获取uuid
                     MainActivity mActivity = (MainActivity) getActivity();
                     mActivity.ScreenShotBoard(getActivity() , AnswerActivity.answerQuestionId , mActivity.getmBoard());
+=======
+                    getUUID();//获取uuid
+                    MainActivity activity = (MainActivity)getActivity();
+                    activity.ScreenShotBoard(getContext(),HuDongDataActivity.answerQuestionId,activity.getmBoard());
+>>>>>>> a778572e660935aea05ec2124a4ace92362a760e
                 }
                 int questionAnswerType = 0;  //答题类型
                 if(txType_tiwen.isSelected()){

@@ -64,8 +64,8 @@ public class HttpActivity extends AnswerActivity {
 
     public static void getHandsUp(MainActivity mainActivity) {
         try{
-            String roomId =MainActivity.Roomid;
-            String userId = MainActivity.UserId;
+            String roomId =MainActivity.roomid;
+            String userId = MainActivity.userId;
             URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_getChatRoomMessage.do?"
                     + "roomId=" + roomId
                     + "&userId=" + userId
@@ -130,7 +130,7 @@ public class HttpActivity extends AnswerActivity {
             @Override
             public void run() {
                 try{
-                    String roomId =MainActivity.Roomid;
+                    String roomId =MainActivity.roomid;
                     URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_TestGetStuJoinOrLeaveRoomList.do?"
                             + "roomId=" + roomId);
 
@@ -187,25 +187,292 @@ public class HttpActivity extends AnswerActivity {
         }).start();
     }
 
-    public void audioController(String action) {
+    /**
+     *
+     *
+     * @param micAction    麦克风操作
+     * @param cameraAction 摄像头操作
+     * @param wordAction   聊天室操作
+     * @param handAction   举手操作
+     * @param userId       操作对象ID
+     * @param position     操作位置
+     * @param mainActivity 主线程
+     */
+
+    public static void memberController(String micAction, String cameraAction, String wordAction, String handAction, String userId, int position, MainActivity mainActivity) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    String roomId = MainActivity.Roomid;
+                    String roomId = roomid;
+                    if(!userId.equals("")) {
+                        roomId += "_" + userId;
+                    }
                     URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_saveControl.do?"
                             + "roomId=" + roomId
-                            + "deviceMicAction=" + action
-                            + "deviceCameraAction="
-                            + "deviceWordsAction="
-                            + "handAction="
+                            + "&deviceMicAction=" + micAction
+                            + "&deviceCameraAction=" + cameraAction
+                            + "&deviceWordsAction=" + wordAction
+                            + "&handAction=" + handAction
                     );
-                } catch (MalformedURLException e) {
+                    Log.e(TAG, "memberController: getUrl  " + url );
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setConnectTimeout(8000);
+                    httpURLConnection.setReadTimeout(8000);
+                    httpURLConnection.connect();
+
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    InputStreamReader reader = new InputStreamReader(inputStream, "GBK");
+                    BufferedReader bufferedReader = new BufferedReader(reader);
+                    StringBuffer buffer = new StringBuffer();
+                    String temp = null;
+
+                    while((temp = bufferedReader.readLine()) != null) {
+                        buffer.append(temp);
+                    }
+
+                    // 关闭
+                    bufferedReader.close();
+                    reader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+
+                    try{
+                        Log.e(TAG, "memberController: getRespond  " + buffer.toString() );
+                        String backLogJsonStr = buffer.toString();
+//                        String backLogJsonStr = "{\"joinlist\":[{\"value\":\"李龙龙\",\"key\":\"ming6001\"}],\"ketanglist\":[{\"num\":\"60\",\"value\":\"我校2022级葛舸班\",\"key\":\"4195ketang\"}]}";
+                        JSONObject jsonObject = stringToJson(backLogJsonStr);
+                        String success = "";
+                        success = jsonObject.getString("success");
+                        if(!success.equals("")) {
+                            Message msg = Message.obtain();
+                            if(!micAction.equals(""))
+                                msg.what = 2;
+                            else if (!wordAction.equals(""))
+                                msg.what = 3;
+                            else if (!cameraAction.equals(""))
+                                msg.what = 4;
+                            Bundle bundle = new Bundle();
+                            if(position != -1)
+                                bundle.putInt("position", position);
+                            msg.setData(bundle);
+                            mainActivity.handler.sendMessage(msg);
+                        } else {
+                            Toast.makeText(mainActivity, "memberController: 操作失败，请检查网络设置", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "memberController: " + e.toString() );
+                        e.printStackTrace();
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, "memberController: " + e.toString() );
                     e.printStackTrace();
                 }
             }
         }).start();
     }
 
+    /**
+     * 上下讲台控制
+     *
+     * @param userId       操作用户ID
+     * @param stuName      操作用户用户名
+     * @param type         操作动作
+     * @param position     操作位置
+     * @param mainActivity 主线程
+     */
+
+    public static void speakerController(String userId, String stuName, String type, int position, MainActivity mainActivity){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String roomId = roomid;
+                    URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_savePlatform.do?"
+                            + "roomId=" + roomId
+                            + "&studId=" + userId
+                            + "&stuName=" + stuName
+                            + "&type=" + type
+                    );
+
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setConnectTimeout(8000);
+                    httpURLConnection.setReadTimeout(8000);
+                    httpURLConnection.connect();
+
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    InputStreamReader reader = new InputStreamReader(inputStream, "GBK");
+                    BufferedReader bufferedReader = new BufferedReader(reader);
+                    StringBuffer buffer = new StringBuffer();
+                    String temp = null;
+
+                    while((temp = bufferedReader.readLine()) != null) {
+                        buffer.append(temp);
+                    }
+
+                    // 关闭
+                    bufferedReader.close();
+                    reader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+
+                    Log.e(TAG, "audioController: " +  buffer.toString());
+                    try{
+                        String backLogJsonStr = buffer.toString();
+//                        String backLogJsonStr = "{\"joinlist\":[{\"value\":\"李龙龙\",\"key\":\"ming6001\"}],\"ketanglist\":[{\"num\":\"60\",\"value\":\"我校2022级葛舸班\",\"key\":\"4195ketang\"}]}";
+                        JSONObject jsonObject = stringToJson(backLogJsonStr);
+                        String success = "";
+                        success = jsonObject.getString("success");
+                        if(!success.equals("")) {
+                            Message msg = Message.obtain();
+                            msg.what = 5;
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("position", position);
+                            msg.setData(bundle);
+                            mainActivity.handler.sendMessage(msg);
+                        } else {
+                            Toast.makeText(mainActivity, "操作失败，请检查网络设置", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public static void initClass(int screenWidth, int screenHeight, String source, MainActivity mainActivity) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String roomId = MainActivity.roomid;
+                    String userId = MainActivity.userId;
+                    String userName = MainActivity.userName;
+                    String keTangId = MainActivity.keTangId;
+                    String keTangName = MainActivity.keTangName;
+                    URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_deleteMemcached.do?"
+                            + "roomId=" + roomId
+                            + "&keTangId=" + keTangId
+                            + "&keTangName=" + keTangName
+                            + "&userId=" + userId
+                            + "&name=" + userName
+                            + "&source=" + source
+                            + "&width=" + screenWidth
+                            + "&height=" + screenHeight
+                    );
+
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setConnectTimeout(8000);
+                    httpURLConnection.setReadTimeout(8000);
+                    httpURLConnection.connect();
+
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    InputStreamReader reader = new InputStreamReader(inputStream, "GBK");
+                    BufferedReader bufferedReader = new BufferedReader(reader);
+                    StringBuffer buffer = new StringBuffer();
+                    String temp = null;
+
+                    while((temp = bufferedReader.readLine()) != null) {
+                        buffer.append(temp);
+                    }
+
+                    // 关闭
+                    bufferedReader.close();
+                    reader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+
+                    Log.e(TAG, "audioController: " +  buffer.toString());
+                    try{
+                        String backLogJsonStr = buffer.toString();
+//                        String backLogJsonStr = "{\"joinlist\":[{\"value\":\"李龙龙\",\"key\":\"ming6001\"}],\"ketanglist\":[{\"num\":\"60\",\"value\":\"我校2022级葛舸班\",\"key\":\"4195ketang\"}]}";
+                        JSONObject jsonObject = stringToJson(backLogJsonStr);
+                        String success = "";
+                        success = jsonObject.getString("success");
+                        if(!success.equals("")) {
+                            Toast.makeText(mainActivity, "初始化房间成功！", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(mainActivity, "操作失败，请检查网络设置", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public static void overClass(String type, String source, MainActivity mainActivity){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String roomId = MainActivity.roomid;
+                    String userId = MainActivity.userId;
+                    String userName = MainActivity.userName;
+                    String keTangId = MainActivity.keTangId;
+                    String keTangName = MainActivity.keTangName;
+                    URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_hostJoinOrLeaveRoom.do?"
+                            + "roomId=" + roomId
+                            + "&keTangId=" + keTangId
+                            + "&keTangName=" + keTangName
+                            + "&userId=" + userId
+                            + "&name=" + userName
+                            + "&type=" + type
+                            + "&source=" + source
+                    );
+
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setConnectTimeout(8000);
+                    httpURLConnection.setReadTimeout(8000);
+                    httpURLConnection.connect();
+
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    InputStreamReader reader = new InputStreamReader(inputStream, "GBK");
+                    BufferedReader bufferedReader = new BufferedReader(reader);
+                    StringBuffer buffer = new StringBuffer();
+                    String temp = null;
+
+                    while((temp = bufferedReader.readLine()) != null) {
+                        buffer.append(temp);
+                    }
+
+                    // 关闭
+                    bufferedReader.close();
+                    reader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+
+                    Log.e(TAG, "audioController: " +  buffer.toString());
+                    try{
+                        String backLogJsonStr = buffer.toString();
+//                        String backLogJsonStr = "{\"joinlist\":[{\"value\":\"李龙龙\",\"key\":\"ming6001\"}],\"ketanglist\":[{\"num\":\"60\",\"value\":\"我校2022级葛舸班\",\"key\":\"4195ketang\"}]}";
+                        JSONObject jsonObject = stringToJson(backLogJsonStr);
+                        String success = "";
+                        success = jsonObject.getString("success");
+                        if(!success.equals("")) {
+                            Toast.makeText(mainActivity, "退出房间成功！", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(mainActivity, "操作失败，请检查网络设置", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+    }
 }
 

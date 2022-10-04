@@ -181,11 +181,11 @@ public class Set_text_Fragment extends Fragment {
     }
 
     public void setLinColorstatus(){
-        settextgray.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        settextblack.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        settextblue.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        settextgreen.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        settextyellow.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
-        settextred.setBackground(getContext().getResources().getDrawable(R.color.bg_select_menu));
+        settextgray.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        settextblack.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        settextblue.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        settextgreen.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        settextyellow.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
+        settextred.setBackground(getContext().getResources().getDrawable(R.color.bg_select_shadow));
     }
 }
