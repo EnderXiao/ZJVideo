@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -21,6 +22,7 @@ public class Set_text_Fragment extends Fragment {
     private LinearLayout settextgray,settextblack,settextblue,settextgreen,settextyellow,settextred;
     private ImageButton textgray,textblack,textblue,textgreen,textyellow,textred;
     private SeekBar seekBar;
+    private TextView setText_textsize;
     public Set_text_Fragment() {
 
     }
@@ -53,21 +55,27 @@ public class Set_text_Fragment extends Fragment {
                 System.out.println("+++proccess"+progress);
                 if(progress<=1){
                     //1号字体
+                    setText_textsize.setText("超小");
                     activity.getmBoard().setTextSize(240);
                 }else if(progress<=2){
                     //2号字体
+                    setText_textsize.setText("小号");
                     activity.getmBoard().setTextSize(320);
                 }else if(progress<=3){
                     //3号字体
+                    setText_textsize.setText("标准");
                     activity.getmBoard().setTextSize(700);
                 }else if(progress<=4){
                     //4号字体
+                    setText_textsize.setText("大号");
                     activity.getmBoard().setTextSize(1000);
                 }else if(progress<=5){
                     //5号字体
+                    setText_textsize.setText("超大");
                     activity.getmBoard().setTextSize(1300);
                 }else {
                     //6号字体
+                    setText_textsize.setText("特大");
                     activity.getmBoard().setTextSize(1600);
                 }
             }
@@ -80,6 +88,8 @@ public class Set_text_Fragment extends Fragment {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
+        setText_textsize=view.findViewById(R.id.setText_textsize);
+
         textgray = view.findViewById(R.id.textgray);
         settextgray = view.findViewById(R.id.settextgray);
         textgray.setOnClickListener(new View.OnClickListener() {
@@ -165,16 +175,22 @@ public class Set_text_Fragment extends Fragment {
 
             if(activity.getmBoard().getTextSize()<=240){
                 seekBar.setProgress(1);
+                setText_textsize.setText("超小");
             }else if(activity.getmBoard().getTextSize()<=320){
                 seekBar.setProgress(2);
+                setText_textsize.setText("小");
             }else if(activity.getmBoard().getTextSize()<=700){
                 seekBar.setProgress(3);
+                setText_textsize.setText("标准");
             }else if(activity.getmBoard().getTextSize()<=1000){
                 seekBar.setProgress(4);
+                setText_textsize.setText("大");
             }else if(activity.getmBoard().getTextSize()<=1300){
                 seekBar.setProgress(5);
+                setText_textsize.setText("超大");
             }else if(activity.getmBoard().getTextSize()<=1600){
                 seekBar.setProgress(6);
+                setText_textsize.setText("特大");
             }
         }
         return view;

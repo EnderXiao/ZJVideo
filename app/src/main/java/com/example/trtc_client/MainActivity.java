@@ -14,15 +14,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.DisplayMetrics;
 import android.text.format.Time;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CompoundButton;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
     //白板底部菜单栏
     private Boolean menu_b_status=true;                                        //底部工具栏状态  true 代表展开
     private TextView b_size,b_cur,b_sum,b_chu,b_per;                           //底部工具栏中显示的文字  当前白板缩放比例  当前页数  总页数
-    private ImageButton menub01,menub02,menub03,menub04,menub05,menub06,menub07,menub08,menub09,menub10,menub11;
+    private ImageButton menub01,menub02,menub03,menub04,menub05,menub06,menub07,menub08,menub09,menub10,menub11,menub02_1,menub05_1;
         //聊天消息列表
     private List<Chat_Msg> data = new ArrayList<>();
 
@@ -207,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
     private TEduBoardController.TEduBoardCallback mBoardCallback;               //白板回调
     private ImageButton geometry11,geometry12,geometry13,geometry14,geometry21,geometry22,geometry23,geometry24,geometry31,geometry32,geometry33,geometry34,geometry41,geometry42,geometry43,geometry44,geometry51,geometry52,geometry53,geometry61,geometry62,geometry63;
     private ImageButton teachingtools1,teachingtools2,teachingtools3,teachingtools4,teachingtools5;
+    public static Integer cur_paintsize=100,cur_Highlighterpaintsize=450;  //记录当前 画笔 荧光笔粗细用的
     private PopupWindow pw_selectpaint;                                 //选择画笔 一级弹窗
     private PopupWindow pw_selecgeometry;                               //选择 几何工具  一级弹窗
     private PopupWindow pw_selectteachingtools;                         //选择教学工具   一级弹窗
@@ -285,9 +286,6 @@ public class MainActivity extends AppCompatActivity {
         }
        //初始化测试参数
         Intent intent = getIntent();
-        System.out.println("+++参数"+intent.getExtras().get("subjectid"));
-        System.out.println("+++参数"+intent.getExtras().get("roomid"));
-        System.out.println("+++参数"+intent.getExtras().get("userid"));
         userId=intent.getExtras().get("userid").toString();
         roomid = intent.getExtras().get("roomid").toString();
         subjectId = intent.getExtras().get("subjectid").toString();
@@ -474,9 +472,20 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //白板需要用到的一些组件 初始化
-         addBoardlayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+
+        addBoardlayoutParams  = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+
+//         // 为了 适配屏幕  白板需要用到的参数 初始化
+
+
+
+
+
+
          Board_container = findViewById(R.id.teachingcontent);
-         rf_leftmenu = findViewById(R.id.menu_left);
+
+
+        rf_leftmenu = findViewById(R.id.menu_left);
          rf_bottommenu = findViewById(R.id.menu_bottom);
          rf_shoukeneirong = findViewById(R.id.bg_shoukeneirong);
 
@@ -993,6 +1002,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTEBError(int code, String msg) {
                 System.out.println("onTEBError"+"+++++++++++++code"+code+msg);
+                alert_text.setText("白板加载失败！重新加载");
             }
             @Override
             public void onTEBWarning(int code, String msg) {
@@ -1011,7 +1021,22 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onTEBInit() {
-                System.out.println("onTEBInit"+"++++白板初始化完成了");
+                System.out.println("onTEBInit"+"++++白板初始化完成了"+mBoard.getBoardRatio());
+
+                ConstraintLayout.LayoutParams params= new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
+
+                System.out.println("+++屏幕参数"+findViewById(R.id.boardcontent).getMeasuredWidth()+"   "+(findViewById(R.id.boardcontent).getMeasuredHeight()));
+
+                if(findViewById(R.id.boardcontent).getMeasuredWidth()>findViewById(R.id.boardcontent).getMeasuredHeight()){
+                    System.out.println("+++横屏");
+                    params.setMargins((findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0,(findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0);
+                }else {
+                    System.out.println("+++竖屏");
+                    params.setMargins(0,(findViewById(R.id.boardcontent).getMeasuredHeight()-findViewById(R.id.boardcontent).getMeasuredWidth()*9/16)/2,0,(findViewById(R.id.boardcontent).getMeasuredHeight()-findViewById(R.id.boardcontent).getMeasuredWidth()*9/16)/2);
+                }
+                Board_container.setLayoutParams(params);
+
+                findViewById(R.id.bg_shoukeneirong).setVisibility(View.GONE);
                 BoardStatus=true;
                 boardview = mBoard.getBoardRenderView();
                 initBoardMenu();
@@ -1034,7 +1059,6 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onTEBSyncData(String data) {
-                findViewById(R.id.setBoardWindow).setVisibility(View.GONE);
                 final V2TIMMessage message = V2TIMManager.getMessageManager().createCustomMessage(data.getBytes(), "", "TXWhiteBoardExt".getBytes());
                 if (message.getCustomElem() != null) {
                     message.getCustomElem().setExtension("TXWhiteBoardExt".getBytes());
@@ -1151,9 +1175,11 @@ public class MainActivity extends AppCompatActivity {
                     FileID=fileId;
                     CurFileID=null;
                 }
-                //更改页码
-                b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
-                b_cur.setText((mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard())+1)+"");
+                if(mBoard!=null){
+                    //更改页码
+                    b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
+                    b_cur.setText((mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard())+1)+"");
+                }
             }
 
             @Override
@@ -1354,6 +1380,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onError(int i, String s) {
                 System.out.println("++++++登陆失败"+s);
+                alert_text.setText("白板加载失败,请重新加载！");
             }
             @Override
             public void onSuccess() {
@@ -1458,6 +1485,9 @@ public class MainActivity extends AppCompatActivity {
         menu04color= findViewById(R.id.menu04color);
         select_menu = findViewById(R.id.select_menu);
         select_menu_top = findViewById(R.id.select_menu_top);
+        b_size.setText(mBoard.getBoardScale()+"");
+
+
 
 //        文件上传按钮
         resupload.setOnClickListener(new View.OnClickListener() {
@@ -1501,6 +1531,7 @@ public class MainActivity extends AppCompatActivity {
                 //设置点击效果
                 mBoard.setPenAutoFittingMode(TEduBoardController.TEduBoardPenFittingMode.NONE);
                 mBoard.setToolType(1);
+                mBoard.setBrushThin(cur_paintsize);
                 setLeftmenustatus(true);
                 menu02.setBackgroundResource(R.mipmap.menu_02_paint1);
                 menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
@@ -1516,7 +1547,21 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         mBoard.setToolType(1);
-                        menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+                        mBoard.setBrushThin(cur_paintsize);
+                        //默认改变当前右下角颜色
+                        if(mBoard.getBrushColor().toInt()==8947848){
+                            menu02color.setImageResource(R.mipmap.text_gray);
+                        }else if(mBoard.getBrushColor().toInt()==0){
+                            menu02color.setImageResource(R.mipmap.text_black);
+                        }else if(mBoard.getBrushColor().toInt()==255){
+                            menu02color.setImageResource(R.mipmap.text_blue);
+                        }else if(mBoard.getBrushColor().toInt()==65280){
+                            menu02color.setImageResource(R.mipmap.text_green);
+                        }else if(mBoard.getBrushColor().toInt()==16776960){
+                            menu02color.setImageResource(R.mipmap.text_yellow);
+                        }else if(mBoard.getBrushColor().toInt()==16711680) {
+                            menu02color.setImageResource(R.mipmap.text_red);
+                        }
                         pw_selectpaint.dismiss();
                     }
                 });
@@ -1525,8 +1570,24 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         mBoard.setToolType(19);
                         mBoard.setHighlighterColor(new TEduBoardController.TEduBoardColor(Color.GREEN));
-                        mBoard.setBrushThin(250);
+                        mBoard.setBrushThin(cur_Highlighterpaintsize);  //选了荧光笔就要  设置之前荧光笔  默认的大小
                         menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+
+                        //选择荧光笔的时候  默认改变当前右下角颜色     当前SDK版本有问题  后续会更改这个bug
+                        if(mBoard.getBrushColor().toInt()==8947848){
+                            menu02color.setImageResource(R.mipmap.text_gray);
+                        }else if(mBoard.getHighlighterColor().toInt()==0){
+                            menu02color.setImageResource(R.mipmap.text_black);
+                        }else if(mBoard.getHighlighterColor().toInt()==255){
+                            menu02color.setImageResource(R.mipmap.text_blue);
+                        }else if(mBoard.getHighlighterColor().toInt()==16777215){
+                            menu02color.setImageResource(R.mipmap.text_green);
+                        }else if(mBoard.getHighlighterColor().toInt()==16776960){
+                            menu02color.setImageResource(R.mipmap.text_yellow);
+                        }else if(mBoard.getHighlighterColor().toInt()==16711680) {
+                            menu02color.setImageResource(R.mipmap.text_red);
+                        }
+
                         pw_selectpaint.dismiss();
                     }
                 });
@@ -1534,8 +1595,22 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 //                        松手拟合几何图形
+                        mBoard.setBrushThin(cur_paintsize);
                         mBoard.setPenAutoFittingMode(TEduBoardController.TEduBoardPenFittingMode.AUTO);
-                        menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+                        //默认改变当前右下角颜色
+                        if(mBoard.getBrushColor().toInt()==8947848){
+                            menu02color.setImageResource(R.mipmap.text_gray);
+                        }else if(mBoard.getBrushColor().toInt()==0){
+                            menu02color.setImageResource(R.mipmap.text_black);
+                        }else if(mBoard.getBrushColor().toInt()==255){
+                            menu02color.setImageResource(R.mipmap.text_blue);
+                        }else if(mBoard.getBrushColor().toInt()==65280){
+                            menu02color.setImageResource(R.mipmap.text_green);
+                        }else if(mBoard.getBrushColor().toInt()==16776960){
+                            menu02color.setImageResource(R.mipmap.text_yellow);
+                        }else if(mBoard.getBrushColor().toInt()==16711680) {
+                            menu02color.setImageResource(R.mipmap.text_red);
+                        }
                         pw_selectpaint.dismiss();
                     }
                 });
@@ -1887,7 +1962,6 @@ public class MainActivity extends AppCompatActivity {
         menu06.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                menu06.setBackgroundResource(R.mipmap.menu_06_tools1);
                 //开启教学工具弹窗
                 View v_selectteachingtools = getLayoutInflater().inflate(R.layout.pw_select_teachingtools,null);
                 if(pw_selectteachingtools==null){
@@ -1947,7 +2021,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mBoard.setToolType(12);
-                b_size.setText(mBoard.getBoardScale()+"%");
+                b_size.setText(mBoard.getBoardScale()+"");
                 setLeftmenustatus(true);
                 menu07.setBackgroundResource(R.mipmap.menu_07_move1);
             }
@@ -2020,6 +2094,10 @@ public class MainActivity extends AppCompatActivity {
                 RelativeLayout setBoardWindow = findViewById(R.id.setBoardWindow);
                 if(setBoardWindow.getVisibility()==View.VISIBLE){
                     setBoardWindow.setVisibility(View.GONE);
+                    //为了解决 输入Text的bug
+                    if (mBoard.getToolType() == 11) {
+                        mBoard.setToolType(11);
+                    }
                 }else {
                     setBoardWindow.setVisibility(View.VISIBLE);
                     //使用适配器将ViewPager与Fragment绑定在一起
@@ -2040,6 +2118,7 @@ public class MainActivity extends AppCompatActivity {
                         sl = new String[]{"画笔设置", "背景设置", "更多设置"};
                         mTabFragmenList.add(set_paint_fragment);
                     } else if (mBoard.getToolType() == 11) {
+                        mBoard.setToolType(11);
                         sl = new String[]{"文本设置", "背景设置", "更多设置"};
                         mTabFragmenList.add(set_text_fragment);
                     } else if (mBoard.getToolType() == 6) {
@@ -2233,11 +2312,15 @@ public class MainActivity extends AppCompatActivity {
         });
         //底部功能栏  第10个按钮  折叠展开底部菜单栏 按钮
         menub10 = findViewById(R.id.menub10);
+        menub02_1 = findViewById(R.id.menub02_1);
+        menub05_1 = findViewById(R.id.menub05_1);
         menub10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setLeftmenustatus(true);//左边菜单栏  状态都改为未选中
                 if(menu_b_status){
+                    menub02_1.setVisibility(View.GONE);
+                    menub05_1.setVisibility(View.GONE);
                     menub03.setVisibility(View.GONE);
                     menub04.setVisibility(View.GONE);
                     menub05.setVisibility(View.GONE);
@@ -2253,6 +2336,8 @@ public class MainActivity extends AppCompatActivity {
                     menub10.setBackgroundResource(R.mipmap.menu_b11);
                     menu_b_status=false;
                 }else {
+                    menub02_1.setVisibility(View.VISIBLE);
+                    menub05_1.setVisibility(View.VISIBLE);
                     menub03.setVisibility(View.VISIBLE);
                     menub04.setVisibility(View.VISIBLE);
                     menub05.setVisibility(View.VISIBLE);
@@ -2310,13 +2395,36 @@ public class MainActivity extends AppCompatActivity {
      */
 
     public void drawAuthority(String extension, String action, String id) {
+        // 发送关闭学生操作白板 消息
+        final V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createCustomMessage(id.getBytes(), "", extension.getBytes());
+        if (v2TIMMessage.getCustomElem() != null) {
+            v2TIMMessage.getCustomElem().setExtension(extension.getBytes());
+            v2TIMMessage.getCustomElem().setDescription("");
+            v2TIMMessage.getCustomElem().setData(id.getBytes());
+        }
+        V2TIMManager.getMessageManager().sendMessage(v2TIMMessage, null,roomid, V2TIMMessage.V2TIM_PRIORITY_HIGH, false, null, new V2TIMSendCallback<V2TIMMessage>() {
+            @Override
+            public void onProgress(int progress) {
+                // 文本消息不会回调进度
+            }
+            @Override
+            public void onSuccess(V2TIMMessage message) {
+                // 发送群聊文本消息成功
+                System.out.println("+++发送关闭学生操作白板消息发送成功了");
+            }
 
+            @Override
+            public void onError(int code, String desc) {
+                System.out.println("+++发送关闭学生操作白板消息发送失败");
+                // 发送群聊文本消息失败
+            }
+        });
     }
 
     public void sendMsg(Chat_Msg msg){
         // 创建文本消息
         //        V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createTextMessage( "{\"text\":\""+msg.getContent()+"\",\"date\":\""+msg.getDate()+"\"}");
-        // 发送消息
+        // 发送聊天消息
         final V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createCustomMessage(msg.getContent().getBytes(), "", "TBKTExt".getBytes());
         if (v2TIMMessage.getCustomElem() != null) {
             v2TIMMessage.getCustomElem().setExtension("TBKTExt".getBytes());

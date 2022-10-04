@@ -45,7 +45,8 @@ public class Set_paint_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setBrushThin(40);
+                activity.getmBoard().setBrushThin(25);
+                MainActivity.cur_paintsize=25;
                 setpaintsize1.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -55,7 +56,8 @@ public class Set_paint_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setBrushThin(70);
+                activity.getmBoard().setBrushThin(50);
+                MainActivity.cur_paintsize=50;
                 setpaintsize2.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -65,7 +67,8 @@ public class Set_paint_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setBrushThin(100);
+                activity.getmBoard().setBrushThin(75);
+                MainActivity.cur_paintsize=75;
                 setpaintsize3.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -75,7 +78,8 @@ public class Set_paint_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setBrushThin(150);
+                activity.getmBoard().setBrushThin(100);
+                MainActivity.cur_paintsize=100;
                 setpaintsize4.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -85,7 +89,8 @@ public class Set_paint_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setBrushThin(200);
+                activity.getmBoard().setBrushThin(125);
+                MainActivity.cur_paintsize=125;
                 setpaintsize5.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -96,6 +101,7 @@ public class Set_paint_Fragment extends Fragment {
             public void onClick(View v) {
                 setLinSizestatus();
                 activity.getmBoard().setBrushThin(250);
+                MainActivity.cur_paintsize=250;
                 setpaintsize6.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -168,15 +174,15 @@ public class Set_paint_Fragment extends Fragment {
         });
 
         if(activity.getmBoard()!=null){
-            if(activity.getmBoard().getBrushThin()==40){
+            if(activity.getmBoard().getBrushThin()==25){
                 setpaintsize1.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getBrushThin()==70){
+            }else if(activity.getmBoard().getBrushThin()==50){
                 setpaintsize2.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getBrushThin()==100){
+            }else if(activity.getmBoard().getBrushThin()==75){
                 setpaintsize3.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getBrushThin()==150){
+            }else if(activity.getmBoard().getBrushThin()==100){
                 setpaintsize4.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getBrushThin()==200){
+            }else if(activity.getmBoard().getBrushThin()==125){
                 setpaintsize5.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }else if(activity.getmBoard().getBrushThin()==250){
                 setpaintsize6.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
