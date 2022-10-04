@@ -151,6 +151,7 @@ public class VideoListFragment extends Fragment {
             availableFragment.push(occupiedFragment.get(userId));
         }
         this.hideFragment(cameraFragment);
-        Toast.makeText(activity, "用户 " + userId + " 退出房间: " + reason, Toast.LENGTH_SHORT).show();
+        if(reason != 12580)
+            Toast.makeText(activity, "用户 " + userId + " 退出房间: " + reason, Toast.LENGTH_SHORT).show();
     }
 }

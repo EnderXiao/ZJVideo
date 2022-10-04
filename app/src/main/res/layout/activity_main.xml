@@ -44,6 +44,7 @@
         >
 
         <TextView
+            android:id="@+id/class_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -516,6 +517,7 @@
             </LinearLayout>
         </RelativeLayout>
 
+        <!-- 选择文件窗口-->
       <RelativeLayout
           android:layout_width="450dp"
           android:id="@+id/select_resources"
@@ -599,11 +601,11 @@
                       android:textColor="@color/gray_text"
                       android:text="请选择文件:   "/>
                   <Button
-                      android:layout_width="wrap_content"
+                      android:layout_width="70dp"
                       android:id="@+id/choosefile"
                       android:textSize="10dp"
                       android:text="选择文件"
-                      android:layout_height="wrap_content"/>
+                      android:layout_height="40dp"/>
                   <TextView
                       android:id="@+id/filename"
                       android:layout_width="150dp"
@@ -613,11 +615,12 @@
                       android:textColor="@color/gray_text"
                       android:layout_height="wrap_content"/>
                   <Button
-                      android:layout_width="wrap_content"
+                      android:layout_width="70dp"
                       android:textSize="10dp"
                       android:id="@+id/uploadfile"
+                      android:background="@drawable/btn_choosefile_style"
                       android:text="开始上传"
-                      android:layout_height="wrap_content"/>
+                      android:layout_height="30dp"/>
               </LinearLayout>
               <LinearLayout
                   android:layout_width="match_parent"
@@ -836,7 +839,7 @@
         android:padding="10dp"
         android:visibility="visible"
 
-        app:constraint_referenced_ids="canvas_btn, board_btn, content_btn, member_btn, hand_btn, mic_btn, camera_btn, share_btn, exit_btn, bottom_line_1, bottom_line_2, bottom_line_3"
+        app:constraint_referenced_ids="canvas_btn, board_btn, content_btn, member_btn, hand_btn_frame_layout, mic_btn, camera_btn, share_btn, exit_btn, bottom_line_1, bottom_line_2, bottom_line_3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/stroll"
         app:layout_constraintHeight_percent="0.15"
@@ -889,22 +892,42 @@
         app:layout_constraintTop_toTopOf="@+id/group_buttons"
         android:src="@drawable/bottom_member"
         />
-
-    <ImageView
-        android:id="@+id/hand_btn"
-        android:layout_width="50dp"
-        android:layout_height="0dp"
-        android:onClick="showHandsUpBtn"
+    <RelativeLayout
+        android:id="@+id/hand_btn_frame_layout"
         app:layout_constraintStart_toEndOf="@id/member_btn"
         app:layout_constraintBottom_toBottomOf="@+id/group_buttons"
         app:layout_constraintTop_toTopOf="@+id/group_buttons"
-        android:src="@drawable/bottom_hand"
-        />
+        android:layout_width="50dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:layout_height="0dp">
+
+        <ImageView
+            android:id="@+id/hand_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:onClick="showHandsUpBtn"
+            android:src="@drawable/bottom_hand" />
+        <TextView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:id="@+id/hand_btn_badge"
+            android:layout_alignEnd="@+id/hand_btn"
+            android:layout_alignTop="@+id/hand_btn"
+            android:maxLines="1"
+            android:background="@drawable/round_text_view_style"
+            android:text="99+"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:visibility="invisible"
+            android:textSize="9sp"
+            />
+    </RelativeLayout>
     <ImageView
         android:id="@+id/bottom_line_2"
         android:layout_width="25dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toEndOf="@id/hand_btn"
+        app:layout_constraintStart_toEndOf="@id/hand_btn_frame_layout"
         app:layout_constraintBottom_toBottomOf="@+id/group_buttons"
         app:layout_constraintTop_toTopOf="@+id/group_buttons"
         android:src="@drawable/bottom_line"

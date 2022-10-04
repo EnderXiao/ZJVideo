@@ -11,6 +11,7 @@
         android:gravity="left"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
+        android:paddingLeft="15dp"
         android:singleLine="true"
         android:text="成员"
         android:textColor="@color/popupWindow_text_gray"

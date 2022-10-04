@@ -1,14 +1,24 @@
 package com.example.trtc_client;
 
 public class HandsUpItem {
+    private int userType;
     private String name;
     private String userId;
     private boolean speakControl;
 
-    public HandsUpItem(String name, String userId, boolean speakControl) {
+    public HandsUpItem(int userType, String name, String userId, boolean speakControl) {
+        this.userType = userType;
         this.name = name;
         this.userId = userId;
         this.speakControl = speakControl;
+    }
+
+    public int getUserType() {
+        return userType;
+    }
+
+    public void setUserType(int userType) {
+        this.userType = userType;
     }
 
     public String getName() {

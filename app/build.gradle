@@ -38,8 +38,6 @@ dependencies {
 //    TRTC依赖
     implementation 'com.tencent.liteav:LiteAVSDK_TRTC:latest.release'
 
-    // 角标插件
-    implementation 'q.rorbin:badgeview:1.1.3'
 
     //学生互动答题,视频流交互
     //implementation project(':Call')

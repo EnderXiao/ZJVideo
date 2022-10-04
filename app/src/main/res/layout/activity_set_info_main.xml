@@ -57,6 +57,7 @@
             android:gravity="center">
             <Button
                 android:text="登录"
+                android:background="@drawable/btn_login_style"
                 android:id="@+id/login"></Button>
         </TableRow>
     </TableLayout>

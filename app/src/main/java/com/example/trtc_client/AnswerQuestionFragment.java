@@ -210,9 +210,6 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
     private  List<String> listitem;
 
-
-
-
     public AnswerQuestionFragment() {
         // Required empty public constructor
         initJoinClassInformation();
@@ -228,9 +225,9 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
     //获取32位uuid作为questionId（默认是32位）
     private void getUUID(){
-        System.out.println("旧的answerQuestionId是: " + HuDongDataActivity.answerQuestionId);
-        HuDongDataActivity.answerQuestionId = UUID.randomUUID().toString();
-        System.out.println("新的answerQuestionId是: " + HuDongDataActivity.answerQuestionId);
+        System.out.println("旧的answerQuestionId是: " + AnswerActivity.answerQuestionId);
+        AnswerActivity.answerQuestionId = UUID.randomUUID().toString();
+        System.out.println("新的answerQuestionId是: " + AnswerActivity.answerQuestionId);
     }
 
     //UI组件事件绑定
@@ -291,7 +288,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
     //显示答题详情(客观题）
     private void showStusAnswers(View v){
         System.out.println("显示答题详情！！！！！！！！！！！！！！！！！！！！！！！！！！！！");
-        System.out.println("学生答案: " + HuDongDataActivity.answerStu);
+        System.out.println("学生答案: " + AnswerActivity.answerStu);
         LinearLayout linearStusAnswers = v.findViewById(R.id.linearStusAnswers);
         //清空布局
         linearStusAnswers.removeAllViews();
@@ -409,9 +406,9 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
     //分割学生答案-客观题
     private void splitStuAnswers(){
         System.out.println("开始分割学生答案！！！！！！！！！！！！！！");
-        //HuDongDataActivity.answerStu格式:
+        //AnswerActivity.answerStu格式:
         // D:葛舸_2,葛舸_5,索夏利,@#@A:葛舸_3,@#@B:葛舸_1,何一繁,卢文静,@#@C:葛舸_0,葛舸_4,孙亮亮,@#@
-        String stuAnswers = HuDongDataActivity.answerStu;
+        String stuAnswers = AnswerActivity.answerStu;
         System.out.println("学生答案1111:" + stuAnswers);
         String[] answer_names_list = stuAnswers.split(",@#@");
         for(int i = 0 ; i < answer_names_list.length ; i++){
@@ -470,12 +467,12 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
     private List<StuAnswerBean> getACStuBeanList(int num){
         int findNum = num >= 3 ? 3 : num;
         List<StuAnswerBean> answerRight_stuslistTop = new ArrayList<StuAnswerBean>();
-        for(int i = 0 ; i < HuDongDataActivity.alist.size() ; i++){
+        for(int i = 0 ; i < AnswerActivity.alist.size() ; i++){
             if(answerRight_stuslistTop.size() >= findNum){
                 break;
             }else{
-                if(HuDongDataActivity.alist.get(i).stuAnswer.equals(answer)){
-                    answerRight_stuslistTop.add(HuDongDataActivity.alist.get(i));
+                if(AnswerActivity.alist.get(i).stuAnswer.equals(answer)){
+                    answerRight_stuslistTop.add(AnswerActivity.alist.get(i));
                 }
             }
         }
@@ -528,11 +525,11 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 linear_quick.setVisibility(View.INVISIBLE);
             }
             //计算正确率
-            int classAllNum = HuDongDataActivity.alist.size(); //总人数（作答）
+            int classAllNum = AnswerActivity.alist.size(); //总人数（作答）
 //            if(index == -1){ //计算汇总人数
 //                classAllNum = getJoinClassAllStuNum();
 //            }else{ //获取要分析的班级人数
-//                classAllNum = HuDongDataActivity.classList.get(index).stuNum;
+//                classAllNum = AnswerActivity.classList.get(index).stuNum;
 //            }
             System.out.println("作答总人数: " + classAllNum);
             linear_right.setVisibility(View.VISIBLE);
@@ -553,8 +550,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
     //获取加入课堂的总人数
     private int getJoinClassAllStuNum(){
         int count = 0 ;
-        for(int i = 0 ; i < HuDongDataActivity.classList.size() ; i++){
-            count += HuDongDataActivity.classList.get(i).stuNum;
+        for(int i = 0 ; i < AnswerActivity.classList.size() ; i++){
+            count += AnswerActivity.classList.get(i).stuNum;
         }
         System.out.println("加入课堂的学生总人数:   " + count);
         return count;
@@ -562,32 +559,42 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
     //加载加入课堂的成员（ming、gege、其它移动端）
     private void initJoinClassInformation(){
-//        KeTangBean huizong = new KeTangBean("all" , "" , 120);
-//        if(HuDongDataActivity.classList != null && HuDongDataActivity.classList.size() > 0){
-//        }
-        //模拟，后续直接从HuDongDataActivity.classList获取就好（肖赋值）
-        if(HuDongDataActivity.classList != null){
-            HuDongDataActivity.classList.clear();
+        //直接从AnswerActivity.ketangList   AnswerActivity.joinList获取就好（肖赋值）
+        if(AnswerActivity.classList != null){
+            AnswerActivity.classList.clear();
         }
-        if(HuDongDataActivity.classList == null){
-            HuDongDataActivity.classList = new ArrayList<>();
+        if(AnswerActivity.classList == null){
+            AnswerActivity.classList = new ArrayList<>();
         }
-        KeTangBean class_ming = new KeTangBean("4193" , "我校2022级明铭班" , 60);
-        KeTangBean class_ge = new KeTangBean("4195ketang" , "我校2022级葛舸班" , 60);
-        KeTangBean class_yidong = new KeTangBean("zb" , "其他移动端" , 20);
-        HuDongDataActivity.classList.add(class_ming);
-        HuDongDataActivity.classList.add(class_ge);
-        HuDongDataActivity.classList.add(class_yidong);
+        if(AnswerActivity.ketangList != null && AnswerActivity.ketangList.size() > 0){
+            for(int i = 0 ; i < AnswerActivity.ketangList.size() ; i++){
+                KeTangBean classItem = new KeTangBean(
+                        AnswerActivity.ketangList.get(i).getUserId() ,
+                        AnswerActivity.ketangList.get(i).getName() ,
+                        AnswerActivity.ketangList.get(i).getNum());
+                AnswerActivity.classList.add(classItem);
+            }
+        }
+        if(AnswerActivity.joinList != null && AnswerActivity.joinList.size() > 0){
+            KeTangBean class_yidong = new KeTangBean("zb" , "其他移动端" , AnswerActivity.joinList.size());
+            AnswerActivity.classList.add(class_yidong);
+        }
+//        KeTangBean class_ming = new KeTangBean("4193" , "我校2022级明铭班" , 60);
+//        KeTangBean class_ge = new KeTangBean("4195ketang" , "我校2022级葛舸班" , 60);
+//        KeTangBean class_yidong = new KeTangBean("zb" , "其他移动端" , 20);
+//        AnswerActivity.classList.add(class_ming);
+//        AnswerActivity.classList.add(class_ge);
+//        AnswerActivity.classList.add(class_yidong);
     }
 
     //清空学生作答情况
     private void initHttpData_memberAnswer(){
-        HuDongDataActivity.ylist = null;
-        HuDongDataActivity.xlist = null;
-        HuDongDataActivity.alist = null;
-        HuDongDataActivity.submitAnswerStatus = false;
-        HuDongDataActivity.answer = "";
-        HuDongDataActivity.answerStu = "";
+        AnswerActivity.ylist = null;
+        AnswerActivity.xlist = null;
+        AnswerActivity.alist = null;
+        AnswerActivity.submitAnswerStatus = false;
+        AnswerActivity.answer = "";
+        AnswerActivity.answerStu = "";
     }
 
 
@@ -595,36 +602,36 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
     private void updateHttpData_memberAnswer(JSONObject jsonObject) throws JSONException {
         //柱状图-纵坐标（每个答案选择的学生个数）
         JSONArray array_ylist = jsonObject.getJSONArray("ylist");
-        if(HuDongDataActivity.ylist != null){
-            HuDongDataActivity.ylist.clear();
+        if(AnswerActivity.ylist != null){
+            AnswerActivity.ylist.clear();
         }
-        if(HuDongDataActivity.ylist == null){
-            HuDongDataActivity.ylist = new ArrayList<>();
+        if(AnswerActivity.ylist == null){
+            AnswerActivity.ylist = new ArrayList<>();
         }
         for(int i = 0 ; i < array_ylist.length() ; i++){
-            HuDongDataActivity.ylist.add((Integer) array_ylist.get(i));
+            AnswerActivity.ylist.add((Integer) array_ylist.get(i));
         }
 
-        System.out.println("ylist==>" + HuDongDataActivity.ylist);
+        System.out.println("ylist==>" + AnswerActivity.ylist);
         //柱状图-横坐标（答案）
         JSONArray array_xlist = jsonObject.getJSONArray("xlist");
-        if(HuDongDataActivity.xlist != null){
-            HuDongDataActivity.xlist.clear();
+        if(AnswerActivity.xlist != null){
+            AnswerActivity.xlist.clear();
         }
-        if(HuDongDataActivity.xlist == null){
-            HuDongDataActivity.xlist = new ArrayList<>();
+        if(AnswerActivity.xlist == null){
+            AnswerActivity.xlist = new ArrayList<>();
         }
         for(int i = 0 ; i < array_xlist.length() ; i++){
-            HuDongDataActivity.xlist.add((String) array_xlist.get(i));
+            AnswerActivity.xlist.add((String) array_xlist.get(i));
         }
-        System.out.println("xlist==>" + HuDongDataActivity.xlist);
+        System.out.println("xlist==>" + AnswerActivity.xlist);
         //作答的学生信息
         JSONArray array_alist = jsonObject.getJSONArray("alist");
-        if(HuDongDataActivity.alist != null){
-            HuDongDataActivity.alist.clear();
+        if(AnswerActivity.alist != null){
+            AnswerActivity.alist.clear();
         }
-        if(HuDongDataActivity.alist == null){
-            HuDongDataActivity.alist = new ArrayList<>();
+        if(AnswerActivity.alist == null){
+            AnswerActivity.alist = new ArrayList<>();
         }
         for(int i = 0 ; i < array_alist.length() ; i++){
             StuAnswerBean item = new StuAnswerBean();
@@ -634,22 +641,22 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             item.stuAnswer = array_alist.getJSONObject(i).getString("stuAnswer");
             item.stuAnswerTime = array_alist.getJSONObject(i).getLong("stuAnswerTime");
             item.startAnswerTime = array_alist.getJSONObject(i).getLong("startAnswerTime");
-            HuDongDataActivity.alist.add(item);
+            AnswerActivity.alist.add(item);
             System.out.println("item==>" + item.toString());
         }
-        System.out.println("alist共多少学生回答问题==>" + HuDongDataActivity.alist.size());
+        System.out.println("alist共多少学生回答问题==>" + AnswerActivity.alist.size());
         //是否有人作答
         boolean status = jsonObject.getBoolean("status");
-        HuDongDataActivity.submitAnswerStatus = status;
-        System.out.println("是否有人提交答案==>" + HuDongDataActivity.submitAnswerStatus);
+        AnswerActivity.submitAnswerStatus = status;
+        System.out.println("是否有人提交答案==>" + AnswerActivity.submitAnswerStatus);
         //正确答案
         String answer = jsonObject.getString("answer");
-        HuDongDataActivity.answer = answer;
-        System.out.println("正确答案是==>" + HuDongDataActivity.answer);
+        AnswerActivity.answer = answer;
+        System.out.println("正确答案是==>" + AnswerActivity.answer);
         //所有学生答案
         String answerStu = jsonObject.getString("answerStu");
-        HuDongDataActivity.answerStu = answerStu;
-        System.out.println("所有学生答案==>" + HuDongDataActivity.answerStu);
+        AnswerActivity.answerStu = answerStu;
+        System.out.println("所有学生答案==>" + AnswerActivity.answerStu);
     }
 
     //获取加入课堂的班级或移动端的学生作答情况  aflag:单题分析-1，答题详情-2 index:汇总数据（-1）、班级以及其他移动端index  v:客观题弹框popupwindow
@@ -659,8 +666,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             public void run() {
                 System.out.println("获取加入课堂的班级或移动端的学生作答情况！！！！！！！！！！！！！！！！！！！！！！！！");
                 initHttpData_memberAnswer();
-//                int count = HuDongDataActivity.alist != null && HuDongDataActivity.alist.size() > 0 ? HuDongDataActivity.alist.size() : 0;
-                System.out.println("学生作答情况111:  " + HuDongDataActivity.xlist);
+//                int count = AnswerActivity.alist != null && AnswerActivity.alist.size() > 0 ? AnswerActivity.alist.size() : 0;
+                System.out.println("学生作答情况111:  " + AnswerActivity.xlist);
                 JSONObject jsonObject = Http_HuDongActivity.getSubmitAnswerClass_keguan(ketangId , stuNum);
                 String status = "";
                 if(jsonObject != null){
@@ -673,24 +680,24 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                     }
                 }
                 if(jsonObject != null && status != null && status.length() > 0){
-//                    count = HuDongDataActivity.alist != null && HuDongDataActivity.alist.size() > 0 ? HuDongDataActivity.alist.size() : 0;
-                    System.out.println("学生作答情况333:  " + HuDongDataActivity.xlist);
+//                    count = AnswerActivity.alist != null && AnswerActivity.alist.size() > 0 ? AnswerActivity.alist.size() : 0;
+                    System.out.println("学生作答情况333:  " + AnswerActivity.xlist);
                     getActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             //更新答题率
                             if(ketangId.equals("all")){
                                 int all_count = getJoinClassAllStuNum();
                                 int answer_count = 0;
-                                for(int i = 0 ; i < HuDongDataActivity.ylist.size() ; i++){
-                                    answer_count += HuDongDataActivity.ylist.get(i);
+                                for(int i = 0 ; i < AnswerActivity.ylist.size() ; i++){
+                                    answer_count += AnswerActivity.ylist.get(i);
                                 }
                                 tx_dati2.setText((int)(answer_count * 1.0 / all_count * 100) + "%");
                                 System.out.println("总人数:  " + all_count + " ,  作答人数:  " + answer_count + " ,  答题率:  " + (int)(answer_count * 1.0 / all_count * 100));
                             }else{
-                                int all_count = HuDongDataActivity.classList.get(index).stuNum;
+                                int all_count = AnswerActivity.classList.get(index).stuNum;
                                 int answer_count = 0;
-                                for(int i = 0 ; i < HuDongDataActivity.ylist.size() ; i++){
-                                    answer_count += HuDongDataActivity.ylist.get(i);
+                                for(int i = 0 ; i < AnswerActivity.ylist.size() ; i++){
+                                    answer_count += AnswerActivity.ylist.get(i);
                                 }
                                 tx_dati2.setText((int)(answer_count * 1.0 / all_count * 100) + "%");
                                 System.out.println("总人数:  " + all_count + " ,  作答人数:  " + answer_count + " ,  答题率:  " + (int)(answer_count * 1.0 / all_count * 100));
@@ -700,12 +707,15 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                                 barChart.setVisibility(View.INVISIBLE); //不加入该语句：柱状图还是显示上一个班级的作答情况
                                 barChart.setVisibility(View.VISIBLE);
 
+                                tx_noanswer.setVisibility(View.GONE);
+
                                 isShowMoreInformation(aflag , index);
 
-                                setAxis(HuDongDataActivity.xlist); // 设置坐标轴
+                                setAxis(AnswerActivity.xlist); // 设置坐标轴
                                 setLegend(); // 设置图例
-                                setData(HuDongDataActivity.xlist, HuDongDataActivity.ylist);  // 设置数据
+                                setData(AnswerActivity.xlist, AnswerActivity.ylist);  // 设置数据
                             }else{ //答题详情
+                                tx_noanswer.setVisibility(View.GONE);
                                 isShowMoreInformation(aflag , index);
                                 showStusAnswers(v); //显示“答案详情”
                             }
@@ -736,6 +746,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
     //显示弹框(客观题：单选、多选、判断)
     private void showPopupWindow(View v , int flag){
+        initJoinClassInformation(); //加载加入课堂的成员
         //将popupWindow将要展示的弹窗内容view放入popupWindow中
         if(screenWidth <= 0){
             getScreenProps();
@@ -788,31 +799,11 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
         barChart.setScaleEnabled(true);// 是否可以缩放
 
         slStusAnswers = v.findViewById(R.id.slStusAnswers);
-//        final String[][] labelName = {
-//                {"对" , "错" , "未答"},
-//                {"A", "B", "未答"},
-//                {"A", "B", "C", "未答"},
-//                {"A", "B", "C", "D", "未答"},
-//                {"A", "B", "C", "D", "E", "未答"},
-//                {"A", "B", "C", "D", "E", "F", "未答"},
-//                {"A", "B", "C", "D", "E", "F", "G", "未答"},
-//                {"A", "B", "C", "D", "E", "F", "G", "H", "未答"},
-//                {"AB", "BCD", "ACD", "ABDE", "ADEFGH", "DFG", "AGH", "ABCDEFGH", "BDE", "AEF", "DF" , "DE" , "ABG" , "DEF" , "未答"}};
-//        final int[][] labelCount = {
-//                {39, 5, 8},
-//                {39, 5, 8},
-//                {2, 39, 5, 8},
-//                {2, 39, 5, 8, 3},
-//                {6, 39, 5, 8, 20, 7},
-//                {6, 20, 5, 8, 25, 7 , 2},
-//                {6, 30, 7, 8, 25, 7 , 10 , 2},
-//                {6, 30, 7, 8, 25, 7 , 10 , 5 , 2},
-//                {6, 30, 7, 8, 25, 7 , 10 , 5 , 2 , 7 , 11 , 12 , 13 , 14 , 23}};
 
         //要显示的数据(左侧班级信息)
-        listitem = new ArrayList<>();
-        for (int i = 0; i < HuDongDataActivity.classList.size() ; i++) {
-            String temp = HuDongDataActivity.classList.get(i).keTangName;
+        List<String> listitem = new ArrayList<>();
+        for (int i = 0; i < AnswerActivity.classList.size() ; i++) {
+            String temp = AnswerActivity.classList.get(i).keTangName;
             listitem.add(temp);
         }
 
@@ -857,11 +848,11 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 }
 
                 initHttpData_memberAnswer();
-                System.out.println("学生答案_class_1111:  " + HuDongDataActivity.answerStu);
-                int count = HuDongDataActivity.classList.get(selectedIndex).stuNum;
-                String classId = HuDongDataActivity.classList.get(selectedIndex).ketangId;
+                System.out.println("学生答案_class_1111:  " + AnswerActivity.answerStu);
+                int count = AnswerActivity.classList.get(selectedIndex).stuNum;
+                String classId = AnswerActivity.classList.get(selectedIndex).ketangId;
                 getJoinClassMemberSubmitAnswerInf(classId , count , selectedIndex , aflag , v);
-                System.out.println("学生答案_class_2222:  " + HuDongDataActivity.answerStu);
+                System.out.println("学生答案_class_2222:  " + AnswerActivity.answerStu);
             }
         });
 
@@ -899,11 +890,11 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 }
 
                 initHttpData_memberAnswer(); //清空学生的回答情况，之后再次请求
-                System.out.println("学生答案汇总1111:  " + HuDongDataActivity.answerStu);
+                System.out.println("学生答案汇总1111:  " + AnswerActivity.answerStu);
                 int count = getJoinClassAllStuNum();
                 //请求当前要分析的课堂的学生回答情况
                 getJoinClassMemberSubmitAnswerInf("all" , count , -1 , aflag , v);
-                System.out.println("学生答案汇总22222:  " + HuDongDataActivity.answerStu);
+                System.out.println("学生答案汇总22222:  " + AnswerActivity.answerStu);
             }
         });
 
@@ -934,18 +925,18 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
         if(isSelect_huizong){
             //初始进入popupwindow，显示汇总数据
-            System.out.println("学生答案11111:  " + HuDongDataActivity.answerStu);
+            System.out.println("学生答案11111:  " + AnswerActivity.answerStu);
             int count = getJoinClassAllStuNum();
             //请求当前要分析的课堂的学生回答情况
             getJoinClassMemberSubmitAnswerInf("all" , count , -1 , flag , v);
-            System.out.println("学生答案22222:  " + HuDongDataActivity.answerStu);
+            System.out.println("学生答案22222:  " + AnswerActivity.answerStu);
         }else{
             initHttpData_memberAnswer();
-            System.out.println("学生答案_class_1111:  " + HuDongDataActivity.answerStu);
-            int count = HuDongDataActivity.classList.get(selectedIndex).stuNum;
-            String classId = HuDongDataActivity.classList.get(selectedIndex).ketangId;
+            System.out.println("学生答案_class_1111:  " + AnswerActivity.answerStu);
+            int count = AnswerActivity.classList.get(selectedIndex).stuNum;
+            String classId = AnswerActivity.classList.get(selectedIndex).ketangId;
             getJoinClassMemberSubmitAnswerInf(classId , count , selectedIndex , flag , v);
-            System.out.println("学生答案_class_2222:  " + HuDongDataActivity.answerStu);
+            System.out.println("学生答案_class_2222:  " + AnswerActivity.answerStu);
         }
 
 
@@ -967,18 +958,18 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 //                isShowMoreInformation(1 , selectedIndex);
                 if(isSelect_huizong){
                     //初始进入popupwindow，显示汇总数据
-                    System.out.println("单题分析11111:  " + HuDongDataActivity.answerStu);
+                    System.out.println("单题分析11111:  " + AnswerActivity.answerStu);
                     int count = getJoinClassAllStuNum();
                     //请求当前要分析的课堂的学生回答情况
                     getJoinClassMemberSubmitAnswerInf("all" , count , -1 , 1 , v);
-                    System.out.println("单题分析22222:  " + HuDongDataActivity.answerStu);
+                    System.out.println("单题分析22222:  " + AnswerActivity.answerStu);
                 }else{
                     initHttpData_memberAnswer();
-                    System.out.println("单题分析_class_1111:  " + HuDongDataActivity.answerStu);
-                    int count = HuDongDataActivity.classList.get(selectedIndex).stuNum;
-                    String classId = HuDongDataActivity.classList.get(selectedIndex).ketangId;
+                    System.out.println("单题分析_class_1111:  " + AnswerActivity.answerStu);
+                    int count = AnswerActivity.classList.get(selectedIndex).stuNum;
+                    String classId = AnswerActivity.classList.get(selectedIndex).ketangId;
                     getJoinClassMemberSubmitAnswerInf(classId , count , selectedIndex , 1 , v);
-                    System.out.println("单题分析_class_2222:  " + HuDongDataActivity.answerStu);
+                    System.out.println("单题分析_class_2222:  " + AnswerActivity.answerStu);
                 }
             }
         });
@@ -996,18 +987,18 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
                 if(isSelect_huizong){
                     //初始进入popupwindow，显示汇总数据
-                    System.out.println("答题详情11111:  " + HuDongDataActivity.answerStu);
+                    System.out.println("答题详情11111:  " + AnswerActivity.answerStu);
                     int count = getJoinClassAllStuNum();
                     //请求当前要分析的课堂的学生回答情况
                     getJoinClassMemberSubmitAnswerInf("all" , count , -1 , 2 , v);
-                    System.out.println("答题详情22222:  " + HuDongDataActivity.answerStu);
+                    System.out.println("答题详情22222:  " + AnswerActivity.answerStu);
                 }else{
                     initHttpData_memberAnswer();
-                    System.out.println("答题详情_class_1111:  " + HuDongDataActivity.answerStu);
-                    int count = HuDongDataActivity.classList.get(selectedIndex).stuNum;
-                    String classId = HuDongDataActivity.classList.get(selectedIndex).ketangId;
+                    System.out.println("答题详情_class_1111:  " + AnswerActivity.answerStu);
+                    int count = AnswerActivity.classList.get(selectedIndex).stuNum;
+                    String classId = AnswerActivity.classList.get(selectedIndex).ketangId;
                     getJoinClassMemberSubmitAnswerInf(classId , count , selectedIndex , 2 , v);
-                    System.out.println("答题详情_class_2222:  " + HuDongDataActivity.answerStu);
+                    System.out.println("答题详情_class_2222:  " + AnswerActivity.answerStu);
                 }
 //                showStusAnswers(v); //显示“答案详情”
 //                isShowMoreInformation(2 , selectedIndex);
@@ -1045,7 +1036,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 if(isSelect_huizong){
                     setAnswers(v_self , v , popupWindow , flag , "all");
                 }else{
-                    setAnswers(v_self , v , popupWindow , flag , HuDongDataActivity.classList.get(selectedIndex).ketangId);
+                    setAnswers(v_self , v , popupWindow , flag , AnswerActivity.classList.get(selectedIndex).ketangId);
                 }
             }
         });
@@ -1088,18 +1079,18 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
                 if(isSelect_huizong){
                     //初始进入popupwindow，显示汇总数据
-                    System.out.println("单题分析11111:  " + HuDongDataActivity.answerStu);
+                    System.out.println("单题分析11111:  " + AnswerActivity.answerStu);
                     int count = getJoinClassAllStuNum();
                     //请求当前要分析的课堂的学生回答情况
                     getJoinClassMemberSubmitAnswerInf("all" , count , -1 , aflag , v);
-                    System.out.println("单题分析22222:  " + HuDongDataActivity.answerStu);
+                    System.out.println("单题分析22222:  " + AnswerActivity.answerStu);
                 }else{
                     initHttpData_memberAnswer();
-                    System.out.println("单题分析_class_1111:  " + HuDongDataActivity.answerStu);
-                    int count = HuDongDataActivity.classList.get(selectedIndex).stuNum;
-                    String classId = HuDongDataActivity.classList.get(selectedIndex).ketangId;
+                    System.out.println("单题分析_class_1111:  " + AnswerActivity.answerStu);
+                    int count = AnswerActivity.classList.get(selectedIndex).stuNum;
+                    String classId = AnswerActivity.classList.get(selectedIndex).ketangId;
                     getJoinClassMemberSubmitAnswerInf(classId , count , selectedIndex , aflag , v);
-                    System.out.println("单题分析_class_2222:  " + HuDongDataActivity.answerStu);
+                    System.out.println("单题分析_class_2222:  " + AnswerActivity.answerStu);
                 }
             }
         });
@@ -1146,9 +1137,9 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
         });
 
         int max = 0;
-        for(int i = 0 ; i < HuDongDataActivity.ylist.size() ; i++){
-            if(HuDongDataActivity.ylist.get(i) > max){
-                max = HuDongDataActivity.ylist.get(i);
+        for(int i = 0 ; i < AnswerActivity.ylist.size() ; i++){
+            if(AnswerActivity.ylist.get(i) > max){
+                max = AnswerActivity.ylist.get(i);
             }
         }
         max += 1;
@@ -1774,20 +1765,20 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
     //清空学生作答情况-主观题
     private void initHttpData_memberAnswer_zhuguan(){
-        HuDongDataActivity.submitAnswerStatus_zhuguan = false;
-        HuDongDataActivity.alist_zhuguan = null;
+        AnswerActivity.submitAnswerStatus_zhuguan = false;
+        AnswerActivity.alist_zhuguan = null;
     }
 
     //将http返回的学生作答情况的数据进行处理，并放入共享变量中(主观题）（接口5）
     private void updateHttpData_memberAnswer_zhuguan(JSONObject jsonObject) throws JSONException{
-        HuDongDataActivity.submitAnswerStatus_zhuguan = jsonObject.getBoolean("status");
+        AnswerActivity.submitAnswerStatus_zhuguan = jsonObject.getBoolean("status");
         //作答的学生信息
         JSONArray array_list = jsonObject.getJSONArray("list");
-        if(HuDongDataActivity.alist_zhuguan != null){
-            HuDongDataActivity.alist_zhuguan.clear();
+        if(AnswerActivity.alist_zhuguan != null){
+            AnswerActivity.alist_zhuguan.clear();
         }
-        if(HuDongDataActivity.alist_zhuguan == null){
-            HuDongDataActivity.alist_zhuguan = new ArrayList<>();
+        if(AnswerActivity.alist_zhuguan == null){
+            AnswerActivity.alist_zhuguan = new ArrayList<>();
         }
         for(int i = 0 ; i < array_list.length() ; i++){
             StuAnswerBean item = new StuAnswerBean();
@@ -1797,10 +1788,10 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             item.stuAnswer = array_list.getJSONObject(i).getString("stuAnswer");
             item.stuAnswerTime = array_list.getJSONObject(i).getLong("stuAnswerTime");
             item.startAnswerTime = array_list.getJSONObject(i).getLong("startAnswerTime");
-            HuDongDataActivity.alist_zhuguan.add(item);
+            AnswerActivity.alist_zhuguan.add(item);
             System.out.println("item==>" + item.toString());
         }
-        System.out.println("list共多少学生回答问题==>" + HuDongDataActivity.alist_zhuguan.size());
+        System.out.println("list共多少学生回答问题==>" + AnswerActivity.alist_zhuguan.size());
 
         setStuAnswers_zhuguan();
     }
@@ -1820,9 +1811,9 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             stusAnswerList = new ArrayList<>();
         }
 
-        for(int i = 0 ; i < HuDongDataActivity.alist_zhuguan.size() ; i++){
-            stusNameList.add(HuDongDataActivity.alist_zhuguan.get(i).name);
-            stusAnswerList.add(HuDongDataActivity.alist_zhuguan.get(i).stuAnswer);
+        for(int i = 0 ; i < AnswerActivity.alist_zhuguan.size() ; i++){
+            stusNameList.add(AnswerActivity.alist_zhuguan.get(i).name);
+            stusAnswerList.add(AnswerActivity.alist_zhuguan.get(i).stuAnswer);
             System.out.println("学生姓名: " + stusNameList.get(i) + "  ,  学生答案: " + stusAnswerList.get(i));
         }
     }
@@ -1834,7 +1825,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             public void run() {
                 System.out.println("主观题: 获取加入课堂的班级或移动端的学生作答情况！！！！！！！！！！！！！！！！！！！！！！！！");
                 initHttpData_memberAnswer_zhuguan();
-                System.out.println("主观题学生作答情况111:  " + HuDongDataActivity.alist_zhuguan);
+                System.out.println("主观题学生作答情况111:  " + AnswerActivity.alist_zhuguan);
                 JSONObject jsonObject = Http_HuDongActivity.getSubmitAnswerClass_zhuguan(ketangId);
                 String status = "";
                 if(jsonObject != null){
@@ -1847,21 +1838,22 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                     }
                 }
                 if(jsonObject != null && status != null && status.length() > 0){
-                    System.out.println("主观题学生作答情况333:  " + HuDongDataActivity.alist_zhuguan);
+                    System.out.println("主观题学生作答情况333:  " + AnswerActivity.alist_zhuguan);
                     getActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             //更新答题率
                             if(ketangId.equals("all")){
                                 int all_count = getJoinClassAllStuNum();
-                                int answer_count = HuDongDataActivity.alist_zhuguan.size();
+                                int answer_count = AnswerActivity.alist_zhuguan.size();
                                 tx_dati2.setText((int)(answer_count * 1.0 / all_count * 100) + "%");
                                 System.out.println("总人数:  " + all_count + " ,  作答人数:  " + answer_count + " ,  答题率:  " + (int)(answer_count * 1.0 / all_count * 100));
                             }else{
-                                int all_count = HuDongDataActivity.classList.get(index).stuNum;
-                                int answer_count = HuDongDataActivity.alist_zhuguan.size();
+                                int all_count = AnswerActivity.classList.get(index).stuNum;
+                                int answer_count = AnswerActivity.alist_zhuguan.size();
                                 tx_dati2.setText((int)(answer_count * 1.0 / all_count * 100) + "%");
                                 System.out.println("总人数:  " + all_count + " ,  作答人数:  " + answer_count + " ,  答题率:  " + (int)(answer_count * 1.0 / all_count * 100));
                             }
+                            tx_noanswer_zhuguan.setVisibility(View.GONE);
                             if(aflag == 1){ //答案内容
                                 showStudentsAnswer_img(v);
                             }else{ //答题详情
@@ -1870,7 +1862,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                         }
                     });
                 }else{
-                    Toast.makeText(getActivity(), "没有人提交答案" + answer, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "没有人提交答案" + answer, Toast.LENGTH_SHORT).show();
                     getActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             slStusAnswers_zhuguan.setVisibility(View.GONE);
@@ -1888,16 +1880,16 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
     private void updateHttpData_memberAnswer_content(JSONObject jsonObject) throws JSONException {
         //是否有人作答
         boolean status = jsonObject.getBoolean("status");
-        HuDongDataActivity.submitAnswerStatus = status;
-        System.out.println("是否有人提交答案==>" + HuDongDataActivity.submitAnswerStatus);
+        AnswerActivity.submitAnswerStatus = status;
+        System.out.println("是否有人提交答案==>" + AnswerActivity.submitAnswerStatus);
 
         //作答的学生信息
         JSONArray array_alist = jsonObject.getJSONArray("alist");
-        if(HuDongDataActivity.alist != null){
-            HuDongDataActivity.alist.clear();
+        if(AnswerActivity.alist != null){
+            AnswerActivity.alist.clear();
         }
-        if(HuDongDataActivity.alist == null){
-            HuDongDataActivity.alist = new ArrayList<>();
+        if(AnswerActivity.alist == null){
+            AnswerActivity.alist = new ArrayList<>();
         }
         for(int i = 0 ; i < array_alist.length() ; i++){
             StuAnswerBean item = new StuAnswerBean();
@@ -1907,15 +1899,15 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             item.stuAnswer = array_alist.getJSONObject(i).getString("stuAnswer");
             item.stuAnswerTime = array_alist.getJSONObject(i).getLong("stuAnswerTime");
             item.startAnswerTime = array_alist.getJSONObject(i).getLong("startAnswerTime");
-            HuDongDataActivity.alist.add(item);
+            AnswerActivity.alist.add(item);
             System.out.println("item==>" + item.toString());
         }
-        System.out.println("alist共多少学生回答问题==>" + HuDongDataActivity.alist.size());
+        System.out.println("alist共多少学生回答问题==>" + AnswerActivity.alist.size());
 
         //所有学生答案
         String answerStu = jsonObject.getString("answerStu");
-        HuDongDataActivity.answerStu = answerStu;
-        System.out.println("所有学生答案==>" + HuDongDataActivity.answerStu);
+        AnswerActivity.answerStu = answerStu;
+        System.out.println("所有学生答案==>" + AnswerActivity.answerStu);
 
         //将学生答案分割并放入List<List<String>> stusAnswerList_name、List<String> stusAnswerList_answer
         splitStuAnswers_zhuguan();
@@ -1926,9 +1918,9 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
     //List<String> stusAnswerList_name_img;  List<String> stusAnswerList_answer_img;
     private void splitStuAnswers_zhuguan(){
         System.out.println("开始分割学生答案！！！！！！！！！！！！！！");
-        //HuDongDataActivity.answerStu格式:
+        //AnswerActivity.answerStu格式:
         // D:葛舸_2,葛舸_5,索夏利,@#@A:葛舸_3,@#@B:葛舸_1,何一繁,卢文静,@#@C:葛舸_0,葛舸_4,孙亮亮,@#@
-        String stuAnswers = HuDongDataActivity.answerStu;
+        String stuAnswers = AnswerActivity.answerStu;
         System.out.println("学生答案1111:" + stuAnswers);
         String[] answer_names_list = stuAnswers.split(",@#@");
         for(int i = 0 ; i < answer_names_list.length ; i++){
@@ -1989,7 +1981,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             public void run() {
                 System.out.println("主观题: 获取加入课堂的班级或移动端的学生作答情况！！！！！！！！！！！！！！！！！！！！！！！！");
                 initHttpData_memberAnswer();
-                System.out.println("主观题学生作答情况111:  " + HuDongDataActivity.alist);
+                System.out.println("主观题学生作答情况111:  " + AnswerActivity.alist);
                 JSONObject jsonObject = Http_HuDongActivity.getSubmitAnswerClass_keguan(ketangId , stuNum);
                 String status = "";
                 if(jsonObject != null){
@@ -2002,21 +1994,22 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                     }
                 }
                 if(jsonObject != null && status != null && status.length() > 0){
-                    System.out.println("主观题学生作答情况333:  " + HuDongDataActivity.alist);
+                    System.out.println("主观题学生作答情况333:  " + AnswerActivity.alist);
                     getActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             //更新答题率
                             if(ketangId.equals("all")){
                                 int all_count = getJoinClassAllStuNum();
-                                int answer_count = HuDongDataActivity.alist.size();
+                                int answer_count = AnswerActivity.alist.size();
                                 tx_dati2.setText((int)(answer_count * 1.0 / all_count * 100) + "%");
                                 System.out.println("总人数:  " + all_count + " ,  作答人数:  " + answer_count + " ,  答题率:  " + (int)(answer_count * 1.0 / all_count * 100));
                             }else{
-                                int all_count = HuDongDataActivity.classList.get(index).stuNum;
-                                int answer_count = HuDongDataActivity.alist.size();
+                                int all_count = AnswerActivity.classList.get(index).stuNum;
+                                int answer_count = AnswerActivity.alist.size();
                                 tx_dati2.setText((int)(answer_count * 1.0 / all_count * 100) + "%");
                                 System.out.println("总人数:  " + all_count + " ,  作答人数:  " + answer_count + " ,  答题率:  " + (int)(answer_count * 1.0 / all_count * 100));
                             }
+                            tx_noanswer_zhuguan.setVisibility(View.GONE);
                             if(aflag == 1){ //答案内容
                                 showStudentsAnswer_img(v);
                             }else{ //答题详情
@@ -2025,7 +2018,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                         }
                     });
                 }else{
-                    Toast.makeText(getActivity(), "没有人提交答案" + answer, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "没有人提交答案" + answer, Toast.LENGTH_SHORT).show();
                     getActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             slStusAnswers_zhuguan.setVisibility(View.GONE);
@@ -2042,12 +2035,12 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
     //显示弹框(主观题)
     private void showPopupWindow_luru(View v , int flag){
-//        initJoinClassInformation();  //初始设置加入课堂的班级信息
         //将popupWindow将要展示的弹窗内容view放入popupWindow中
 //        PopupWindow popupWindow = new PopupWindow(v ,
 //                1000,
 //                650,
 //                false);
+        initJoinClassInformation(); //加载加入课堂的成员
         if(screenWidth <= 0){
             getScreenProps();
         }
@@ -2079,8 +2072,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
         //要显示的数据(左侧班级信息)
         List<String> listitem = new ArrayList<>();
-        for (int i = 0; i < HuDongDataActivity.classList.size() ; i++) {
-            String temp = HuDongDataActivity.classList.get(i).keTangName;
+        for (int i = 0; i < AnswerActivity.classList.size() ; i++) {
+            String temp = AnswerActivity.classList.get(i).keTangName;
             listitem.add(temp);
         }
 
@@ -2126,16 +2119,16 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                     tx_noanswer_zhuguan.setVisibility(View.GONE);
                 }
 
-                String classId = HuDongDataActivity.classList.get(selectedIndex).ketangId;
+                String classId = AnswerActivity.classList.get(selectedIndex).ketangId;
                 if(aflag == 1){
-                    System.out.println("主观题学生答案_class_1111:  " + HuDongDataActivity.alist_zhuguan);
+                    System.out.println("主观题学生答案_class_1111:  " + AnswerActivity.alist_zhuguan);
                     getJoinClassMemberSubmitAnswerInf_zhuguan(classId , selectedIndex , aflag , v);
-                    System.out.println("主观题学生答案_class_22222:  " + HuDongDataActivity.alist_zhuguan);
+                    System.out.println("主观题学生答案_class_22222:  " + AnswerActivity.alist_zhuguan);
                 }else{
-                    System.out.println("主观题学生答案_class_11111:  " + HuDongDataActivity.alist);
-                    int count = HuDongDataActivity.classList.get(selectedIndex).stuNum;
+                    System.out.println("主观题学生答案_class_11111:  " + AnswerActivity.alist);
+                    int count = AnswerActivity.classList.get(selectedIndex).stuNum;
                     getJoinClassMemberSubmitAnswerInf_zhuguan_content(classId , count ,  selectedIndex , aflag , v);
-                    System.out.println("主观题学生答案_class_22222:  " + HuDongDataActivity.alist);
+                    System.out.println("主观题学生答案_class_22222:  " + AnswerActivity.alist);
                 }
             }
         });
@@ -2165,26 +2158,26 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
         if(isSelect_huizong){
             //请求当前要分析的课堂的学生回答情况
             if(flag == 1){
-                System.out.println("主观题学生答案11111:  " + HuDongDataActivity.alist_zhuguan);
+                System.out.println("主观题学生答案11111:  " + AnswerActivity.alist_zhuguan);
                 getJoinClassMemberSubmitAnswerInf_zhuguan("all" , -1 , flag , v);
-                System.out.println("主观题学生答案22222:  " + HuDongDataActivity.alist_zhuguan);
+                System.out.println("主观题学生答案22222:  " + AnswerActivity.alist_zhuguan);
             }else{
-                System.out.println("主观题学生答案11111:  " + HuDongDataActivity.alist);
+                System.out.println("主观题学生答案11111:  " + AnswerActivity.alist);
                 int count = getJoinClassAllStuNum();
                 getJoinClassMemberSubmitAnswerInf_zhuguan_content("all" , count ,  -1 , flag , v);
-                System.out.println("主观题学生答案22222:  " + HuDongDataActivity.alist);
+                System.out.println("主观题学生答案22222:  " + AnswerActivity.alist);
             }
         }else{
-            String classId = HuDongDataActivity.classList.get(selectedIndex).ketangId;
+            String classId = AnswerActivity.classList.get(selectedIndex).ketangId;
             if(flag == 1){
-                System.out.println("主观题学生答案_class_1111:  " + HuDongDataActivity.alist_zhuguan);
+                System.out.println("主观题学生答案_class_1111:  " + AnswerActivity.alist_zhuguan);
                 getJoinClassMemberSubmitAnswerInf_zhuguan(classId , selectedIndex , flag , v);
-                System.out.println("主观题学生答案_class_22222:  " + HuDongDataActivity.alist_zhuguan);
+                System.out.println("主观题学生答案_class_22222:  " + AnswerActivity.alist_zhuguan);
             }else{
-                System.out.println("主观题学生答案_class_11111:  " + HuDongDataActivity.alist);
-                int count = HuDongDataActivity.classList.get(selectedIndex).stuNum;
+                System.out.println("主观题学生答案_class_11111:  " + AnswerActivity.alist);
+                int count = AnswerActivity.classList.get(selectedIndex).stuNum;
                 getJoinClassMemberSubmitAnswerInf_zhuguan_content(classId , count ,  selectedIndex , flag , v);
-                System.out.println("主观题学生答案_class_22222:  " + HuDongDataActivity.alist);
+                System.out.println("主观题学生答案_class_22222:  " + AnswerActivity.alist);
             }
         }
 
@@ -2223,14 +2216,14 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
                 //请求当前要分析的课堂的学生回答情况
                 if(aflag == 1){
-                    System.out.println("主观题学生答案11111:  " + HuDongDataActivity.alist_zhuguan);
+                    System.out.println("主观题学生答案11111:  " + AnswerActivity.alist_zhuguan);
                     getJoinClassMemberSubmitAnswerInf_zhuguan("all" , -1 , aflag , v);
-                    System.out.println("主观题学生答案22222:  " + HuDongDataActivity.alist_zhuguan);
+                    System.out.println("主观题学生答案22222:  " + AnswerActivity.alist_zhuguan);
                 }else{
-                    System.out.println("主观题学生答案11111:  " + HuDongDataActivity.alist);
+                    System.out.println("主观题学生答案11111:  " + AnswerActivity.alist);
                     int count = getJoinClassAllStuNum();
                     getJoinClassMemberSubmitAnswerInf_zhuguan_content("all" , count ,  -1 , aflag , v);
-                    System.out.println("主观题学生答案22222:  " + HuDongDataActivity.alist);
+                    System.out.println("主观题学生答案22222:  " + AnswerActivity.alist);
                 }
             }
         });
@@ -2245,14 +2238,14 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 //                showStudentsAnswer_img(v);
                 if(isSelect_huizong){
                     //请求当前要分析的课堂的学生回答情况
-                    System.out.println("主观题学生答案11111:  " + HuDongDataActivity.alist_zhuguan);
+                    System.out.println("主观题学生答案11111:  " + AnswerActivity.alist_zhuguan);
                     getJoinClassMemberSubmitAnswerInf_zhuguan("all" , -1 , 1 , v);
-                    System.out.println("主观题学生答案22222:  " + HuDongDataActivity.alist_zhuguan);
+                    System.out.println("主观题学生答案22222:  " + AnswerActivity.alist_zhuguan);
                 }else{
-                    System.out.println("主观题学生答案_class_1111:  " + HuDongDataActivity.alist_zhuguan);
-                    String classId = HuDongDataActivity.classList.get(selectedIndex).ketangId;
+                    System.out.println("主观题学生答案_class_1111:  " + AnswerActivity.alist_zhuguan);
+                    String classId = AnswerActivity.classList.get(selectedIndex).ketangId;
                     getJoinClassMemberSubmitAnswerInf_zhuguan(classId , selectedIndex , 1 , v);
-                    System.out.println("主观题学生答案_class_22222:  " + HuDongDataActivity.alist_zhuguan);
+                    System.out.println("主观题学生答案_class_22222:  " + AnswerActivity.alist_zhuguan);
                 }
             }
         });
@@ -2267,16 +2260,16 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 //                showStudentsAnswer(v);
                 if(isSelect_huizong){
                     //请求当前要分析的课堂的学生回答情况
-                    System.out.println("主观题学生答案11111:  " + HuDongDataActivity.alist);
+                    System.out.println("主观题学生答案11111:  " + AnswerActivity.alist);
                     int count = getJoinClassAllStuNum();
                     getJoinClassMemberSubmitAnswerInf_zhuguan_content("all" , count ,  -1 , 2 , v);
-                    System.out.println("主观题学生答案22222:  " + HuDongDataActivity.alist);
+                    System.out.println("主观题学生答案22222:  " + AnswerActivity.alist);
                 }else{
-                    System.out.println("主观题学生答案_class_11111:  " + HuDongDataActivity.alist);
-                    String classId = HuDongDataActivity.classList.get(selectedIndex).ketangId;
-                    int count = HuDongDataActivity.classList.get(selectedIndex).stuNum;
+                    System.out.println("主观题学生答案_class_11111:  " + AnswerActivity.alist);
+                    String classId = AnswerActivity.classList.get(selectedIndex).ketangId;
+                    int count = AnswerActivity.classList.get(selectedIndex).stuNum;
                     getJoinClassMemberSubmitAnswerInf_zhuguan_content(classId , count ,  selectedIndex , 2 , v);
-                    System.out.println("主观题学生答案_class_22222:  " + HuDongDataActivity.alist);
+                    System.out.println("主观题学生答案_class_22222:  " + AnswerActivity.alist);
                 }
             }
         });
@@ -2334,26 +2327,26 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 if(isSelect_huizong){
                     //请求当前要分析的课堂的学生回答情况
                     if(aflag == 1){
-                        System.out.println("主观题学生答案11111:  " + HuDongDataActivity.alist_zhuguan);
+                        System.out.println("主观题学生答案11111:  " + AnswerActivity.alist_zhuguan);
                         getJoinClassMemberSubmitAnswerInf_zhuguan("all" , -1 , aflag , v);
-                        System.out.println("主观题学生答案22222:  " + HuDongDataActivity.alist_zhuguan);
+                        System.out.println("主观题学生答案22222:  " + AnswerActivity.alist_zhuguan);
                     }else{
-                        System.out.println("主观题学生答案11111:  " + HuDongDataActivity.alist);
+                        System.out.println("主观题学生答案11111:  " + AnswerActivity.alist);
                         int count = getJoinClassAllStuNum();
                         getJoinClassMemberSubmitAnswerInf_zhuguan_content("all" , count ,  -1 , aflag , v);
-                        System.out.println("主观题学生答案22222:  " + HuDongDataActivity.alist);
+                        System.out.println("主观题学生答案22222:  " + AnswerActivity.alist);
                     }
                 }else{
-                    String classId = HuDongDataActivity.classList.get(selectedIndex).ketangId;
+                    String classId = AnswerActivity.classList.get(selectedIndex).ketangId;
                     if(aflag == 1){
-                        System.out.println("主观题学生答案_class_1111:  " + HuDongDataActivity.alist_zhuguan);
+                        System.out.println("主观题学生答案_class_1111:  " + AnswerActivity.alist_zhuguan);
                         getJoinClassMemberSubmitAnswerInf_zhuguan(classId , selectedIndex , aflag , v);
-                        System.out.println("主观题学生答案_class_22222:  " + HuDongDataActivity.alist_zhuguan);
+                        System.out.println("主观题学生答案_class_22222:  " + AnswerActivity.alist_zhuguan);
                     }else{
-                        System.out.println("主观题学生答案_class_11111:  " + HuDongDataActivity.alist);
-                        int count = HuDongDataActivity.classList.get(selectedIndex).stuNum;
+                        System.out.println("主观题学生答案_class_11111:  " + AnswerActivity.alist);
+                        int count = AnswerActivity.classList.get(selectedIndex).stuNum;
                         getJoinClassMemberSubmitAnswerInf_zhuguan_content(classId , count ,  selectedIndex , aflag , v);
-                        System.out.println("主观题学生答案_class_22222:  " + HuDongDataActivity.alist);
+                        System.out.println("主观题学生答案_class_22222:  " + AnswerActivity.alist);
                     }
                 }
             }
@@ -2921,13 +2914,13 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                     }
                 });
                 System.out.println("请求接口，获取随机或抢答学生姓名，答题类型是: " + txType);
-                HuDongDataActivity.stuId = "";
-                HuDongDataActivity.stuName = "";
+                AnswerActivity.stuId = "";
+                AnswerActivity.stuName = "";
                 Http_HuDongActivity.getSjOrQdStu(txType);   //获取随机或抢答学生信息
-                if(HuDongDataActivity.stuId != null && HuDongDataActivity.stuId.length() > 0){
+                if(AnswerActivity.stuId != null && AnswerActivity.stuId.length() > 0){
                     suiji_qiangda_flag = 1; //选中了一个学生
-                    stuName_selected = HuDongDataActivity.stuName;
-                    stuId_selected = HuDongDataActivity.stuId;
+                    stuName_selected = AnswerActivity.stuName;
+                    stuId_selected = AnswerActivity.stuId;
                     Log.e("选中学生姓名" , stuName_selected);
                     Log.e("选中学生id" , stuId_selected);
                     System.out.println("选中的学生信息！！！！！！！！！！！！！！！！！！！！！！！！" + stuName_selected + stuId_selected);
@@ -2993,11 +2986,11 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
         new Thread(new Runnable() {
             @Override
             public void run() {
-                HuDongDataActivity.answer_sjOrQd = "";
+                AnswerActivity.answer_sjOrQd = "";
                 Http_HuDongActivity.getSjOrQdAnswer();
-                if(HuDongDataActivity.answer_sjOrQd != null && HuDongDataActivity.answer_sjOrQd.length() > 0){
+                if(AnswerActivity.answer_sjOrQd != null && AnswerActivity.answer_sjOrQd.length() > 0){
                     suiji_qiangda_flag = 2; //学生发送了答案
-                    stuAnswer_selected = HuDongDataActivity.answer_sjOrQd;
+                    stuAnswer_selected = AnswerActivity.answer_sjOrQd;
                     System.out.println("学生答案11111！！！！！！！！！！！！！！！！！！！！！！！！" + stuAnswer_selected);
                 }
             }
@@ -3589,7 +3582,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                             || txModle_panduan.isSelected()
                             || txModle_danxuan.isSelected()
                     ){
-                        setAnswer_sq(HuDongDataActivity.currentketangId);
+                        setAnswer_sq(AnswerActivity.currentketangId);
                         //当前线程暂停wait 500ms
                         synchronized (Thread.currentThread()){
                             try {
@@ -3771,7 +3764,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 Http_HuDongActivity.getSubmitAnswerStuNum(); //调接口
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        int stuNum = HuDongDataActivity.answerNum;
+                        int stuNum = AnswerActivity.answerNum;
                         int allNum = getJoinClassAllStuNum();
                         tx_answers_sum.setText(stuNum + "/" + allNum + "位同学已提交");
                     }
@@ -3816,8 +3809,13 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             public void run() {
                 if(actionName.indexOf("start") >= 0 && !actionName.equals("startAnswerQiangDa")){
                     getUUID();//获取uuid
-                    MainActivity activity = (MainActivity)getActivity();
-                    activity.ScreenShotBoard(getContext(),HuDongDataActivity.answerQuestionId,activity.getmBoard());
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            MainActivity activity = (MainActivity)getActivity();
+                            activity.ScreenShotBoard(getContext(),AnswerActivity.answerQuestionId,activity.getmBoard());
+                        }
+                    });
                 }
                 int questionAnswerType = 0;  //答题类型
                 if(txType_tiwen.isSelected()){
@@ -3843,7 +3841,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
                 String questionAction = actionName; //答题动作
                 //请求接口2
-                HuDongDataActivity.isSuccess = Http_HuDongActivity.saveQueHdAction(
+                AnswerActivity.isSuccess = Http_HuDongActivity.saveQueHdAction(
                         questionAnswerType ,
                         questionSubNum ,
                         questionBaseTypeId ,
@@ -4033,7 +4031,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                         } else {//客观题点赞
                             answer_sq = stuAnswer_selected;
                             //调取设置答案接口！！！！！！！！！！！！！！！
-                            setAnswer_sq(HuDongDataActivity.currentketangId);
+                            setAnswer_sq(AnswerActivity.currentketangId);
                             //当前线程暂停wait 500ms
                             synchronized (Thread.currentThread()){
                                 try {

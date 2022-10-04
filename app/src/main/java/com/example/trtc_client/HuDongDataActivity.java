@@ -9,6 +9,8 @@ public class HuDongDataActivity {
     public static String currentketangId;   //自己的课堂id
     public static String answerQuestionId;
 
+    public static List<KeTangBean> classList;  //加入的课堂  //要分析的课堂信息（肖先把数据传递过来）（他传过来的数据应该不包括  汇总数据以及其它移动端）
+
     //接口2 开始答题、结束答题等
     public static Long startTime;
     public static boolean isSuccess;
@@ -16,8 +18,6 @@ public class HuDongDataActivity {
 
     //接口7
     public static int answerNum; //已作答学生人数
-
-    public static List<KeTangBean> classList;  //加入的课堂  //要分析的课堂信息（肖先把数据传递过来）（他传过来的数据应该不包括  汇总数据以及其它移动端）
 
     //接口3
     public static List<Integer> ylist; //柱状图-纵坐标（每个答案选择的学生个数）
