@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:orientation="horizontal"
-    android:padding="5dp"
+    android:padding="2dp"
     android:background="@color/purple_500">
 
     <LinearLayout
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:padding="15dp"
+        android:padding="5dp"
         android:background="#d3d7d4">
         <!-- 页面左侧-->
         <LinearLayout
@@ -42,8 +42,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp">
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp">
                 <TextView
                     android:id="@+id/tx_dati1"
                     android:text="答题率: "
@@ -69,8 +69,8 @@
                     android:text="汇总数据"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:paddingLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:paddingLeft="10dp"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:textColor="#FFFFFF"
@@ -94,7 +94,7 @@
         <!--中间分割区-->
         <View
             android:id="@+id/view"
-            android:layout_width="10dp"
+            android:layout_width="5dp"
             android:layout_height="match_parent"
             android:background="#d3d7d4"
             />
@@ -117,8 +117,8 @@
                 android:layout_weight="1"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp">
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
 
                 <LinearLayout
                     android:id="@+id/linearStusAnswersImg"
@@ -132,6 +132,7 @@
             <TextView
                 android:id="@+id/tx_noanswer"
                 android:text="没有人提交答案。"
+                android:textColor="@color/text_black"
                 android:textSize="20sp"
                 android:gravity="center"
                 android:layout_width="match_parent"
@@ -147,8 +148,8 @@
                 android:layout_weight="1"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp">
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
 
                 <LinearLayout
                     android:id="@+id/linearStusAnswers"
@@ -194,7 +195,7 @@
             <!--右侧底部工具栏-->
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
+                android:layout_height="35dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -255,7 +256,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="15dp"
+        android:padding="5dp"
         android:background="#d3d7d4">
 
         <!--显示学生答案-图片-->

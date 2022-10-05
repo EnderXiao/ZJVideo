@@ -81,7 +81,7 @@ public class MyAdapter extends BaseAdapter {
         if(isSelect == true){
 //            System.out.println("listItem都没选中，选中了汇总数据");
             holder.txt_classname.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            holder.txt_classname.setTextColor(Color.parseColor("#828798"));
+            holder.txt_classname.setTextColor(Color.parseColor("#FF000000"));
         }else{
             if(mSelect == position){  //选中的item样式
 //                System.out.println("isSelect: " + isSelect + "     mSelect: " + mSelect + "   position: " + position);
@@ -89,7 +89,8 @@ public class MyAdapter extends BaseAdapter {
                 holder.txt_classname.setTextColor(Color.parseColor("#FFFFFF"));
             }else{
                 holder.txt_classname.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                holder.txt_classname.setTextColor(Color.parseColor("#828798"));
+//                holder.txt_classname.setTextColor(Color.parseColor("#828798"));
+                holder.txt_classname.setTextColor(Color.parseColor("#FF000000"));
             }
         }
 

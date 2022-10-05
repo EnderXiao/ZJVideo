@@ -316,9 +316,9 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             LinearLayout.LayoutParams tparams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
-            tparams.setMargins(30 , 5 , 0 , 0);
+            tparams.setMargins(30 , 3 , 0 , 0);
             txt_answerTitle.setLayoutParams(tparams);
-            txt_answerTitle.setTextSize(15);
+//            txt_answerTitle.setTextSize(15);
             txt_answerTitle.setTextColor(Color.parseColor("#828798"));
 
             TextView txt_answer = new TextView(getActivity());
@@ -326,9 +326,9 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             LinearLayout.LayoutParams txt_params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
-            txt_params.setMargins(5 , 5 , 0 , 0);
+            txt_params.setMargins(5 , 3 , 0 , 0);
             txt_answer.setLayoutParams(txt_params);
-            txt_answer.setTextSize(20);
+//            txt_answer.setTextSize(20);
             if(listAnswers.get(i).equals("未答")){
                 txt_answerTitle.setText("未答题");
                 answersList[i].addView(txt_answerTitle);
@@ -376,13 +376,13 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
                 //每行展示8个学生姓名
                 if(j % 8 == 0){
-                    txtname_params.setMargins(10 , 5 , 5 , 5);
+                    txtname_params.setMargins(10 , 3 , 5 , 3);
                 }else{
-                    txtname_params.setMargins(5 , 5 , 5 , 5);
+                    txtname_params.setMargins(5 , 3 , 5 , 3);
                 }
                 txt_name.setLayoutParams(txtname_params);
                 txt_name.setPadding(5 , 2 , 5 , 2);
-                txt_name.setTextSize(15);
+//                txt_name.setTextSize(15);
                 txt_name.setGravity(Gravity.CENTER);
                 txt_name.setText(listStusName.get(i).get(j));
 //                txt_name.setBackgroundColor(Color.parseColor("#007947"));
@@ -519,10 +519,10 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                         tx_top3.setText(answerRight_stuslistTop.get(2).name);
                     }
                 }else{
-                    linear_quick.setVisibility(View.INVISIBLE);
+                    linear_quick.setVisibility(View.GONE);
                 }
             }else{
-                linear_quick.setVisibility(View.INVISIBLE);
+                linear_quick.setVisibility(View.GONE);
             }
             //计算正确率
             int classAllNum = AnswerActivity.alist.size(); //总人数（作答）
@@ -822,7 +822,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 Log.e("汇总数据是否选中2：  " ,  myAdapter.isSelect()+ "");
                 if(isSelect_huizong){
                     tx_huizong.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                    tx_huizong.setTextColor(Color.parseColor("#828798"));
+                    tx_huizong.setTextColor(Color.parseColor("#FF000000"));
                 }
                 isSelect_huizong = false;
                 Log.e("当前选中的index是123：  " , position + "");
@@ -2091,7 +2091,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 Log.e("汇总数据是否选中2：  " ,  myAdapter.isSelect()+ "");
                 if(isSelect_huizong){
                     tx_huizong.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                    tx_huizong.setTextColor(Color.parseColor("#828798"));
+                    tx_huizong.setTextColor(Color.parseColor("#FF000000"));
                 }
                 isSelect_huizong = false;
                 Log.e("当前选中的index是123：  " , position + "");
@@ -2390,14 +2390,18 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             answersList[i].setOrientation(LinearLayout.HORIZONTAL);
         }
 
+        if(screenWidth < 0){
+            getScreenProps();
+        }
+
         for(int i = 0 ; i < studentsNum ; i++){
             LinearLayout linearStu = new LinearLayout(getActivity());
-            LinearLayout.LayoutParams linear_params = new LinearLayout.LayoutParams(0, 180, 1);
+            LinearLayout.LayoutParams linear_params = new LinearLayout.LayoutParams(0, (int)(screenHeight * 0.35), 1);
             //每行展示3个学生答案
             if(i % 3 == 0){
-                linear_params.setMargins(10 , 5 , 5 , 5);
+                linear_params.setMargins(10 , 3 , 5 , 3);
             }else{
-                linear_params.setMargins(5 , 5 , 5 , 5);
+                linear_params.setMargins(5 , 3 , 5 , 3);
             }
             linearStu.setOrientation(LinearLayout.VERTICAL);
             linearStu.setLayoutParams(linear_params);
@@ -2623,14 +2627,14 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
             txt_da.setLayoutParams(txt_params);
-            txt_da.setTextSize(15);
+//            txt_da.setTextSize(15);
             txt_da.setText("答:");
             txt_da.setTextColor(Color.parseColor("#828798"));
 
             TextView txt_answer = new TextView(getActivity());
             txt_answer.setPadding(10 , 0 , 0 , 0);
             txt_answer.setLayoutParams(txt_params);
-            txt_answer.setTextSize(15);
+//            txt_answer.setTextSize(15);
             txt_answer.setText(stusAnswerList_answer_txt.get(i));
             txt_answer.setTextColor(Color.parseColor("#33a3dc"));
             linearAnswer.addView(txt_da);
@@ -2668,13 +2672,13 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
                 //每行展示8个学生姓名
                 if(j % 8 == 0){
-                    txtname_params.setMargins(10 , 5 , 5 , 5);
+                    txtname_params.setMargins(10 , 3 , 5 , 3);
                 }else{
-                    txtname_params.setMargins(5 , 5 , 5 , 5);
+                    txtname_params.setMargins(5 , 3 , 5 , 3);
                 }
                 txt_name.setLayoutParams(txtname_params);
                 txt_name.setPadding(5 , 2 , 5 , 2);
-                txt_name.setTextSize(15);
+//                txt_name.setTextSize(15);
                 txt_name.setGravity(Gravity.CENTER);
                 txt_name.setText(stusAnswerList_name_txt.get(i).get(j));
 
@@ -2697,7 +2701,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                     LinearLayout.LayoutParams.WRAP_CONTENT);
             txt_params.setMargins(10 , 5 , 10 , 5);
             txt_paizhao.setLayoutParams(txt_params);
-            txt_paizhao.setTextSize(15);
+//            txt_paizhao.setTextSize(15);
             txt_paizhao.setText("拍照片");
             txt_paizhao.setTextColor(Color.parseColor("#828798"));
             linearStusAnswers.addView(txt_paizhao);
@@ -2738,7 +2742,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 }
                 txt_name.setLayoutParams(txtname_params);
                 txt_name.setPadding(5 , 2 , 5 , 2);
-                txt_name.setTextSize(15);
+//                txt_name.setTextSize(15);
                 txt_name.setGravity(Gravity.CENTER);
                 txt_name.setText(stusAnswerList_name_img.get(i));
 
@@ -2962,11 +2966,17 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                                 btAnswers.setBackground(getResources().getDrawable((R.drawable.btn_begin_enable)));
                             }
                             jishiqi.stop();   //停止计时
-                            tx_tishi.setText("点击此处查看答案");
-                            //自动弹出学生答案
-                            View view_stuAnswer = View.inflate(getActivity() , R.layout.suiji_qiangda_stuanswer , null);
-                            //显示随机或抢答学生的答案
-                            showPopupWindow_suiji_qiangda_stuAnswer(view_stuAnswer);
+                            //主观题：答案弹窗 ， 客观题：直接答案回显
+                            if(txModle_luru.isSelected()){
+                                tx_tishi.setText("点击此处查看答案");
+                                //自动弹出学生答案
+                                View view_stuAnswer = View.inflate(getActivity() , R.layout.suiji_qiangda_stuanswer , null);
+                                //显示随机或抢答学生的答案
+                                showPopupWindow_suiji_qiangda_stuAnswer(view_stuAnswer);
+                            }else{
+                                tx_tishi.setText(stuAnswer_selected);
+                            }
+
                             if (answer_sq != null && answer_sq.length() > 0 && stuAnswer_selected.equals(answer_sq)) {
                                 //学生回答正确
                                 img_zan.setVisibility(View.VISIBLE);
@@ -3019,7 +3029,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 pw_selectStu = new PopupWindow(view_selectStu , (int)(screenWidth * 0.17) , (int)(screenWidth * 0.17) , false);
 //                pw_selectStu = new PopupWindow(view_selectStu , 200, 200, false);
                 //弹框展示在屏幕中间Gravity.CENTER,x和y是相对于Gravity.CENTER的偏移
-                pw_selectStu.showAtLocation(view_selectStu , Gravity.TOP | Gravity.RIGHT , (int)(screenWidth * 0.26) , (int)(screenHeight * 0.47));
+//                pw_selectStu.showAtLocation(view_selectStu , Gravity.TOP | Gravity.RIGHT , (int)(screenWidth * 0.26) , (int)(screenHeight * 0.47));
+                pw_selectStu.showAsDropDown(btSingle , -(pw_selectStu.getWidth() + 15) , -(pw_selectStu.getWidth() + 20));
 
                 img_zan = view_selectStu.findViewById(R.id.img_zan);
                 if(answer_sq != null && answer_sq.length() > 0 && stuAnswer_selected.equals(answer_sq)){
@@ -3033,20 +3044,31 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 tx_stuname.setText(stuName_selected);
 
                 tx_tishi = view_selectStu.findViewById(R.id.tx_tishi);
-                if(suiji_qiangda_flag == 2 || stuAnswer_selected.length() > 0){
-                    tx_tishi.setText("点击此处查看答案");
+                if(txModle_luru.isSelected()){
+                    if(suiji_qiangda_flag == 2 || stuAnswer_selected.length() > 0){
+                        tx_tishi.setText("点击此处查看答案");
+                    }else{
+                        tx_tishi.setText("请回答问题");
+                    }
                 }else{
-                    tx_tishi.setText("请回答问题");
+                    if(suiji_qiangda_flag == 2 || stuAnswer_selected.length() > 0){
+                        tx_tishi.setText(stuAnswer_selected);
+                    }else{
+                        tx_tishi.setText("请回答问题");
+                    }
                 }
+
 
                 tx_tishi.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if(suiji_qiangda_flag == 2 || stuAnswer_selected.length() > 0){
+                        if(txModle_luru.isSelected()){
+                            if(suiji_qiangda_flag == 2 || stuAnswer_selected.length() > 0){
 //                            Toast.makeText(getActivity(),"点击了查看答案",Toast.LENGTH_SHORT).show();
-                            View view_stuAnswer = View.inflate(getActivity() , R.layout.suiji_qiangda_stuanswer , null);
-                            //显示随机或抢答学生的答案
-                            showPopupWindow_suiji_qiangda_stuAnswer(view_stuAnswer);
+                                View view_stuAnswer = View.inflate(getActivity() , R.layout.suiji_qiangda_stuanswer , null);
+                                //显示随机或抢答学生的答案
+                                showPopupWindow_suiji_qiangda_stuAnswer(view_stuAnswer);
+                            }
                         }
                     }
                 });
@@ -3765,6 +3787,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         int stuNum = AnswerActivity.answerNum;
+                        initJoinClassInformation();
                         int allNum = getJoinClassAllStuNum();
                         tx_answers_sum.setText(stuNum + "/" + allNum + "位同学已提交");
                     }
