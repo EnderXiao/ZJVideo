@@ -15,6 +15,7 @@
         <entry key="..\:/Android/TRTC_ClientBundle/TRTC_Client/app/src/main/res/layout/member_list_title.xml" value="0.9" />
         <entry key="..\:/Android/TRTC_ClientBundle/TRTC_Client/app/src/main/res/layout/stusnamelist_item.xml" value="0.15185185185185185" />
         <entry key="..\:/Android/TRTC_ClientBundle/TRTC_Client/app/src/main/res/layout/video_list.xml" value="0.1527777777777778" />
+<<<<<<< HEAD
         <entry key="..\:/AndroidStudioCodeTest/TeacherTest/TeacherTest-GitNew/ZJVideo/app/src/main/res/drawable/btn_begin_enable.xml" value="0.1695" />
         <entry key="..\:/AndroidStudioCodeTest/TeacherTest/TeacherTest-GitNew/ZJVideo/app/src/main/res/drawable/btn_begin_unenable.xml" value="0.126" />
         <entry key="..\:/AndroidStudioCodeTest/TeacherTest/TeacherTest-GitNew/ZJVideo/app/src/main/res/layout/activity_main.xml" value="0.16" />
@@ -27,6 +28,25 @@
         <entry key="..\:/AndroidStudioCodeTest/TeacherTest/TeacherTest-GitNew/ZJVideo/app/src/main/res/layout/suiji_qiangda_selectstu.xml" value="0.16041666666666668" />
         <entry key="..\:/AndroidStudioCodeTest/TeacherTest/TeacherTest-GitNew/ZJVideo/app/src/main/res/layout/suiji_qiangda_setanswer.xml" value="0.16041666666666668" />
         <entry key="..\:/AndroidStudioCodeTest/TeacherTest/TeacherTest-GitNew/ZJVideo/app/src/main/res/layout/suiji_qiangda_stuanswer.xml" value="0.16041666666666668" />
+=======
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/drawable/btn_begin_enable.xml" value="0.1685" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/drawable/btn_choosefile_style.xml" value="0.1685" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/drawable/btn_login_style.xml" value="0.1685" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/drawable/head_radius.xml" value="0.196" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/activity_main.xml" value="0.534965034965035" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/activity_set_info_main.xml" value="0.33" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/answer_question.xml" value="0.159375" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/boardresources_item.xml" value="0.19739583333333333" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/camera_fragment.xml" value="0.19739583333333333" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/chat_room.xml" value="0.33" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/content_set_info_main.xml" value="0.19739583333333333" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/fragment_first.xml" value="0.5" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/fragment_second.xml" value="0.25" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/item_response.xml" value="0.6241276171485544" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/item_send.xml" value="0.7569528415961306" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/member_list_pop_window.xml" value="0.27708333333333335" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/set_text_fragment.xml" value="0.7035175879396985" />
+>>>>>>> 73ae6177db1abd5dd493e526713f44fd6ed119ed
       </map>
     </option>
   </component>
