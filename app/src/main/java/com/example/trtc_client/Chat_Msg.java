@@ -5,7 +5,7 @@ public class Chat_Msg {
     private String date;  //发送时间
     private String content;//消息内容
     private String url;
-    private Integer type;  // 0代表接受 1代表发送
+    private Integer type;  // 1 主讲人  2  听课端
 
 
     public Chat_Msg(String name, String date, String content, Integer type) {

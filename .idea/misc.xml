@@ -18,6 +18,7 @@
         <entry key="..\:/xgy/ZJVideo/app/src/main/res/drawable/btn_begin_enable.xml" value="0.1685" />
         <entry key="..\:/xgy/ZJVideo/app/src/main/res/drawable/btn_choosefile_style.xml" value="0.1685" />
         <entry key="..\:/xgy/ZJVideo/app/src/main/res/drawable/btn_login_style.xml" value="0.1685" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/drawable/head_radius.xml" value="0.196" />
         <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/activity_main.xml" value="0.534965034965035" />
         <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/activity_set_info_main.xml" value="0.33" />
         <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/answer_question.xml" value="0.159375" />
@@ -27,6 +28,9 @@
         <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/content_set_info_main.xml" value="0.19739583333333333" />
         <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/fragment_first.xml" value="0.5" />
         <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/fragment_second.xml" value="0.25" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/item_response.xml" value="0.6241276171485544" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/item_send.xml" value="0.7569528415961306" />
+        <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/member_list_pop_window.xml" value="0.27708333333333335" />
         <entry key="..\:/xgy/ZJVideo/app/src/main/res/layout/set_text_fragment.xml" value="0.7035175879396985" />
       </map>
     </option>

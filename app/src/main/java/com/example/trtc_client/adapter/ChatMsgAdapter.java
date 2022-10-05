@@ -2,11 +2,11 @@ package com.example.trtc_client.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 
 import com.example.trtc_client.Chat_Msg;
 import com.example.trtc_client.R;
+import com.example.trtc_client.utils.ImageViewActivity;
 
 import java.util.List;
 
@@ -43,6 +44,7 @@ public class ChatMsgAdapter extends ArrayAdapter {
             mViewHolder.Msgname = (TextView) mView.findViewById(R.id.name);
             mViewHolder.Msgdate = (TextView) mView.findViewById(R.id.date);
             mViewHolder.Msgcontent = (TextView) mView.findViewById(R.id.msgcontent);
+            mViewHolder.msg_head = (ImageView) mView.findViewById(R.id.msg_head);
             mView.setTag(mViewHolder);
         }else {
             mView = convertView;
@@ -51,23 +53,22 @@ public class ChatMsgAdapter extends ArrayAdapter {
         mViewHolder.Msgname.setText(mMsg.getName());
         mViewHolder.Msgdate.setText(mMsg.getDate());
         mViewHolder.Msgcontent.setText(mMsg.getContent());
-
+        ImageViewActivity.setHead_url("http://www.cn901.com/res/avatar/2022/07/21/avatar-mingming_173040431.png");
         //设置格式
-        if(mMsg.getType() == 0)  //发送的消息
+        if(mMsg.getType() == 2)      //  接受  听课端的
         {
-            mViewHolder.Layout.setGravity(Gravity.LEFT);
+            mViewHolder.Layout.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             mViewHolder.Layout1.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             mViewHolder.Msgname.setTextColor(Color.WHITE);
             mViewHolder.Msgcontent.setTextColor(Color.WHITE);
         }
-        else if(mMsg.getType() == 1)  //接受的消息
+        else if(mMsg.getType() == 1)  //  发送的消息  主讲人
         {
-            mViewHolder.Layout.setGravity(Gravity.RIGHT);
+            mViewHolder.Layout.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             mViewHolder.Layout1.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             mViewHolder.Msgname.setTextColor(Color.YELLOW);
             mViewHolder.Msgcontent.setTextColor(Color.YELLOW);
         }
-
         return mView;
     }
 
@@ -77,6 +78,7 @@ public class ChatMsgAdapter extends ArrayAdapter {
         TextView Msgname;
         TextView Msgdate;
         TextView Msgcontent;
+        ImageView msg_head;
     }
 
 }
