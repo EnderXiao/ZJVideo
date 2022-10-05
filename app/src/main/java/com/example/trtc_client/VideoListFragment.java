@@ -40,14 +40,10 @@ public class VideoListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.video_list, container, false);
-        Bundle arguments = getArguments();
 
 //        mTRTCCloud = TRTCCloud.sharedInstance(getActivity().getApplicationContext());
 //        mTRTCCloud.setListener(new MyTRTCCloudListener(VideoListFragment.this));
 
-        if(arguments != null) {
-            mUserList = arguments.getStringArrayList("mUserList");
-        }
         initView(view);
         return view;
     }
@@ -105,16 +101,6 @@ public class VideoListFragment extends Fragment {
         cameraFragmentNow.setUserName(userId);
         fragmentTransaction.show(cameraFragmentNow);
         cameraFragmentNow.showVideo(mTRTCCloud, userId);
-        fragmentTransaction.commit();
-    }
-
-    public void RefreshingCameraView(ArrayList<String> mUserList) {
-        FragmentManager fragmentManager = getChildFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        for (int i = 0; i < mUserList.size(); i++) {
-            CameraFragment cameraFragment = new CameraFragment();
-            fragmentTransaction.add(R.id.ll_content, cameraFragment);
-        }
         fragmentTransaction.commit();
     }
 

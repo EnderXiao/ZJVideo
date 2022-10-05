@@ -8,6 +8,13 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Theme.Board_Client" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorOnSecondary">@color/blue_white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/blue_white</item>
+        <!-- Customize your theme here. -->
+    </style>
+
     <style name="Theme.TRTC_Client.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

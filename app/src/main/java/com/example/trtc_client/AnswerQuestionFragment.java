@@ -210,9 +210,6 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
     private  List<String> listitem;
 
-
-
-
     public AnswerQuestionFragment() {
         // Required empty public constructor
         initJoinClassInformation();

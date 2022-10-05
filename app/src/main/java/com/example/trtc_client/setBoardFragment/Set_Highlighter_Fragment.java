@@ -41,16 +41,19 @@ public class Set_Highlighter_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.set__highlighter_fragment, container, false);
         MainActivity activity = (MainActivity) getActivity();
+        System.out.println("+++当前画笔粗细"+activity.getmBoard().getBrushThin());
         hihtlightersize1 = view.findViewById(R.id.hihtlightersize1);
         sethihtlightersize1 = view.findViewById(R.id.sethihtlightersize1);
         hihtlightersize1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(40);
+                activity.getmBoard().setTextSize(100);
+                MainActivity.cur_Highlighterpaintsize=100;
                 sethihtlightersize1.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -60,7 +63,8 @@ public class Set_Highlighter_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(70);
+                activity.getmBoard().setTextSize(150);
+                MainActivity.cur_Highlighterpaintsize=150;
                 sethihtlightersize2.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -70,7 +74,8 @@ public class Set_Highlighter_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(100);
+                activity.getmBoard().setTextSize(200);
+                MainActivity.cur_Highlighterpaintsize=200;
                 sethihtlightersize3.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -80,7 +85,8 @@ public class Set_Highlighter_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(150);
+                activity.getmBoard().setTextSize(250);
+                MainActivity.cur_Highlighterpaintsize=250;
                 sethihtlightersize4.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -90,7 +96,8 @@ public class Set_Highlighter_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(200);
+                activity.getmBoard().setTextSize(350);
+                MainActivity.cur_Highlighterpaintsize=350;
                 sethihtlightersize5.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -100,7 +107,8 @@ public class Set_Highlighter_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(250);
+                activity.getmBoard().setTextSize(450);
+                MainActivity.cur_Highlighterpaintsize=450;
                 sethihtlightersize6.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -174,17 +182,17 @@ public class Set_Highlighter_Fragment extends Fragment {
 
         if(activity.getmBoard()!=null){
             System.out.println("+++荧光笔颜色"+activity.getmBoard().getHighlighterColor().toInt()+"---"+activity.getmBoard().getBrushColor().toInt());
-            if(activity.getmBoard().getBrushThin()==40){
+            if(activity.getmBoard().getBrushThin()==100){
                 sethihtlightersize1.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getBrushThin()==70){
-                sethihtlightersize2.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getBrushThin()==100){
-                sethihtlightersize3.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }else if(activity.getmBoard().getBrushThin()==150){
-                sethihtlightersize4.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
+                sethihtlightersize2.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }else if(activity.getmBoard().getBrushThin()==200){
-                sethihtlightersize5.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
+                sethihtlightersize3.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }else if(activity.getmBoard().getBrushThin()==250){
+                sethihtlightersize4.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
+            }else if(activity.getmBoard().getBrushThin()==350){
+                sethihtlightersize5.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
+            }else if(activity.getmBoard().getBrushThin()==450){
                 sethihtlightersize6.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
             if(activity.getmBoard().getHighlighterColor().toInt()==8947848){

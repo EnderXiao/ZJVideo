@@ -89,16 +89,13 @@ public class ChatRoomFragment extends Fragment {
                 }else {
                     //创建消息
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                    Chat_Msg msg = new Chat_Msg(MainActivity.userId,sdf.format(new Date()),edtext.getText().toString(),1);
+                    Chat_Msg msg = new Chat_Msg(MainActivity.userId,sdf.format(new Date()),edtext.getText().toString(),1);  //type 1 主讲人  2  听课端
                     //发送给别人
                     MainActivity activity = (MainActivity) getActivity();
-
                     activity.sendMsg(msg);//activity中的方法
-
                     //自己这里显示
                     data.add(msg);
                     chatlv.setSelection(chatlv.getBottom());
-
                     //清空输入框
                     edtext.setText("");
                     edtext.setHint("请输入讨论的内容");
