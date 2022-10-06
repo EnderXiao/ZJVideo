@@ -212,7 +212,7 @@ public class HttpActivity extends AnswerActivity {
                 try {
                     String roomId = roomid;
                     if(!userId.equals("")) {
-                        roomId += "_" + userId;
+                        roomId += "@_@" + userId;
                     }
                     URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_saveControl.do?"
                             + "roomId=" + roomId
@@ -297,7 +297,7 @@ public class HttpActivity extends AnswerActivity {
                     String roomId = roomid;
                     URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_savePlatform.do?"
                             + "roomId=" + roomId
-                            + "&studId=" + userId
+                            + "&stuId=" + userId
                             + "&name=" + URLEncoder.encode(stuName, "utf-8")
                             + "&type=" + type
                     );

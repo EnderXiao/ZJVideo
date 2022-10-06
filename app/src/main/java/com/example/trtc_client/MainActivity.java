@@ -785,6 +785,7 @@ public class MainActivity extends AppCompatActivity {
     public void initMemberList() {
         Log.e(TAG, "initMemberList: hahahahhahaah");
         memberDataList = new Vector<>();
+        HttpActivity.getMemberList(this);
 
         setCountMember(AnswerActivity.ketangList.size(), AnswerActivity.joinList.size());
         MainActivity that = this;
