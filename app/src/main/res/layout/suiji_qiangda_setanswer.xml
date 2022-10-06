@@ -59,54 +59,56 @@
             android:orientation="vertical">
 
             <!--  单选a-f -->
+
+            <!--  多选a-f -->
             <LinearLayout
                 android:id="@+id/linearImg1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/a"
-                    android:src="@mipmap/a"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_margin="3dp"
-                    android:scaleType="centerCrop"
                     android:adjustViewBounds="true"
+                    android:maxWidth="200dp"
                     android:maxHeight="200dp"
-                    android:maxWidth="200dp"/>
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/a" />
 
                 <ImageView
                     android:id="@+id/b"
-                    android:src="@mipmap/b"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_margin="3dp"
                     android:adjustViewBounds="true"
+                    android:maxWidth="200dp"
                     android:maxHeight="200dp"
-                    android:maxWidth="200dp"/>
+                    android:src="@mipmap/b" />
 
                 <ImageView
                     android:id="@+id/c"
-                    android:src="@mipmap/c"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_margin="3dp"
                     android:adjustViewBounds="true"
+                    android:maxWidth="200dp"
                     android:maxHeight="200dp"
-                    android:maxWidth="200dp"/>
+                    android:src="@mipmap/c" />
 
                 <ImageView
                     android:id="@+id/d"
-                    android:src="@mipmap/d"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_margin="3dp"
                     android:adjustViewBounds="true"
+                    android:maxWidth="200dp"
                     android:maxHeight="200dp"
-                    android:maxWidth="200dp"/>
+                    android:src="@mipmap/d" />
 
                 <ImageView
                     android:id="@+id/e"
@@ -149,7 +151,6 @@
                     android:src="@mipmap/h" />
             </LinearLayout>
 
-            <!--  多选a-f -->
             <LinearLayout
                 android:visibility="gone"
                 android:id="@+id/linearImg2"

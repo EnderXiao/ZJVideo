@@ -765,7 +765,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if(AnswerActivity.ketangList != null) {
             for (int i = 0; i < AnswerActivity.ketangList.size(); i++) {
-                memberDataList.add(new MemberItem(AnswerActivity.ketangList.get(i).getName(), AnswerActivity.joinList.get(i).getUserId(), 0 , true, true, true, false, true));
+                memberDataList.add(new MemberItem(AnswerActivity.ketangList.get(i).getName(), AnswerActivity.ketangList.get(i).getUserId(), 0 , true, true, true, false, true));
                 Log.e(TAG, "initMemberList: " + AnswerActivity.ketangList.get(i).toString());
             }
         }
@@ -786,7 +786,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if(AnswerActivity.ketangList != null) {
             for (int i = 0; i < AnswerActivity.ketangList.size(); i++) {
-                memberDataList.add(new MemberItem(AnswerActivity.ketangList.get(i).getName(), AnswerActivity.joinList.get(i).getUserId(), 0 , true, true, true, false, true));
+                memberDataList.add(new MemberItem(AnswerActivity.ketangList.get(i).getName(), AnswerActivity.ketangList.get(i).getUserId(), 0 , true, true, true, false, true));
                 Log.e(TAG, "initMemberList: " + AnswerActivity.ketangList.get(i).toString());
             }
         }

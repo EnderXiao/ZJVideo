@@ -1284,18 +1284,23 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 //        int count = 8;
         //2-4个选项
         LinearLayout.LayoutParams lps1 = new LinearLayout.LayoutParams(90, 90);
+//        LinearLayout.LayoutParams lps1 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT , 1);
         lps1.setMargins(3 , 3 , 3 , 3);
         //5个选项
         LinearLayout.LayoutParams lps2 = new LinearLayout.LayoutParams(70, 70);
+//        LinearLayout.LayoutParams lps2 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT , 1);
         lps2.setMargins(3 , 3 , 3 , 3);
         //6个选项
         LinearLayout.LayoutParams lps3 = new LinearLayout.LayoutParams(65, 65);
+//        LinearLayout.LayoutParams lps3 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT , 1);
         lps3.setMargins(3 , 3 , 3 , 3);
         //7个选项
         LinearLayout.LayoutParams lps4 = new LinearLayout.LayoutParams(55, 55);
+//        LinearLayout.LayoutParams lps4 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT , 1);
         lps4.setMargins(3 , 3 , 3 , 3);
         //8个选项
         LinearLayout.LayoutParams lps5 = new LinearLayout.LayoutParams(49, 49);
+//        LinearLayout.LayoutParams lps5 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT , 1);
         lps5.setMargins(3 , 3 , 3 , 3);
         //单选(图标）
         if(txModle_danxuan.isSelected()){
@@ -2968,12 +2973,14 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                             jishiqi.stop();   //停止计时
                             //主观题：答案弹窗 ， 客观题：直接答案回显
                             if(txModle_luru.isSelected()){
+                                tx_tishi.setTextColor(Color.parseColor("#555D6D"));
                                 tx_tishi.setText("点击此处查看答案");
                                 //自动弹出学生答案
                                 View view_stuAnswer = View.inflate(getActivity() , R.layout.suiji_qiangda_stuanswer , null);
                                 //显示随机或抢答学生的答案
                                 showPopupWindow_suiji_qiangda_stuAnswer(view_stuAnswer);
                             }else{
+                                tx_tishi.setTextColor(Color.parseColor("#ffe600"));
                                 tx_tishi.setText(stuAnswer_selected);
                             }
 
@@ -3045,6 +3052,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
                 tx_tishi = view_selectStu.findViewById(R.id.tx_tishi);
                 if(txModle_luru.isSelected()){
+                    tx_tishi.setTextColor(Color.parseColor("#555D6D"));
                     if(suiji_qiangda_flag == 2 || stuAnswer_selected.length() > 0){
                         tx_tishi.setText("点击此处查看答案");
                     }else{
@@ -3052,8 +3060,10 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                     }
                 }else{
                     if(suiji_qiangda_flag == 2 || stuAnswer_selected.length() > 0){
+                        tx_tishi.setTextColor(Color.parseColor("#ffe600"));
                         tx_tishi.setText(stuAnswer_selected);
                     }else{
+                        tx_tishi.setTextColor(Color.parseColor("#555D6D"));
                         tx_tishi.setText("请回答问题");
                     }
                 }
