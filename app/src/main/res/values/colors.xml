@@ -64,7 +64,11 @@
     <color name="teal_700">#FF018786</color>
 
     <color name="text_orange">#FF6100</color>
-    <color name="text_gray">#485060</color>
+
+    <!--弹框内的字体颜色-->
+    <color name="text_gray">#828798</color>
+    <color name="text_black">#FF000000</color>
+
     <color name="text_white">#FFFFFF</color>
     <color name="text_yellow">#FFC800</color>
     <color name="text_topbar">#694E42</color>

@@ -1,10 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.qcloud.cos:cos-android:5.9.5@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/01db55805dd8ec5d60628ccf0e5c16ba/transformed/cos-android-5.9.5/jars/classes.jar!/" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/01db55805dd8ec5d60628ccf0e5c16ba/transformed/cos-android-5.9.5/jars/libs/r-classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/01db55805dd8ec5d60628ccf0e5c16ba/transformed/cos-android-5.9.5/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/9a911494deda4faaca819a643f28d0e8/transformed/jetified-cos-android-5.9.5/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/01db55805dd8ec5d60628ccf0e5c16ba/transformed/cos-android-5.9.5/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/01db55805dd8ec5d60628ccf0e5c16ba/transformed/cos-android-5.9.5/jars/libs/r-classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/01db55805dd8ec5d60628ccf0e5c16ba/transformed/cos-android-5.9.5/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:orientation="horizontal"
-    android:padding="5dp"
+    android:padding="2dp"
     android:background="@color/purple_500">
 
     <LinearLayout
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:padding="15dp"
+        android:padding="5dp"
         android:background="#d3d7d4">
         <!-- 页面左侧-->
         <LinearLayout
@@ -41,8 +41,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp">
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp">
                 <TextView
                     android:id="@+id/tx_dati1"
                     android:text="答题率: "
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="5dp"
-                android:layout_marginLeft="10dp">
+                android:layout_marginLeft="5dp">
                 <TextView
                     android:id="@+id/tx_right1"
                     android:text="正确率: "
@@ -93,8 +93,8 @@
                     android:text="汇总数据"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:paddingLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:paddingLeft="10dp"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:textColor="#FFFFFF"
@@ -118,7 +118,7 @@
         <!--中间分割区-->
         <View
             android:id="@+id/view"
-            android:layout_width="10dp"
+            android:layout_width="5dp"
             android:layout_height="match_parent"
             android:background="#d3d7d4"
             />
@@ -133,76 +133,82 @@
             android:orientation="vertical">
             <!--答题率-->
             <!--android:gravity="right"-->
+
+            <!--单题分析   柱状图区域-->
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingTop="10dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="10dp">
+                android:paddingTop="3dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="3dp">
 
                 <LinearLayout
-                    android:visibility="invisible"
                     android:id="@+id/linear_quick"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="invisible">
 
-                    <!-- 最快答对-->
+                    <!-- 最快答对  android:textColor="#828798"-->
                     <TextView
                         android:id="@+id/tx_quick"
-                        android:text="最快答对: "
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#828798"
                         android:layout_marginLeft="5dp"
-                        android:paddingTop="5dp"/>
+                        android:paddingTop="3dp"
+                        android:text="最快答对: "
+                        android:textColor="@color/text_black" />
+
                     <ImageView
                         android:id="@+id/img_top1"
-                        android:src="@mipmap/top1"
                         android:layout_width="25dp"
                         android:layout_height="35dp"
-                        android:layout_marginLeft="5dp"/>
+                        android:layout_marginLeft="5dp"
+                        android:src="@mipmap/top1" />
+
                     <TextView
                         android:id="@+id/tx_top1"
-                        android:text="钱宇华"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#828798"
                         android:paddingLeft="5dp"
-                        android:paddingTop="5dp"/>
+                        android:paddingTop="3dp"
+                        android:text="钱宇华"
+                        android:textColor="@color/text_black" />
 
                     <ImageView
                         android:id="@+id/img_top2"
-                        android:src="@mipmap/top2"
                         android:layout_width="25dp"
                         android:layout_height="35dp"
-                        android:layout_marginLeft="5dp"/>
+                        android:layout_marginLeft="5dp"
+                        android:src="@mipmap/top2" />
+
                     <TextView
                         android:id="@+id/tx_top2"
-                        android:text="王春芸"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#828798"
                         android:paddingLeft="5dp"
-                        android:paddingTop="5dp"/>
+                        android:paddingTop="3dp"
+                        android:text="王春芸"
+                        android:textColor="@color/text_black" />
 
                     <!--android:scaleType="center"-->
                     <ImageView
                         android:id="@+id/img_top3"
-                        android:src="@mipmap/top3"
                         android:layout_width="25dp"
                         android:layout_height="35dp"
-                        android:layout_marginLeft="5dp"/>
+                        android:layout_marginLeft="5dp"
+                        android:src="@mipmap/top3" />
+
                     <TextView
                         android:id="@+id/tx_top3"
-                        android:text="薛志"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#828798"
                         android:paddingLeft="5dp"
-                        android:paddingTop="5dp"/>
+                        android:paddingTop="3dp"
+                        android:text="薛志"
+                        android:textColor="@color/text_black" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -234,7 +240,6 @@
 
             </LinearLayout>
 
-            <!--单题分析   柱状图区域-->
             <com.github.mikephil.charting.charts.BarChart
                 android:visibility="gone"
                 android:id="@+id/bar_chart"
@@ -245,6 +250,7 @@
             <TextView
                 android:id="@+id/tx_noanswer"
                 android:text="没有人提交答案。"
+                android:textColor="@color/text_black"
                 android:textSize="20sp"
                 android:gravity="center"
                 android:layout_width="match_parent"
@@ -303,7 +309,7 @@
             <!--右侧底部工具栏-->
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
+                android:layout_height="35dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
                 <TextView
