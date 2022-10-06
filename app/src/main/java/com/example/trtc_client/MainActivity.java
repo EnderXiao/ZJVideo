@@ -1193,36 +1193,21 @@ public class MainActivity extends AppCompatActivity {
                 boardview = mBoard.getBoardRenderView();
                 initBoardMenu();
                 alert_text.setText("白板加载完成！");
-
                 if(!addBoardtoFragmentstatus){
                     addBoardtoFragmentstatus =  mBoard.addBoardViewToContainer(Board_container,boardview,addBoardlayoutParams);
                     rf_leftmenu.setVisibility(View.VISIBLE);
                     rf_bottommenu.setVisibility(View.VISIBLE);
                     rf_shoukeneirong.setVisibility(View.GONE);//默认图片那个消失
                 }
-                if(mBoard!=null){
-                    b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
-                    b_cur.setText((mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard())+1)+"");
-                }
+
             }
             @Override
             public void onTEBHistroyDataSyncCompleted() {
                 System.out.println("onTEBHistroyDataSyncCompleted"+"+++++++++++++");
-                //白板加载完成 请切换
-                if(mBoard!=null&&mBoard.getBoardList().size()>0){
-                    b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
-                    b_cur.setText((mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard())+1)+"");
-                }
             }
             @Override
             public void onTEBSyncData(String data) {
-                final V2TIMMessage message = V2TIMManager.getMessageManager().createCustomMessage(data.getBytes(), "", "TXWhiteBoardExt".getBytes());
-                if (message.getCustomElem() != null) {
-                    message.getCustomElem().setExtension("TXWhiteBoardExt".getBytes());
-                    //设置头像  名称  +++
-                    message.getCustomElem().setDescription("");
-                    message.getCustomElem().setData(data.getBytes());
-                }
+                final V2TIMMessage Board_message = V2TIMManager.getMessageManager().createCustomMessage(data.getBytes(), "", "TXWhiteBoardExt".getBytes());
                 V2TIMManager.getInstance().getConversationManager().getConversation(roomid, new V2TIMValueCallback<V2TIMConversation>() {
                     @Override
                     public void onError(int i, String s) {
@@ -1231,10 +1216,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                     @Override
                     public void onSuccess(V2TIMConversation v2TIMConversation) {
-                        V2TIMManager.getInstance().getMessageManager().sendMessage(message, null, roomid, 1, false, null,  new V2TIMSendCallback<V2TIMMessage>() {
+                        V2TIMManager.getInstance().getMessageManager().sendMessage(Board_message, null, roomid, 1, false, null,  new V2TIMSendCallback<V2TIMMessage>() {
                             @Override
                             public void onSuccess(V2TIMMessage v2TIMMessage) {
                                 // 发送 IM 消息成功
+                                System.out.println("+++发送白板数据成功"+v2TIMMessage.getCustomElem().toString());
                                 if(findViewById(R.id.setBoardWindow).getVisibility()==View.VISIBLE){findViewById(R.id.setBoardWindow).setVisibility(View.GONE);}
                             }
                             @Override
@@ -1254,6 +1240,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTEBUndoStatusChanged(boolean canUndo) {
                 System.out.println("onTEBUndoStatusChanged"+"+++"+canUndo);
+                if(mBoard!=null){
+                    mBoard.getFileBoardList(mBoard.getCurrentFile()).size();
+                    mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard());
+                    String cur = (mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard())+1)+"";
+                    String sum = mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"";
+                    b_cur.setText(cur);
+                    b_sum.setText(sum);
+                }
             }
 
             @Override
@@ -1265,6 +1259,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTEBImageStatusChanged(String boardId, String url, int status) {
                 System.out.println("onTEBImageStatusChanged"+"+++");
+
             }
 
             @Override
@@ -1326,23 +1321,15 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTEBAddBoard(List<String> boardList, String fileId) {
-                menub08.setImageResource(R.mipmap.menu_b08);
                 if(!"#DEFAULT".equals(fileId)){
                     FileID=fileId;
                     CurFileID=null;
-                }
-                if(mBoard!=null){
-                    //更改页码
-                    b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
-                    b_cur.setText((mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard())+1)+"");
                 }
             }
 
             @Override
             public void onTEBDeleteBoard(List<String> boardList, String fileId) {
-                menub09.setImageResource(R.mipmap.menu_b09);
-                b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
-                b_cur.setText((mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard())+1)+"");
+
             }
 
             @Override
@@ -1401,8 +1388,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                     CurFileID = mBoard.getCurrentBoard();
                 }
-                b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
-                b_cur.setText((mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard())+1)+"");
             }
 
             @Override
@@ -1442,7 +1427,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTEBSnapshot(String path, int code, String msg) {
                 System.out.println("onTEBSnapshot"+"++++白板快照"+path+msg+code);
-
                 if(code==0){
                     File ff = new File(path);
                     String name = ff.getName();
@@ -1451,7 +1435,6 @@ public class MainActivity extends AppCompatActivity {
                     // isquestion  用来区分本次快照是题目的快照还是 切换的时候保存的快照
                     String cosprefix = isquestion?"class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/question/" : "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/capture/";
                     UploadToBucket(cosprefix,path,name,true);
-
                 }else {
                     System.out.println("++++白板快照出错"+msg+"   code:"+code);
                 }
@@ -1546,16 +1529,20 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onRecvNewMessage(V2TIMMessage msg) {
                         String Msg_Extension = new String(msg.getCustomElem().getExtension());
+                        String Msg_Description = msg.getCustomElem().getDescription();
                         super.onRecvNewMessage(msg);
                         if("TXWhiteBoardExt".equals(Msg_Extension)){
                             //白板消息
                             mBoard.addSyncData(new String(msg.getCustomElem().getData()));
                         }else if("TBKTExt".equals(Msg_Extension)){
                             //文本消息
+                            System.out.println("+++收到了消息"+Msg_Description);
                             SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-                            Chat_Msg msg_rec = new Chat_Msg(msg.getUserID(),format.format(new Date(msg.getTimestamp()*1000)),new String(msg.getCustomElem().getData()),0);// type  0 别人 1 自己
+                            Chat_Msg msg_rec = new Chat_Msg(Msg_Description.split("@#@")[1],format.format(new Date(msg.getTimestamp()*1000)),new String(msg.getCustomElem().getData()),2);// type  2 别人 1 自己
+
                             ChatRoomFragment f = (ChatRoomFragment)getmFragmenglist().get(1);
                             f.setData(msg_rec);
+
                             f.getChatMsgAdapter().notifyDataSetChanged();
                             f.getChatlv().setSelection(f.getChatlv().getBottom());
                         }
@@ -2620,12 +2607,12 @@ public class MainActivity extends AppCompatActivity {
      */
     public void drawAuthority(String extension, String action, String id) {
         // 发送关闭学生操作白板 消息
-        final V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createCustomMessage(id.getBytes(), "", extension.getBytes());
-        if (v2TIMMessage.getCustomElem() != null) {
-            v2TIMMessage.getCustomElem().setData(action.getBytes());
-            v2TIMMessage.getCustomElem().setDescription(id+"_WhiteBoard");
-            v2TIMMessage.getCustomElem().setExtension(extension.getBytes());
-        }
+        final V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createCustomMessage(action.getBytes(), id+"_WhiteBoard", extension.getBytes());
+//        if (v2TIMMessage.getCustomElem() != null) {
+//            v2TIMMessage.getCustomElem().setData(action.getBytes());
+//            v2TIMMessage.getCustomElem().setDescription(id+"_WhiteBoard");
+//            v2TIMMessage.getCustomElem().setExtension(extension.getBytes());
+//        }
         V2TIMManager.getMessageManager().sendMessage(v2TIMMessage, null,roomid, V2TIMMessage.V2TIM_PRIORITY_HIGH, false, null, new V2TIMSendCallback<V2TIMMessage>() {
             @Override
             public void onProgress(int progress) {
@@ -2636,10 +2623,9 @@ public class MainActivity extends AppCompatActivity {
                 // 发送群聊文本消息成功
                 System.out.println("+++发送关闭学生操作白板消息发送成功了");
             }
-
             @Override
             public void onError(int code, String desc) {
-                System.out.println("+++发送关闭学生操作白板消息发送失败");
+                System.out.println("+++发送关闭学生操作白板消息发送失败"+desc);
                 // 发送群聊文本消息失败
             }
         });
@@ -2648,16 +2634,16 @@ public class MainActivity extends AppCompatActivity {
     public void sendMsg(Chat_Msg msg){
         // 创建文本消息
         //        V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createTextMessage( "{\"text\":\""+msg.getContent()+"\",\"date\":\""+msg.getDate()+"\"}");
-        // 发送聊天消息
-        final V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createCustomMessage(msg.getContent().getBytes(), "", "TBKTExt".getBytes());
-        if (v2TIMMessage.getCustomElem() != null) {
-            v2TIMMessage.getCustomElem().setExtension("TBKTExt".getBytes());
-            //设置头像  名称  +++
-            v2TIMMessage.getCustomElem().setDescription("2@#@"+teaName+"@#@"+teaHead);  //  "2@#@"+teaName+"@#@"+teaHead   1 主讲人  2  听课端
-            v2TIMMessage.getCustomElem().setData(msg.getContent().getBytes());
-        }
 
-        V2TIMManager.getMessageManager().sendMessage(v2TIMMessage, null,roomid, V2TIMMessage.V2TIM_PRIORITY_NORMAL, false, null, new V2TIMSendCallback<V2TIMMessage>() {
+        // 发送聊天消息
+        final V2TIMMessage v2TIMMessage_chat = V2TIMManager.getMessageManager().createCustomMessage(msg.getContent().getBytes(), ("2@#@"+userName+"@#@"+userHead), "TBKTExt".getBytes());
+//        if (v2TIMMessage_chat.getCustomElem() != null) {
+//            v2TIMMessage_chat.getCustomElem().setExtension("TBKTExt".getBytes());
+            //设置头像  名称  +++
+//            v2TIMMessage_chat.getCustomElem().setDescription("2@#@"+teaName+"@#@"+teaHead);  //  "2@#@"+teaName+"@#@"+teaHead   1 主讲人  2  听课端
+//            v2TIMMessage_chat.getCustomElem().setData(msg.getContent().getBytes());
+//        }
+        V2TIMManager.getMessageManager().sendMessage(v2TIMMessage_chat, null,roomid, V2TIMMessage.V2TIM_PRIORITY_NORMAL, false, null, new V2TIMSendCallback<V2TIMMessage>() {
             @Override
             public void onProgress(int progress) {
                 // 文本消息不会回调进度
