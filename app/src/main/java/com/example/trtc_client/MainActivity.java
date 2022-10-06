@@ -106,6 +106,7 @@ import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -2702,6 +2703,26 @@ public class MainActivity extends AppCompatActivity {
     public void onExitLiveRoom() {
 
         HttpActivity.overClass("leave", "skydt", this);
+        final V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createCustomMessage(
+                "finish".getBytes(),       //data
+                "all"+"_WhiteBoard",     //descripition
+                "exitRoomNotice".getBytes());   //extension
+        V2TIMManager.getMessageManager().sendMessage(v2TIMMessage, null,roomid, V2TIMMessage.V2TIM_PRIORITY_HIGH, false, null, new V2TIMSendCallback<V2TIMMessage>() {
+            @Override
+            public void onProgress(int progress) {
+                // 文本消息不会回调进度
+            }
+            @Override
+            public void onSuccess(V2TIMMessage message) {
+                // 发送群聊文本消息成功
+                System.out.println("+++发送下课消息发送成功了");
+            }
+            @Override
+            public void onError(int code, String desc) {
+                System.out.println("+++发送下课发送失败"+desc);
+                // 发送群聊文本消息失败
+            }
+        });
         stopTime();
         mTRTCCloud.exitRoom();
     }
