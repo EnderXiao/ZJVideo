@@ -98,7 +98,7 @@
     <orderEntry type="library" name="Gradle: com.tencent.edu:TEduBoardSdk:2.7.8.199@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.tencent.edu:TIWLogger:1.0.1.76@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.tencent.edu:TIWCache:1.0.0.91@aar" level="project" />
-    <orderEntry type="library" name="Gradle: com.tencent.imsdk:imsdk:5.1.66@aar" level="project" />
+    <orderEntry type="library" name="Gradle: com.tencent.imsdk:imsdk-plus:6.5.2816@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.qcloud.cos:cos-android:5.9.5@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.qcloud.cos:qcloud-foundation:1.5.48@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.github.bumptech.glide:glide:4.11.0@aar" level="project" />
