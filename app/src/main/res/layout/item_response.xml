@@ -9,10 +9,9 @@
         android:layout_width="30dp"
         android:orientation="vertical"
         android:layout_height="wrap_content">
-        <ImageView
-            android:layout_width="match_parent"
+        <com.example.trtc_client.utils.MyChatHead_ImageView
+            android:layout_width="30dp"
             android:id="@+id/msg_head"
-            android:background="@mipmap/aa"
             android:layout_height="30dp"/>
     </LinearLayout>
     <LinearLayout
