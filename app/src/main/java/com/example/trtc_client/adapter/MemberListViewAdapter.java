@@ -129,7 +129,7 @@ public class MemberListViewAdapter extends BaseAdapter {
 
 
         viewHolder.chatControl.setImageResource(goods.getChatControl() ? R.drawable.chat_controller_on : R.drawable.chat_controller_off);
-        viewHolder.speakControl.setImageResource(!goods.getSpeakControl() ? R.drawable.speaker_controller_on : R.drawable.speaker_controller_off);
+        viewHolder.speakControl.setImageResource(goods.getSpeakControl() ? R.drawable.speaker_controller_on : R.drawable.speaker_controller_off);
         if(goods.getUserType() == 0) {
             viewHolder.audioControl.setVisibility(View.VISIBLE);
             viewHolder.audioClose.setVisibility(View.INVISIBLE);

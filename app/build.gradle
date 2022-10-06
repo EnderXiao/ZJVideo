@@ -66,16 +66,14 @@ dependencies {
     implementation 'com.tencent.edu:TEduBoardSdk:latest.release'
 
     //即时通信依赖
-//    implementation 'com.tencent.imsdk:imsdk-plus:6.5.2816'
+//   implementation 'com.tencent.imsdk:imsdk-plus:6.5.2816'
     implementation 'com.tencent.imsdk:imsdk:latest.release'
     //安卓上传文件到存储桶
     implementation 'com.qcloud.cos:cos-android:5.9.+'
-
     //wly
         //师姐的项目用的是glide:4.9.0
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-
     
 }

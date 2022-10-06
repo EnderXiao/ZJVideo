@@ -27,10 +27,6 @@ public class VideoListFragment extends Fragment {
     public static Stack<Integer> availableFragment = new Stack<>();
     public static TreeMap<String, Integer> occupiedFragment = new TreeMap<>();
 
-    // TRTC监听器
-//    public static TRTCCloud mTRTCCloud;
-//    public static TRTCCloudListener myListener;
-
     public static ArrayList<CameraFragment> videoFragmentList = new ArrayList<>();
 
     public static LinearLayout ScrollContainer;
@@ -40,16 +36,21 @@ public class VideoListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.video_list, container, false);
-        Bundle arguments = getArguments();
 
 //        mTRTCCloud = TRTCCloud.sharedInstance(getActivity().getApplicationContext());
 //        mTRTCCloud.setListener(new MyTRTCCloudListener(VideoListFragment.this));
 
-        if(arguments != null) {
-            mUserList = arguments.getStringArrayList("mUserList");
-        }
         initView(view);
         return view;
+    }
+
+    public boolean findUserInUserList(String userId) {
+        for (int i = 0; i < mUserList.size(); i++){
+            if(mUserList.get(i).equals(userId)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void initView(View view) {
@@ -100,21 +101,12 @@ public class VideoListFragment extends Fragment {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Integer mUserCount = availableFragment.pop();
         CameraFragment cameraFragmentNow = videoFragmentList.get(mUserCount);
+        mUserList.add(userId);
         mCameraFragmentMap.put(userId, cameraFragmentNow);
         occupiedFragment.put(userId, mUserCount);
         cameraFragmentNow.setUserName(userId);
         fragmentTransaction.show(cameraFragmentNow);
         cameraFragmentNow.showVideo(mTRTCCloud, userId);
-        fragmentTransaction.commit();
-    }
-
-    public void RefreshingCameraView(ArrayList<String> mUserList) {
-        FragmentManager fragmentManager = getChildFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        for (int i = 0; i < mUserList.size(); i++) {
-            CameraFragment cameraFragment = new CameraFragment();
-            fragmentTransaction.add(R.id.ll_content, cameraFragment);
-        }
         fragmentTransaction.commit();
     }
 
@@ -151,6 +143,7 @@ public class VideoListFragment extends Fragment {
             availableFragment.push(occupiedFragment.get(userId));
         }
         this.hideFragment(cameraFragment);
+        mUserList.remove(userId);
         if(reason != 12580)
             Toast.makeText(activity, "用户 " + userId + " 退出房间: " + reason, Toast.LENGTH_SHORT).show();
     }

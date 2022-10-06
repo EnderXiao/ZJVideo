@@ -87,16 +87,18 @@ public class HttpActivity extends AnswerActivity {
             reader.close();
             inputStream.close();
             httpURLConnection.disconnect();
-            Log.e(TAG, "getHandsUpList: " + buffer.toString());
+//            Log.e(TAG, "getHandsUpList: " + buffer.toString());
             try{
                 String backLogJsonStr = buffer.toString();
 //                String backLogJsonStr = "{\"joinlist\":[{\"value\":\"李龙龙\",\"key\":\"ming6001\"}],\"ketanglist\":[{\"num\":\"60\",\"value\":\"我校2022级葛舸班\",\"key\":\"4195ketang\"}]}";
                 JSONObject jsonObject = stringToJson(backLogJsonStr);
                 String userListStr = jsonObject.getString("raiseHandUserId");
                 String splitter = ",";
+
                 String[] handsUpIdList = userListStr.split(splitter);
                 List<MemberDataBean> tempHandsUpList = new ArrayList<>();
                 for (int i = 0; i < handsUpIdList.length; i++) {
+                    if(handsUpIdList[i].equals("")) continue;
                     Log.e(TAG, "getHandsUpList: " + handsUpIdList[i]);
                     StudentDataBean studentMemberInJoinList = findMemberInJoinList(handsUpIdList[i]);
                     if(studentMemberInJoinList != null) {
@@ -210,7 +212,7 @@ public class HttpActivity extends AnswerActivity {
                 try {
                     String roomId = roomid;
                     if(!userId.equals("")) {
-                        roomId += "_" + userId;
+                        roomId += "@_@" + userId;
                     }
                     URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_saveControl.do?"
                             + "roomId=" + roomId
@@ -295,7 +297,7 @@ public class HttpActivity extends AnswerActivity {
                     String roomId = roomid;
                     URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_savePlatform.do?"
                             + "roomId=" + roomId
-                            + "&studId=" + userId
+                            + "&stuId=" + userId
                             + "&name=" + URLEncoder.encode(stuName, "utf-8")
                             + "&type=" + type
                     );

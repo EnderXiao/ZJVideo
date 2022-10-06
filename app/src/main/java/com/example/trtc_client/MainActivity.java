@@ -113,6 +113,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -257,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
     private static ListView memberList;
     private static MemberListViewAdapter listViewAdapter;
     private static TextView memberListCountString;
-    private List<MemberItem> memberDataList;
+    private Vector<MemberItem> memberDataList;
 
     // 举手列表
     private View handsUpPopupView;
@@ -401,6 +402,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 destroyBoard();
+                onExitLiveRoom();
                 addBoardtoFragmentstatus =false;
                 rf_leftmenu.setVisibility(View.GONE);
                 rf_bottommenu.setVisibility(View.GONE);
@@ -738,14 +740,15 @@ public class MainActivity extends AppCompatActivity {
         // 更新小红点
         setHandBtnBadge(handsUpItemList.size());
         handsUpListViewAdapter.notifyDataSetChanged();
-        HttpActivity.speakerController(item.getUserId(), item.getName(), "up", position, this);
 
         // 更改MemberList中的状态
         int memberPosition = listViewAdapter.getItemPositionById(item.getUserId());
+
+
         if(memberPosition != -1){
             MemberItem memberNow = listViewAdapter.getItem(memberPosition);
+            HttpActivity.speakerController(memberNow.getUserId(), item.getName(), "up", position, this);
             memberNow.setUserType(0);
-            switchSpeakerIcon(memberPosition);
             listViewAdapter.notifyDataSetChanged();
         }
         this.videoListFragment.addCameraView(item.getUserId(), mTRTCCloud);
@@ -759,14 +762,19 @@ public class MainActivity extends AppCompatActivity {
         memberDataList.clear();
         if(AnswerActivity.joinList != null) {
             for (int i = 0; i < AnswerActivity.joinList.size(); i++) {
-                memberDataList.add(new MemberItem(AnswerActivity.joinList.get(i).getName(), AnswerActivity.joinList.get(i).getUserId(), 1 ,true, true, true, false, true));
+                memberDataList.addElement(new MemberItem(AnswerActivity.joinList.get(i).getName(), AnswerActivity.joinList.get(i).getUserId(), 1 ,true, false, true, false, true));
                 Log.e(TAG, "initMemberList: " + AnswerActivity.joinList.get(i).toString());
             }
         }
         if(AnswerActivity.ketangList != null) {
             for (int i = 0; i < AnswerActivity.ketangList.size(); i++) {
-                memberDataList.add(new MemberItem(AnswerActivity.ketangList.get(i).getName(), AnswerActivity.joinList.get(i).getUserId(), 0 , true, true, true, false, true));
+//                Log.e(TAG, "updateMemberList: get No . " + AnswerActivity.ketangList.get(i).toString() + " from size " + AnswerActivity.ketangList.size());
+                MemberItem memberItemNew = new MemberItem(AnswerActivity.ketangList.get(i).getName(), AnswerActivity.ketangList.get(i).getUserId(), 0, true, false, true, false, true);
+                memberDataList.addElement(memberItemNew);
                 Log.e(TAG, "initMemberList: " + AnswerActivity.ketangList.get(i).toString());
+                if(!videoListFragment.findUserInUserList(AnswerActivity.ketangList.get(i).getUserId())) {
+                    videoListFragment.addCameraView(AnswerActivity.ketangList.get(i).getUserId(), mTRTCCloud);
+                }
             }
         }
         setCountMember(AnswerActivity.ketangList.size(), AnswerActivity.joinList.size());
@@ -775,29 +783,15 @@ public class MainActivity extends AppCompatActivity {
 
     // 初始化成员列表
     public void initMemberList() {
-        memberDataList = new ArrayList<>();
+        Log.e(TAG, "initMemberList: hahahahhahaah");
+        memberDataList = new Vector<>();
         HttpActivity.getMemberList(this);
-//        memberList.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
-        if(AnswerActivity.joinList != null) {
-            for (int i = 0; i < AnswerActivity.joinList.size(); i++) {
-                memberDataList.add(new MemberItem(AnswerActivity.joinList.get(i).getName(), AnswerActivity.joinList.get(i).getUserId(), 1 ,true, true, true, false, true));
-                Log.e(TAG, "initMemberList: " + AnswerActivity.joinList.get(i).toString());
-            }
-        }
-        if(AnswerActivity.ketangList != null) {
-            for (int i = 0; i < AnswerActivity.ketangList.size(); i++) {
-                memberDataList.add(new MemberItem(AnswerActivity.ketangList.get(i).getName(), AnswerActivity.joinList.get(i).getUserId(), 0 , true, true, true, false, true));
-                Log.e(TAG, "initMemberList: " + AnswerActivity.ketangList.get(i).toString());
-            }
-        }
 
-//        for (int i = 0; i < 10; i ++){
-//            memberDataList.add(new MemberItem("测试", Integer.toString(i), "2", "3", "4", "5"));
-//        }
         setCountMember(AnswerActivity.ketangList.size(), AnswerActivity.joinList.size());
         MainActivity that = this;
         listViewAdapter = new MemberListViewAdapter(this, memberList, memberDataList);
         memberList.setAdapter(listViewAdapter);
+        HttpActivity.getMemberList(this);
 
         listViewAdapter.setOnItemButtonListener(new MemberListViewAdapter.onItemButtonListener() {
             @Override
@@ -826,11 +820,6 @@ public class MainActivity extends AppCompatActivity {
                 MemberItem item = listViewAdapter.getItem(i);
                 if(item != null){
                     if(item.getSpeakControl()){
-                        item.setUserType(0);
-                        HttpActivity.speakerController(item.getUserId(), item.getName(), "down", i, that);
-                        that.videoListFragment.leaveRoom(item.getUserId(), 12580, that, getmTRTCCloud());
-                        that.videoListFragment.addCameraView(item.getUserId(), getmTRTCCloud());
-                    } else {
                         ClassDataBean memberInKetangList = AnswerActivity.findMemberInKetangList(item.getUserId());
                         StudentDataBean studentDataBean = AnswerActivity.findMemberInJoinList(item.getUserId());
                         if(memberInKetangList != null)
@@ -839,6 +828,11 @@ public class MainActivity extends AppCompatActivity {
                             that.videoListFragment.leaveRoom(item.getUserId(), 12580, that, getmTRTCCloud());
                             item.setUserType(1);
                         }
+                        HttpActivity.speakerController(item.getUserId(), item.getName(), "down", i, that);
+                    } else {
+                        that.videoListFragment.leaveRoom(item.getUserId(), 12580, that, getmTRTCCloud());
+                        that.videoListFragment.addCameraView(item.getUserId(), getmTRTCCloud());
+                        item.setUserType(0);
                         HttpActivity.speakerController(item.getUserId(), item.getName(), "up", i, that);
                     }
                     Toast.makeText(MainActivity.this, "成员 " + i + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
@@ -2681,8 +2675,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onExitLiveRoom() {
-
         HttpActivity.overClass("leave", "skydt", this);
+        final V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createCustomMessage(
+                "finish".getBytes(),       //data
+                "all"+"_WhiteBoard",     //descripition
+                "exitRoomNotice".getBytes());   //extension
+        V2TIMManager.getMessageManager().sendMessage(v2TIMMessage, null,roomid, V2TIMMessage.V2TIM_PRIORITY_HIGH, false, null, new V2TIMSendCallback<V2TIMMessage>() {
+            @Override
+            public void onProgress(int progress) {
+            }
+            @Override
+            public void onSuccess(V2TIMMessage message) {
+                System.out.println("+++发送下课消息发送成功了");
+            }
+            @Override
+            public void onError(int code, String desc) {
+                System.out.println("+++发送下课发送失败"+desc);
+            }
+        });
         stopTime();
         mTRTCCloud.exitRoom();
     }
