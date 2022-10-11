@@ -22,20 +22,6 @@
 <!--  分割线  -->
 
     <TextView
-        android:id="@+id/text_doc_move"
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:paddingBottom="10dp"
-        android:textColor="@color/popupWindow_text_gray"
-        android:background="@color/popupWindow_container"
-        android:paddingTop="10dp"
-        android:singleLine="true"
-        android:textSize="11sp"
-        android:gravity="center"
-        android:text="移出" />
-
-    <TextView
         android:id="@+id/text_doc_mute"
         android:layout_width="50dp"
         android:layout_height="match_parent"

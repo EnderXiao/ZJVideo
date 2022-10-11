@@ -703,51 +703,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="1.0"
+        app:layout_constraintWidth_percent="0.3"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.25">
+        >
 
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-<!--            <ScrollView-->
-<!--                android:id="@+id/stroll_tiankong"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:layout_gravity="top"-->
-<!--                android:background="@color/white"-->
-<!--                android:fadingEdge="vertical"-->
-<!--                android:gravity="right"-->
-<!--                android:padding="2dp"-->
-<!--                android:layout_marginLeft="2dp"-->
-<!--                android:layout_marginRight="2dp"-->
-<!--                android:scrollbars="vertical"-->
-<!--                android:visibility="invisible"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHeight_percent="0.74"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/teacher_camera"-->
-<!--                >-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/tiankong_echo"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:padding="2dp"-->
-<!--                    android:layout_marginLeft="2dp"-->
-<!--                    android:layout_marginRight="2dp"-->
-<!--                    android:text=""-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textSize="12dp"/>-->
-
-<!--            </ScrollView>-->
-
-
-
-            <!--教师端摄像头流 teacher_camera-->
-            <com.tencent.rtmp.ui.TXCloudVideoView
-                android:id="@+id/teacher_camera"
+            <RelativeLayout
+                android:id="@+id/teacher_camera_block"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:padding="2dp"
@@ -755,32 +721,42 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                >
 
-                />
+                <RelativeLayout
+                    android:id="@+id/camera_block"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <!--教师端摄像头流 teacher_camera-->
+                    <com.tencent.rtmp.ui.TXCloudVideoView
+                        android:id="@+id/teacher_camera"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="2dp"
+                        />
 
-            <RelativeLayout
-                android:id="@+id/teacher_background"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@color/temp_camera"
-                android:padding="2dp"
-                android:visibility="visible"
-                app:layout_constraintDimensionRatio="w,9:16"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                    <RelativeLayout
+                        android:id="@+id/teacher_background"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/temp_camera"
+                        android:padding="2dp"
+                        android:visibility="visible">
 
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_centerInParent="true"
-                    android:maxWidth="20dp"
-                    android:maxHeight="20dp"
-                    android:src="@drawable/zbcameranoopen" />
-            </RelativeLayout>
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_centerInParent="true"
+                            android:maxWidth="20dp"
+                            android:maxHeight="20dp"
+                            android:src="@drawable/zbcameranoopen" />
+                    </RelativeLayout>
+                </RelativeLayout>
 
             <TextView
                 android:id="@+id/teacher_name"
+                android:layout_alignBottom="@+id/camera_block"
+                android:alpha="0.7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/background"
@@ -790,7 +766,8 @@
                 android:text="XX老师"
                 android:textColor="@color/white"
                 android:textSize="13sp"
-                app:layout_constraintTop_toBottomOf="@id/teacher_background" />
+                />
+            </RelativeLayout>
 
 <!--            <androidx.fragment.app.FragmentContainerView-->
 <!--                android:id="@+id/teacher_camera"-->
@@ -805,7 +782,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/background_chatroom"
-                app:layout_constraintTop_toBottomOf="@id/teacher_name"
+                app:layout_constraintTop_toBottomOf="@id/teacher_camera_block"
                 app:tabPaddingStart="5dp"
                 app:tabPaddingEnd="5dp"
                 app:tabRippleColor="@color/blue_white"
@@ -842,7 +819,7 @@
         app:constraint_referenced_ids="canvas_btn, board_btn, content_btn, member_btn, hand_btn_frame_layout, mic_btn, camera_btn, share_btn, exit_btn, bottom_line_1, bottom_line_2, bottom_line_3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/stroll"
-        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintHeight_percent="0.10"
         app:layout_constraintWidth_percent="0.8" />
     <ImageView
         android:id="@+id/canvas_btn"
@@ -851,7 +828,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="@+id/group_buttons"
         app:layout_constraintTop_toTopOf="@+id/group_buttons"
-        android:src="@drawable/bottom_canvas"
+        android:src="@drawable/bottom_file"
          />
 
     <ImageView
@@ -861,7 +838,7 @@
         app:layout_constraintStart_toEndOf="@id/canvas_btn"
         app:layout_constraintBottom_toBottomOf="@+id/group_buttons"
         app:layout_constraintTop_toTopOf="@+id/group_buttons"
-        android:src="@drawable/bottom_board"
+        android:src="@drawable/bottom_dir"
         />
     <ImageView
         android:id="@+id/bottom_line_1"
@@ -908,20 +885,20 @@
             android:layout_height="match_parent"
             android:onClick="showHandsUpBtn"
             android:src="@drawable/bottom_hand" />
+
         <TextView
+            android:id="@+id/hand_btn_badge"
             android:layout_width="22dp"
             android:layout_height="22dp"
-            android:id="@+id/hand_btn_badge"
-            android:layout_alignEnd="@+id/hand_btn"
             android:layout_alignTop="@+id/hand_btn"
-            android:maxLines="1"
+            android:layout_alignEnd="@+id/hand_btn"
             android:background="@drawable/round_text_view_style"
-            android:text="99+"
             android:gravity="center"
+            android:maxLines="1"
+            android:text="99+"
             android:textColor="@color/white"
-            android:visibility="invisible"
             android:textSize="9sp"
-            />
+            android:visibility="invisible" />
     </RelativeLayout>
     <ImageView
         android:id="@+id/bottom_line_2"

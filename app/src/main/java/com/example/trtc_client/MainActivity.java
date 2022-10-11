@@ -6,9 +6,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.media.VolumeShaper;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.os.SystemClock;
 import android.text.format.Time;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -303,6 +306,7 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, sList, 10000);
             }
         }
+
        //初始化测试参数
         Intent intent = getIntent();
         userId=intent.getExtras().get("userid").toString();
@@ -367,6 +371,15 @@ public class MainActivity extends AppCompatActivity {
         cameraBtn = findViewById(R.id.camera_btn);
         overClassBtn = findViewById(R.id.exit_btn);
         teacher_name_view = findViewById(R.id.teacher_name);
+        // 初始化布局
+        RelativeLayout scroll_block = findViewById(R.id.stroll);
+        ViewGroup.LayoutParams scroll_block_params = scroll_block.getLayoutParams();
+        if(isTabletDevice(this)) {
+            scroll_block_params.width = UtilTools.dip2px(this, 0);
+        } else {
+            scroll_block_params.width = UtilTools.dip2px(this, 160);
+        }
+        scroll_block.setLayoutParams(scroll_block_params);
 
         MainActivity that = this;
         handsUpSwitchBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -605,6 +618,17 @@ public class MainActivity extends AppCompatActivity {
         startTime();
     }
 
+
+    /**
+     * 设备类型判断
+     *
+     * @param context 上下文
+     * @return true表示设备为平板 false表示设备为手机
+     */
+    public boolean isTabletDevice(Context context) {
+        return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK)>= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
+
     public void startTime() {
         MainActivity that = this;
         baseTimer = SystemClock.elapsedRealtime();
@@ -683,6 +707,17 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "switchMemberListAudioIcon: 获取用户item " + item.getName());
             item.setAudioControl(!item.getAudioControl());
             Toast.makeText(MainActivity.this, "成员 " + position + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
+            listViewAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(MainActivity.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void switchMemberListVideoIcon(int position) {
+        MemberItem item = listViewAdapter.getItem(position);
+        if(item != null){
+            Log.e(TAG, "switchMemberListAudioIcon: 获取用户item " + item.getName());
+            item.setVideoControl(!item.getVideoControl());
             listViewAdapter.notifyDataSetChanged();
         } else {
             Toast.makeText(MainActivity.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
@@ -939,6 +974,8 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
             System.out.println("onUserVideoAvailable:"+userId);
             activity.videoListFragment.setAudio(userId, available, activity, activity.mTRTCCloud);
+            int userPosition = listViewAdapter.getItemPositionById(userId);
+            activity.switchMemberListAudioIcon(userPosition);
         }
 
         @Override
@@ -962,6 +999,8 @@ public class MainActivity extends AppCompatActivity {
             }
             else
                 mUserList.remove(userId);
+            int userPosition = listViewAdapter.getItemPositionById(userId);
+            activity.switchMemberListVideoIcon(userPosition);
             if(AnswerActivity.findMemberInKetangList((userId)) != null)
                 activity.videoListFragment.setVideo(userId, available, activity, activity.mTRTCCloud);
 
@@ -1110,7 +1149,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showMemberListBtn(View view) {
-        PopupWindow popupWindow = new PopupWindow(memberPopupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        Point point = new Point();
+        this.getWindowManager().getDefaultDisplay().getSize(point);
+        int popUpWindowWidth = (int) (point.x*0.5);
+        int popUpWindowHeight = (int) (point.y * 0.7);
+        PopupWindow popupWindow = new PopupWindow(memberPopupView, popUpWindowWidth, popUpWindowHeight, true);
         memberPopupCloseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1118,13 +1161,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         memberPopupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        int offsetX = - memberPopupView.getMeasuredWidth() / 4;
-        int offsetY = - memberPopupView.getMeasuredHeight() - (view.getHeight()) - 10;
+        int offsetX = - popUpWindowWidth / 4;
+        int offsetY = - popUpWindowHeight - (view.getHeight()) - 10;
         popupWindow.showAsDropDown(view, offsetX, offsetY, Gravity.START);
     }
 
     public void showHandsUpBtn(View view) {
-        PopupWindow popupWindow = new PopupWindow(handsUpPopupView, 300, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        Point point = new Point();
+        this.getWindowManager().getDefaultDisplay().getSize(point);
+        int popUpWindowWidth = (int) (point.x*0.3);
+        int popUpWindowHeight = (int) (point.y * 0.5);
+        PopupWindow popupWindow = new PopupWindow(handsUpPopupView, popUpWindowWidth, popUpWindowHeight, true);
         handsUpPopupCloseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1132,8 +1179,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         handsUpPopupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        int offsetX = - handsUpPopupView.getMeasuredWidth() /4;
-        int offsetY = - handsUpPopupView.getMeasuredHeight() - (view.getHeight()) - 10;
+        int offsetX = - popUpWindowWidth /4;
+        int offsetY = - popUpWindowHeight - (view.getHeight()) - 10;
         popupWindow.showAsDropDown(view, offsetX, offsetY, Gravity.START);
     }
 

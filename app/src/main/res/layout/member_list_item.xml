@@ -19,27 +19,7 @@
         android:textColor="@color/popupWindow_text_gray"
         android:background="@color/popupWindow_container"
         android:textSize="11sp" />
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="50dp"
-        android:layout_weight="2"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
-        android:background="@color/popupWindow_container"
-        android:orientation="vertical"
-        android:layout_height="match_parent" >
-        <ImageView
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:id="@+id/member_move_out"
-            android:src="@drawable/user_controller_move" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

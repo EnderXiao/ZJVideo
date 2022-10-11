@@ -54,7 +54,6 @@ public class MemberListViewAdapter extends BaseAdapter {
     public static class ViewHolder{
         //public TextView diyid;
         public TextView userName;
-        public ImageView moveOut;
         public ImageView chatControl;
         public ImageView speakControl;
         public ImageView audioControl;
@@ -107,7 +106,6 @@ public class MemberListViewAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.member_list_item, null);
 
             viewHolder.userName = (TextView) convertView.findViewById(R.id.member_user_name);
-            viewHolder.moveOut = (ImageView) convertView.findViewById(R.id.member_move_out);
             viewHolder.chatControl = (ImageView) convertView.findViewById(R.id.member_chat_control);
             viewHolder.speakControl = (ImageView) convertView.findViewById(R.id.member_speak_control);
             viewHolder.audioControl = (ImageView) convertView.findViewById(R.id.member_audio_control);
@@ -149,12 +147,6 @@ public class MemberListViewAdapter extends BaseAdapter {
         viewHolder.boardControl.setImageResource(goods.getBoardControl() ? R.drawable.board_controller_on : R.drawable.board_controller_off);
 
         // 点击事件
-        viewHolder.moveOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mOnItemButtonListener.onMoveOutClick(position);
-            }
-        });
 
         viewHolder.chatControl.setOnClickListener(new View.OnClickListener() {
             @Override
