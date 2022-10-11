@@ -421,7 +421,7 @@
                         android:background="@mipmap/menu_b06" />
                     <TextView
                         android:id="@+id/board_curpage"
-                        android:layout_width="10dp"
+                        android:layout_width="18dp"
                         android:layout_height="20dp"
                         android:textSize="10sp"
                         android:background="@color/bg_select_menu"
@@ -439,7 +439,7 @@
                         android:textColor="@color/white" />
                     <TextView
                         android:id="@+id/board_sumpage"
-                        android:layout_width="10dp"
+                        android:layout_width="18dp"
                         android:layout_height="20dp"
                         android:textSize="10sp"
                         android:background="@color/bg_select_menu"
